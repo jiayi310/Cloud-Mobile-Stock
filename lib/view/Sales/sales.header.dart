@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilestock/utils/global.colors.dart';
+import 'package:mobilestock/view/Sales/OrderHistory/history.view.dart';
 
 import 'Cart/cart.view.dart';
 
@@ -11,7 +12,7 @@ class SalesAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.6,
+          width: MediaQuery.of(context).size.width * 0.4,
           child: Row(
             children: [
               InkWell(
@@ -38,6 +39,32 @@ class SalesAppBar extends StatelessWidget {
           ),
         ),
         InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OrderHistoryScreen()),
+            );
+          },
+          borderRadius: BorderRadius.circular(50),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                child: Icon(
+                  Icons.history,
+                  color: GlobalColors.mainColor,
+                ),
+                decoration: BoxDecoration(
+                  color: GlobalColors.mainColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ],
+          ),
+        ),
+        InkWell(
           onTap: () {},
           borderRadius: BorderRadius.circular(50),
           child: Stack(
@@ -47,7 +74,7 @@ class SalesAppBar extends StatelessWidget {
                 height: 50,
                 width: 50,
                 child: Icon(
-                  Icons.sort,
+                  Icons.filter_list_alt,
                   color: GlobalColors.mainColor,
                 ),
                 decoration: BoxDecoration(

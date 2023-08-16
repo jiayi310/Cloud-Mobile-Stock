@@ -44,6 +44,10 @@ dependencies:
   bubble_tab_indicator: ^0.1.4
   fl_chart: ^0.63.0
   simple_animations: ^5.0.2
+  syncfusion_flutter_signaturepad: ^22.2.9
+  path_provider: ^2.0.2
+  open_file: ^3.2.1
+  universal_html: ^2.0.8
 
 dev_dependencies:
   flutter_test:

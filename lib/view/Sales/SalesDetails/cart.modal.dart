@@ -5,11 +5,20 @@ import 'package:mobilestock/utils/global.colors.dart';
 
 import '../../../models/Product.dart';
 
-class AddToCartModal extends StatelessWidget {
+class AddToCartModal extends StatefulWidget {
+  final Product product;
   AddToCartModal({Key? key, required this.product}) : super(key: key);
+
+  @override
+  State<AddToCartModal> createState() => _AddToCartModalState(product: product);
+}
+
+class _AddToCartModalState extends State<AddToCartModal> {
+  _AddToCartModalState({Key? key, required this.product});
 
   List uom = ["PCS", "PC", "BOX"];
   final Product product;
+  int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -106,36 +115,79 @@ class AddToCartModal extends StatelessWidget {
                         ),
                         SizedBox(width: 50),
                         Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF7F8FA),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Icon(
-                            CupertinoIcons.minus,
-                            size: 25,
-                            color: GlobalColors.mainColor,
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.indigo,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    quantity--;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: 50,
+                                child: TextField(
+                                  decoration:
+                                      InputDecoration(border: InputBorder.none),
+                                  textAlign: TextAlign.center,
+                                  controller: _controller,
+                                  style: TextStyle(
+                                      color: GlobalColors.mainColor,
+                                      fontSize: 17),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.indigo,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    quantity++;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          "01",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w400),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF7F8FA),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Icon(
-                            CupertinoIcons.add,
-                            size: 25,
-                            color: GlobalColors.mainColor,
-                          ),
-                        ),
+                        // Container(
+                        //   padding: EdgeInsets.all(8),
+                        //   decoration: BoxDecoration(
+                        //     color: Color(0xFFF7F8FA),
+                        //     borderRadius: BorderRadius.circular(20),
+                        //   ),
+                        //   child: Icon(
+                        //     CupertinoIcons.minus,
+                        //     size: 25,
+                        //     color: GlobalColors.mainColor,
+                        //   ),
+                        // ),
+                        // SizedBox(height: 10),
+                        // Text(
+                        //   "01",
+                        //   style: TextStyle(
+                        //       fontSize: 20, fontWeight: FontWeight.w400),
+                        // ),
+                        // SizedBox(height: 10),
+                        // Container(
+                        //   padding: EdgeInsets.all(8),
+                        //   decoration: BoxDecoration(
+                        //     color: Color(0xFFF7F8FA),
+                        //     borderRadius: BorderRadius.circular(20),
+                        //   ),
+                        //   child: Icon(
+                        //     CupertinoIcons.add,
+                        //     size: 25,
+                        //     color: GlobalColors.mainColor,
+                        //   ),
+                        // ),
                       ],
                     ),
                     SizedBox(height: 30),
@@ -207,5 +259,21 @@ class AddToCartModal extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  TextEditingController _controller = new TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Step 2 <- SEE HERE
+    _controller.text = quantity.toString();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+    _controller.text = quantity.toString();
   }
 }

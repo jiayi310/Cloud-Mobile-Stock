@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobilestock/view/Quotation/quotation.card.dart';
 
 import '../../utils/global.colors.dart';
+import '../Customer/customer.search.dart';
 
 class QuotationHomeScreen extends StatefulWidget {
   const QuotationHomeScreen({Key? key}) : super(key: key);
@@ -47,6 +49,16 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
             ),
           ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+            child: Column(
+          children: [
+            Visibility(visible: _visible, child: SearchWidget()),
+            QuotationCard(),
+          ],
+        )),
       ),
     );
   }

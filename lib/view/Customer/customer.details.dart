@@ -50,7 +50,7 @@ class CustomerDetails extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                      bottom: 0, right: 4, child: buildEditIcon(Colors.blue)),
+                      bottom: 0, right: 0, child: buildEditIcon(Colors.blue)),
                 ]),
               ),
               SizedBox(

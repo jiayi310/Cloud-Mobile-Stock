@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilestock/models/Product.dart';
 import 'package:mobilestock/utils/global.colors.dart';
+import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
 class CartItem extends StatelessWidget {
-  CartItem({Key? key}) : super(key: key);
+  CartItem({Key? key, required this.deleteButton}) : super(key: key);
+  bool deleteButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,43 +90,45 @@ class CartItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.delete, color: Colors.redAccent),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF7F8FA),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Icon(
-                              CupertinoIcons.minus,
-                              size: 18,
-                              color: GlobalColors.mainColor,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "01",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w400),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF7F8FA),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Icon(
-                              CupertinoIcons.add,
-                              size: 18,
-                              color: GlobalColors.mainColor,
-                            ),
-                          ),
-                        ],
-                      ),
+                      if (deleteButton)
+                        Icon(Icons.delete, color: Colors.redAccent),
+                      AddCartButtonCart(),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Container(
+                      //       padding: EdgeInsets.all(8),
+                      //       decoration: BoxDecoration(
+                      //         color: Color(0xFFF7F8FA),
+                      //         borderRadius: BorderRadius.circular(20),
+                      //       ),
+                      //       child: Icon(
+                      //         CupertinoIcons.minus,
+                      //         size: 18,
+                      //         color: GlobalColors.mainColor,
+                      //       ),
+                      //     ),
+                      //     SizedBox(width: 10),
+                      //     Text(
+                      //       "01",
+                      //       style: TextStyle(
+                      //           fontSize: 15, fontWeight: FontWeight.w400),
+                      //     ),
+                      //     SizedBox(width: 10),
+                      //     Container(
+                      //       padding: EdgeInsets.all(8),
+                      //       decoration: BoxDecoration(
+                      //         color: Color(0xFFF7F8FA),
+                      //         borderRadius: BorderRadius.circular(20),
+                      //       ),
+                      //       child: Icon(
+                      //         CupertinoIcons.add,
+                      //         size: 18,
+                      //         color: GlobalColors.mainColor,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 )

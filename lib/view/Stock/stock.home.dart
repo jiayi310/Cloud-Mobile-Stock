@@ -28,7 +28,9 @@ class _StockHomeScreen extends State<StockHomeScreen> {
         centerTitle: true,
         title: Text(
           "Stock",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           Padding(

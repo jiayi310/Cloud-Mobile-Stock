@@ -4,9 +4,15 @@ import 'package:mobilestock/view/Sales/Cart/cart.item.dart';
 
 import '../../../utils/global.colors.dart';
 
-class CartList extends StatelessWidget {
+class CartList extends StatefulWidget {
   const CartList({Key? key}) : super(key: key);
 
+  @override
+  State<CartList> createState() => _CartListState();
+}
+
+class _CartListState extends State<CartList> {
+  bool deleteButton = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +32,7 @@ class CartList extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     child: Icon(
-                      Icons.arrow_back,
+                      Icons.arrow_back_ios_new,
                       size: 30,
                       color: GlobalColors.mainColor,
                     ),
@@ -45,7 +51,11 @@ class CartList extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        setState(() {
+                          deleteButton = !deleteButton;
+                        });
+                      },
                       child: Text(
                         "Edit",
                         style: TextStyle(
@@ -60,7 +70,9 @@ class CartList extends StatelessWidget {
               padding: EdgeInsets.only(top: 5),
               child: Column(
                 children: [
-                  CartItem(),
+                  CartItem(
+                    deleteButton: deleteButton,
+                  ),
                 ],
               ),
             ),

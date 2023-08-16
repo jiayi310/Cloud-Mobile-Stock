@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobilestock/utils/global.colors.dart';
+import 'package:mobilestock/view/Sales/SalesDetails/add.cartbutton.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -19,8 +21,8 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: Container(
-        width: 154,
-        height: 230,
+        width: 170,
+        height: 220,
         padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -29,15 +31,22 @@ class ProductCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              width: 154,
+              width: double.infinity,
               height: 132,
               decoration: BoxDecoration(
                 color: bgColor,
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
-              child: Image.asset(
-                image,
-                height: 132,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      image,
+                      height: 132,
+                    ),
+                  ),
+                  Positioned(top: 5, right: -5, child: AddCartButton()),
+                ],
               ),
             ),
             const SizedBox(height: 10),
@@ -65,20 +74,21 @@ class ProductCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'UOM',
-                            style: const TextStyle(color: Colors.grey),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "RM " + price.toString(),
-                            style: Theme.of(context).textTheme.subtitle2,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'UOM',
+                              style: const TextStyle(color: Colors.grey),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "RM " + price.toString(),
+                              style: TextStyle(
+                                  color: GlobalColors.mainColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ],
                     ),

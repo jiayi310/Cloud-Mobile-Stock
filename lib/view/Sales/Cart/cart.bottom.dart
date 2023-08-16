@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobilestock/models/Product.dart';
 import 'package:mobilestock/size.config.dart';
+import 'package:mobilestock/view/Sales/CheckOut/checkout.view.dart';
 
 import '../../../utils/global.colors.dart';
 
@@ -62,7 +63,10 @@ class CartBottomBar extends StatelessWidget {
               ),
               SizedBox(width: 10),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CheckOutPage()));
+                },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                   decoration: BoxDecoration(
