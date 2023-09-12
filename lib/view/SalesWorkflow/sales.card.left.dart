@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Analysis/analysis.view.dart';
+import 'package:mobilestock/view/ClockIn/clockin.view.dart';
 import 'package:mobilestock/view/Sales/home.sales.dart';
-
-import '../../models/Product.dart';
-import '../Quotation/quotation.view.dart';
 
 class SalesCardLeft extends StatelessWidget {
   SalesCardLeft({
@@ -28,7 +25,10 @@ class SalesCardLeft extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            if (route == "sales")
+            if (route == "clockin")
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ClockInHomeScreen()));
+            else if (route == "sales")
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => HomeSalesScreen()));
             else if (route == "analysis")

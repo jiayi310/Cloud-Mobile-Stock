@@ -31,7 +31,7 @@ class ItemCheckout extends StatelessWidget {
                     color: Color.fromARGB(255, 224, 224, 244),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image.asset(demo_product[i].image),
+                  child: Image.asset(demo_product[i].image.toString()),
                 ),
                 Expanded(
                   child: Container(
@@ -42,7 +42,7 @@ class ItemCheckout extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          demo_product[i].title,
+                          demo_product[i].title.toString(),
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
@@ -94,6 +94,5 @@ class ItemCheckout extends StatelessWidget {
           )
       ],
     );
-    ;
   }
 }

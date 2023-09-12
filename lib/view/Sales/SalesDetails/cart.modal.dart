@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobilestock/size.config.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 
 import '../../../models/Product.dart';
@@ -14,7 +13,7 @@ class AddToCartModal extends StatefulWidget {
 }
 
 class _AddToCartModalState extends State<AddToCartModal> {
-  _AddToCartModalState({Key? key, required this.product});
+  _AddToCartModalState({required this.product});
 
   List uom = ["PCS", "PC", "BOX"];
   final Product product;
@@ -47,7 +46,7 @@ class _AddToCartModalState extends State<AddToCartModal> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      product.title,
+                      product.title.toString(),
                       style: TextStyle(
                         color: GlobalColors.mainColor,
                         fontSize: 18,

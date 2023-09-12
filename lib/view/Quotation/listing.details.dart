@@ -12,7 +12,7 @@ class ListingDetails extends StatefulWidget {
 }
 
 class _ListingDetails extends State<ListingDetails> {
-  _ListingDetails({Key? key, required this.quotation});
+  _ListingDetails({required this.quotation});
   Quotation quotation;
 
   List<Map> _books = [

@@ -3,10 +3,18 @@ import 'package:mobilestock/models/Customer.dart';
 
 import '../../utils/global.colors.dart';
 
-class CustomerDetails extends StatelessWidget {
+class CustomerDetails extends StatefulWidget {
   const CustomerDetails({Key? key, required this.customer}) : super(key: key);
-
   final Customer customer;
+
+  @override
+  State<CustomerDetails> createState() =>
+      _CustomerDetailsState(customer: customer);
+}
+
+class _CustomerDetailsState extends State<CustomerDetails> {
+  final Customer customer;
+  _CustomerDetailsState({Key? key, required this.customer});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +26,7 @@ class CustomerDetails extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          customer.AccNo,
+          customer.customerCode.toString(),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -60,7 +68,7 @@ class CustomerDetails extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    customer.Name,
+                    customer.name.toString(),
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -72,7 +80,7 @@ class CustomerDetails extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    customer.Phone,
+                    customer.phone1.toString(),
                     style: TextStyle(fontSize: 15),
                   ),
                 ),

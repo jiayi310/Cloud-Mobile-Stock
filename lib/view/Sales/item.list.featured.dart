@@ -30,10 +30,10 @@ class ItemsWidget extends StatelessWidget {
               (index) => Padding(
                 padding: const EdgeInsets.only(right: defaultPadding),
                 child: ProductCard(
-                  title: demo_product[index].title,
-                  image: demo_product[index].image,
-                  price: demo_product[index].price,
-                  bgColor: demo_product[index].bgColor,
+                  title: demo_product[index].title.toString(),
+                  image: demo_product[index].image.toString(),
+                  price: demo_product[index].price!,
+                  bgColor: demo_product[index].bgColor!,
                   press: () {
                     Navigator.push(
                         context,

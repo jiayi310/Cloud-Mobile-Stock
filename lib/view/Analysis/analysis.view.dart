@@ -12,7 +12,6 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  @override
   final covidUSADailyNewCases = [
     12.17,
     11.15,

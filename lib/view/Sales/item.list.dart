@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobilestock/view/Sales/product.card.dart';
 import 'package:mobilestock/view/Sales/section.title.dart';
 
@@ -31,10 +32,10 @@ class ItemsGridWidget extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return ProductCard(
-                title: demo_product[index].title,
-                image: demo_product[index].image,
-                price: demo_product[index].price,
-                bgColor: demo_product[index].bgColor,
+                title: demo_product[index].title.toString(),
+                image: demo_product[index].image.toString(),
+                price: demo_product[index].price!,
+                bgColor: demo_product[index].bgColor!,
                 press: () {
                   Navigator.push(
                       context,

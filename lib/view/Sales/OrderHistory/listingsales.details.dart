@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilestock/models/Sales.dart';
 
-import '../../../models/Sales.dart';
-
 class ListingSalesDetails extends StatefulWidget {
   ListingSalesDetails({Key? key, required this.sales}) : super(key: key);
   Sales sales;
@@ -14,7 +12,7 @@ class ListingSalesDetails extends StatefulWidget {
 }
 
 class _ListingSalesDetails extends State<ListingSalesDetails> {
-  _ListingSalesDetails({Key? key, required this.sales});
+  _ListingSalesDetails({required this.sales});
   Sales sales;
 
   List<Map> _books = [

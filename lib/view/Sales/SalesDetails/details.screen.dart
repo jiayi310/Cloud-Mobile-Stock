@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 
 import '../../../models/Product.dart';
@@ -21,7 +20,7 @@ class DetailsScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          product.title,
+          product.title.toString(),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -37,7 +36,7 @@ class DetailsScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Image.asset(
-                          product.image,
+                          product.image.toString(),
                           height: MediaQuery.of(context).size.height * 0.3,
                           fit: BoxFit.cover,
                         ),
@@ -59,9 +58,9 @@ class DetailsScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    product.title,
+                                    product.title.toString(),
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 const SizedBox(width: defaultPadding),

@@ -1,14 +1,7 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:mobilestock/view/Analysis/analysis.view.dart';
-import 'package:mobilestock/view/Sales/home.sales.dart';
 import 'package:mobilestock/view/SalesWorkflow/sales.card.left.dart';
 import 'package:mobilestock/view/SalesWorkflow/sales.card.right.dart';
 import '../../utils/global.colors.dart';
-import '../Quotation/quotation.view.dart';
-import 'background.dart';
 
 class SalesWorkFlowPage extends StatefulWidget {
   const SalesWorkFlowPage({super.key});
@@ -32,8 +25,6 @@ class _HomeScreenState extends State<SalesWorkFlowPage> {
 
   @override
   Widget build(BuildContext context) {
-    double picturewidth = (MediaQuery.of(context).size.height * 914.0) / 1319.0;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

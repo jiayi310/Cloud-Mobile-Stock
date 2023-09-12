@@ -1,24 +1,45 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:mobilestock/models/Product.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Customer/customer.details.dart';
 
+import '../../api/base.client.dart';
 import '../../models/Customer.dart';
 
-class CustomerCard extends StatelessWidget {
+class CustomerCard extends StatefulWidget {
+  const CustomerCard({Key? key}) : super(key: key);
+
+  @override
+  State<CustomerCard> createState() => _CustomerCardState();
+}
+
+class _CustomerCardState extends State<CustomerCard> {
+  List<Customer> customerlist = [];
+  String companyid = "";
+  final storage = new FlutterSecureStorage();
+  List<Customer> userFromJson(String str) =>
+      List<Customer>.from(json.decode(str).map((x) => Customer.fromJson(x)));
+
+  @override
+  void initState() {
+    super.initState();
+    getCustomerData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (int i = 0; i < demo_customer.length; i++)
+        for (int i = 0; i < customerlist.length; i++)
           InkWell(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        CustomerDetails(customer: demo_customer[i]),
+                        CustomerDetails(customer: customerlist[i]),
                   ));
             },
             child: Container(
@@ -47,7 +68,7 @@ class CustomerCard extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     child: Text(
-                                      demo_customer[i].Name,
+                                      customerlist[i].name.toString(),
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
@@ -65,7 +86,7 @@ class CustomerCard extends StatelessWidget {
                                       color: GlobalColors.mainColor,
                                       borderRadius: BorderRadius.circular(30)),
                                   child: Text(
-                                    demo_customer[i].AccNo,
+                                    customerlist[i].customerCode.toString(),
                                     style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                       fontWeight: FontWeight.bold,
@@ -82,7 +103,7 @@ class CustomerCard extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     child: Text(
-                                      demo_customer[i].Name2,
+                                      customerlist[i].name2.toString(),
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         fontSize: 13,
@@ -99,7 +120,7 @@ class CustomerCard extends StatelessWidget {
                                       color: Colors.pinkAccent,
                                       borderRadius: BorderRadius.circular(30)),
                                   child: Text(
-                                    demo_customer[i].Email,
+                                    customerlist[i].email.toString(),
                                     style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                       fontWeight: FontWeight.bold,
@@ -116,7 +137,7 @@ class CustomerCard extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     child: Text(
-                                      demo_customer[i].Agent,
+                                      customerlist[i].salesAgent.toString(),
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         fontSize: 13,
@@ -132,7 +153,7 @@ class CustomerCard extends StatelessWidget {
                                       color: Colors.blue,
                                       borderRadius: BorderRadius.circular(30)),
                                   child: Text(
-                                    demo_customer[i].Phone,
+                                    customerlist[i].phone1.toString(),
                                     style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                       fontWeight: FontWeight.bold,
@@ -154,5 +175,19 @@ class CustomerCard extends StatelessWidget {
           )
       ],
     );
+  }
+
+  Future<void> getCustomerData() async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get(
+          '/Customer/GetCustomerListWithForeignTablesByCompanyId?companyid=' +
+              companyid);
+      List<Customer> _customerlist = userFromJson(response);
+
+      setState(() {
+        customerlist = _customerlist;
+      });
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:mobilestock/view/Analysis/styles.dart';
 
 import '../../models/DataModel.dart';
 
@@ -95,39 +94,4 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     }
     return list;
   }
-
-  SideTitles get _bottomTitles => SideTitles(
-        showTitles: true,
-        getTitlesWidget: (value, meta) {
-          String text = '';
-          switch (value.toInt()) {
-            case 0:
-              text = 'Mon';
-              break;
-            case 1:
-              text = 'Tue';
-              break;
-            case 2:
-              text = 'Wed';
-              break;
-            case 3:
-              text = 'Thu';
-              break;
-            case 4:
-              text = 'Fri';
-              break;
-            case 5:
-              text = 'Sat';
-              break;
-            case 6:
-              text = 'Sun';
-              break;
-          }
-
-          return Text(
-            text,
-            style: TextStyle(fontSize: 10),
-          );
-        },
-      );
 }

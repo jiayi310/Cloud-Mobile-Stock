@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Quotation/quotation.view.dart';
 
-import '../../models/Product.dart';
+import '../Collection/collection.view.dart';
 
 class SalesCardRight extends StatelessWidget {
   SalesCardRight(
@@ -31,6 +29,11 @@ class SalesCardRight extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => QuotationHomeScreen()));
+            if (route == "collection")
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CollectionHomeScreen()));
           },
           child: Container(
             width: MediaQuery.of(context).size.width / 1.3,

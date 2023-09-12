@@ -16,8 +16,7 @@ class DetailsListingScreen extends StatefulWidget {
 }
 
 class _DetailsListingScreen extends State<DetailsListingScreen> {
-  bool _visible = false;
-  _DetailsListingScreen({Key? key, required this.quotation});
+  _DetailsListingScreen({required this.quotation});
   final Quotation quotation;
 
   @override

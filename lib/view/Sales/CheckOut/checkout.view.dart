@@ -10,9 +10,6 @@ import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 import 'dart:ui' as ui;
 import 'dart:io';
 import 'package:open_file/open_file.dart';
-import 'package:universal_html/html.dart' show AnchorElement;
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:convert';
 
 import '../../../utils/global.colors.dart';
 import 'checkout.bottom.dart';

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/models/Quotation.dart';
-import 'package:mobilestock/view/Quotation/listing.details.dart';
-import 'package:mobilestock/view/Quotation/listing.header.dart';
 import 'package:mobilestock/view/Sales/OrderHistory/history.header.dart';
 
 import '../../../models/Sales.dart';
@@ -18,8 +15,7 @@ class HistoryListingScreen extends StatefulWidget {
 }
 
 class _HistoryListingScreen extends State<HistoryListingScreen> {
-  bool _visible = false;
-  _HistoryListingScreen({Key? key, required this.sales});
+  _HistoryListingScreen({required this.sales});
   final Sales sales;
 
   @override

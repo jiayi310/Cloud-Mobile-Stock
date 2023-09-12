@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/models/Product.dart';
 import 'package:mobilestock/size.config.dart';
-
-import '../../../utils/global.colors.dart';
 
 class AddBottomBar extends StatelessWidget {
   const AddBottomBar({Key? key}) : super(key: key);

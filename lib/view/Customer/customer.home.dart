@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/models/Customer.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Customer/customer.add.dart';
 import 'package:mobilestock/view/Customer/customer.card.dart';

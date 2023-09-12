@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobilestock/view/Customer/add.bottom.dart';
 import 'package:mobilestock/view/Customer/textfield.widget.dart';
-import 'package:mobilestock/view/Settings/settings.constant.dart';
 
 import '../../utils/global.colors.dart';
-import '../../widgets/text.form.global.dart';
 
 class NewCustomer extends StatelessWidget {
   NewCustomer({Key? key}) : super(key: key);

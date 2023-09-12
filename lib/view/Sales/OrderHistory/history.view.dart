@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/view/Quotation/quotation.card.dart';
 import 'package:mobilestock/view/Sales/OrderHistory/history.card.dart';
 
 import '../../../utils/global.colors.dart';

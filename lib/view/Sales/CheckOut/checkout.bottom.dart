@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/models/Product.dart';
 import 'package:mobilestock/size.config.dart';
 import 'package:mobilestock/view/Sales/CheckOut/checkout.view.dart';
 

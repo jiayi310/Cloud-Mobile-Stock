@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilestock/view/Quotation/quotation.add.dart';
 import 'package:mobilestock/view/Quotation/quotation.card.dart';
 
 import '../../utils/global.colors.dart';
@@ -19,8 +20,8 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => NewCustomer()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => QuotationAdd()));
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,

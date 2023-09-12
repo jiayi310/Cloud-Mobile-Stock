@@ -1,25 +1,47 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:mobilestock/utils/global.colors.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../../api/base.client.dart';
 import '../../models/Product.dart';
 import 'StockDetails/details.view.dart';
 
-class StockCard extends StatelessWidget {
-  StockCard({Key? key}) : super(key: key);
+class StockCard extends StatefulWidget {
+  const StockCard({Key? key}) : super(key: key);
+
+  @override
+  State<StockCard> createState() => _StockCardState();
+}
+
+class _StockCardState extends State<StockCard> {
+  _StockCardState({Key? key});
+
+  List<Product> productlist = [];
+  String companyid = "";
+  final storage = new FlutterSecureStorage();
+  List<Product> productFromJson(String str) =>
+      List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getStockData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (int i = 0; i < demo_product.length; i++)
+        for (int i = 0; i < productlist.length; i++)
           InkWell(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => StockDetails(
-                      product: demo_product[i],
+                      product: productlist[i],
                     ),
                   ));
             },
@@ -48,7 +70,7 @@ class StockCard extends StatelessWidget {
                                 color: Colors.green,
                                 borderRadius: BorderRadius.circular(30)),
                             child: Text(
-                              demo_product[i].title,
+                              productlist[i].stockCode.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,
@@ -60,7 +82,7 @@ class StockCard extends StatelessWidget {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "UOM",
+                          productlist[i].baseUOM.toString(),
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontSize: 15,
@@ -76,7 +98,7 @@ class StockCard extends StatelessWidget {
                         Flexible(
                           flex: 1,
                           child: Text(
-                            demo_product[i].title,
+                            productlist[i].description.toString(),
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -104,7 +126,7 @@ class StockCard extends StatelessWidget {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "RM" + demo_product[i].price.toString(),
+                          "RM" + productlist[i].price.toString(),
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
@@ -121,5 +143,19 @@ class StockCard extends StatelessWidget {
           )
       ],
     );
+  }
+
+  Future<void> getStockData() async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get(
+          '/Stock/GetStockListWithForeignTablesByCompanyId?companyid=' +
+              companyid);
+      List<Product> _productlist = productFromJson(response);
+
+      setState(() {
+        productlist = _productlist;
+      });
+    }
   }
 }
