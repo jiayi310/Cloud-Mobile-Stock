@@ -3,8 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:mobilestock/models/Product.dart';
 
 class StockDetails extends StatefulWidget {
-  const StockDetails({Key? key, required this.product}) : super(key: key);
-  final Product product;
+  StockDetails({Key? key, required this.product}) : super(key: key);
+  String product;
 
   @override
   State<StockDetails> createState() => _StockDetails(product: product);
@@ -13,7 +13,7 @@ class StockDetails extends StatefulWidget {
 class _StockDetails extends State<StockDetails>
     with SingleTickerProviderStateMixin {
   _StockDetails({required this.product});
-  final Product product;
+  String product;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class _StockDetails extends State<StockDetails>
         elevation: 0,
         centerTitle: true,
         title: Text(
-          product.title.toString(),
+          product,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -86,7 +86,7 @@ class _StockDetails extends State<StockDetails>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          product.title.toString(),
+                          product,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),

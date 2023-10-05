@@ -36,9 +36,10 @@ class _HomeScreenState extends State<SalesWorkFlowPage> {
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/background.jpg"),
-                  fit: BoxFit.fill)),
+              // image: DecorationImage(
+              //     image: AssetImage("assets/images/background.jpg"),
+              //     fit: BoxFit.fill)
+              ),
           child: Column(
             children: [
               Padding(
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<SalesWorkFlowPage> {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 10,
               ),
               Align(
                   alignment: Alignment.centerLeft,

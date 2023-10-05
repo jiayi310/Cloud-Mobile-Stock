@@ -6,12 +6,12 @@ import 'package:mobilestock/view/Analysis/widgets.bar.dart';
 import 'package:mobilestock/view/Analysis/widgets.custom.dart';
 import 'package:mobilestock/view/Analysis/widgets.grid.dart';
 
-class StatsScreen extends StatefulWidget {
+class AnalysisScreen extends StatefulWidget {
   @override
   _StatsScreenState createState() => _StatsScreenState();
 }
 
-class _StatsScreenState extends State<StatsScreen> {
+class _StatsScreenState extends State<AnalysisScreen> {
   final covidUSADailyNewCases = [
     12.17,
     11.15,

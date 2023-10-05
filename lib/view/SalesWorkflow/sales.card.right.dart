@@ -46,7 +46,7 @@ class SalesCardRight extends StatelessWidget {
             child: Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(5),
                   child: Column(
                     children: [
                       Padding(
@@ -77,7 +77,7 @@ class SalesCardRight extends StatelessWidget {
                       Align(
                           alignment: Alignment.centerRight,
                           child: Container(
-                            width: MediaQuery.of(context).size.width / 3,
+                            width: MediaQuery.of(context).size.width / 2.6,
                             child: Text(
                               subtext,
                               style: TextStyle(
@@ -91,11 +91,11 @@ class SalesCardRight extends StatelessWidget {
                 Positioned(
                     top: 10,
                     left: 30,
-                    child: buildEditIcon(maincolor, mainimage, 130, 50)),
+                    child: buildEditIcon(maincolor, mainimage, 110, 30)),
                 Positioned(
                     top: 0,
-                    left: 120,
-                    child: buildEditIcon(subcolor, subimage, 50, 25)),
+                    left: 110,
+                    child: buildEditIcon(subcolor, subimage, 45, 25)),
               ],
             ),
           ),

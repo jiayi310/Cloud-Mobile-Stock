@@ -1,15 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:mobilestock/api/base.client.dart';
 import 'package:mobilestock/models/UserCompanyLoginSelectionDto.dart';
 import 'package:mobilestock/view/social.login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../utils/global.colors.dart';
 import 'home.view.dart';
 
@@ -30,6 +27,8 @@ class _LoginViewState extends State<LoginView> {
   final storage = new FlutterSecureStorage();
   bool value = false;
   int userid = 0;
+  String _username = "Username";
+  int isLogin = 0;
 
   int companyid = 0;
   List<UserCompanyLoginSelectionDto> companylist = [
@@ -66,6 +65,7 @@ class _LoginViewState extends State<LoginView> {
 
     if (token == 1) {
       setState(() {
+        isLogin = 1;
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Home()),
@@ -102,7 +102,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 const SizedBox(height: 30),
 
-                ///Email Input
+                ///Username Input
                 Container(
                     height: 55,
                     padding: const EdgeInsets.only(top: 3, left: 15),
@@ -115,35 +115,26 @@ class _LoginViewState extends State<LoginView> {
                             blurRadius: 7,
                           )
                         ]),
-                    child: TextFormField(
-                      onChanged: (text) {
-                        setState(() {
-                          companylist = [
-                            new UserCompanyLoginSelectionDto(
-                                userMappingID: 0,
-                                userTypeID: 0,
-                                type: null,
-                                comapanyName: "Select Company",
-                                isActive: true)
-                          ];
-                        });
-                      },
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                          errorText: _validate ? 'Field cannot be empty' : null,
-                          hintText: 'Email',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(0),
-                          hintStyle: const TextStyle(
-                            height: 1,
-                          )),
-                    )),
-                const SizedBox(height: 20),
-
-                ///Password Input
-                Container(
+                    child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (context) {
+                                return _LoginUserModal();
+                              });
+                        },
+                        child: Container(
+                          width: double.maxFinite,
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                _username,
+                              )),
+                        ))),
+                if (_username != "Username") const SizedBox(height: 30),
+                if (_username != "Username")
+                  Container(
                     height: 55,
                     padding: const EdgeInsets.only(top: 3, left: 15),
                     decoration: BoxDecoration(
@@ -155,55 +146,7 @@ class _LoginViewState extends State<LoginView> {
                             blurRadius: 7,
                           )
                         ]),
-                    child: TextFormField(
-                      onChanged: (text) {
-                        setState(() {
-                          companylist = [
-                            new UserCompanyLoginSelectionDto(
-                                userMappingID: 0,
-                                userTypeID: 0,
-                                type: null,
-                                comapanyName: "Select Company",
-                                isActive: true)
-                          ];
-                        });
-                      },
-                      controller: passwordController,
-                      keyboardType: TextInputType.text,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          errorText:
-                              _validate2 ? 'Field cannot be empty' : null,
-                          hintText: 'Password',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(0),
-                          hintStyle: const TextStyle(
-                            height: 1,
-                          )),
-                    )),
-                const SizedBox(height: 20),
-                Container(
-                  height: 55,
-                  padding: const EdgeInsets.only(top: 3, left: 15),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 7,
-                        )
-                      ]),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        getCompanyList();
-                      });
-                    },
                     child: DropdownButton<UserCompanyLoginSelectionDto>(
-                      onTap: () {
-                        getCompanyList();
-                      },
                       value: company,
                       isExpanded: true,
                       onChanged: (UserCompanyLoginSelectionDto? newvalue) {
@@ -225,7 +168,6 @@ class _LoginViewState extends State<LoginView> {
                       }).toList(),
                     ),
                   ),
-                ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -241,21 +183,19 @@ class _LoginViewState extends State<LoginView> {
                     Text("Remember Me"),
                   ],
                 ),
-
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
-                    setState(() {
-                      emailController.text.isEmpty
-                          ? _validate = true
-                          : _validate = false;
-
-                      passwordController.text.isEmpty
-                          ? _validate2 = true
-                          : _validate2 = false;
-                    });
-                    TextInput.finishAutofillContext();
-                    fetchUsers();
+                    if (_username == "Username") {
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (context) {
+                            return _LoginUserModal();
+                          });
+                    } else {
+                      _validateLogin();
+                    }
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -269,8 +209,8 @@ class _LoginViewState extends State<LoginView> {
                             blurRadius: 10,
                           )
                         ]),
-                    child: const Text(
-                      'Sign In',
+                    child: Text(
+                      'Login',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -278,8 +218,41 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 70),
-                SocialLogin(),
+                SizedBox(
+                  height: 30,
+                ),
+                if (isLogin == 1)
+                  InkWell(
+                    onTap: () {
+                      storeTokenAndData(
+                          "",
+                          "",
+                          false,
+                          0,
+                          0,
+                          new UserCompanyLoginSelectionDto(comapanyName: ""),
+                          "");
+
+                      setState(() {
+                        isLogin = 0;
+                        showModalBottomSheet(
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) {
+                              return _LoginUserModal();
+                            });
+                      });
+                    },
+                    child: Center(
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  )
               ],
             ),
           ),
@@ -299,6 +272,198 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
+  _LoginUserModal() {
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+                padding:
+                    EdgeInsets.only(left: 30, right: 30, bottom: 50, top: 30),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    )),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 223, 221, 221),
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Account Log In",
+                      style: TextStyle(
+                        color: GlobalColors.mainColor,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    ///Email Input
+                    Container(
+                        height: 55,
+                        padding: const EdgeInsets.only(top: 3, left: 15),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 7,
+                              )
+                            ]),
+                        child: TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              errorText:
+                                  _validate ? 'Field cannot be empty' : null,
+                              hintText: 'Email',
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0),
+                              hintStyle: const TextStyle(
+                                height: 1,
+                              )),
+                        )),
+                    const SizedBox(height: 20),
+
+                    ///Password Input
+                    Container(
+                        height: 55,
+                        padding: const EdgeInsets.only(top: 3, left: 15),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 7,
+                              )
+                            ]),
+                        child: TextFormField(
+                          controller: passwordController,
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              errorText:
+                                  _validate2 ? 'Field cannot be empty' : null,
+                              hintText: 'Password',
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0),
+                              hintStyle: const TextStyle(
+                                height: 1,
+                              )),
+                        )),
+                    const SizedBox(height: 10),
+                    // Row(
+                    //   children: [
+                    //     Checkbox(
+                    //         materialTapTargetSize:
+                    //             MaterialTapTargetSize.shrinkWrap,
+                    //         value: this.value,
+                    //         activeColor: GlobalColors.mainColor,
+                    //         onChanged: (bool? value) {
+                    //           setState(() {
+                    //             this.value = value!;
+                    //           });
+                    //         }),
+                    //     Text("Remember Me"),
+                    //   ],
+                    // ),
+
+                    const SizedBox(height: 10),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          emailController.text.isEmpty
+                              ? _validate = true
+                              : _validate = false;
+
+                          passwordController.text.isEmpty
+                              ? _validate2 = true
+                              : _validate2 = false;
+                        });
+                        TextInput.finishAutofillContext();
+                        fetchUsers();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 55,
+                        decoration: BoxDecoration(
+                            color: GlobalColors.mainColor,
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 10,
+                              )
+                            ]),
+                        child: const Text(
+                          'Sign In',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SocialLogin()
+                  ],
+                )),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _validateLogin() async {
+    if (company.comapanyName == "Select Company") {
+      Fluttertoast.showToast(
+        msg: "Please select a company.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+      );
+    } else {
+      final resp = await BaseClient().get(
+          '/User/ValidateMobileRemember?email=' +
+              emailController.text! +
+              '&password=' +
+              passwordController.text! +
+              '');
+
+      int i = int.parse(resp.toString());
+      if (i > 0) {
+        storeTokenAndData(emailController.text, passwordController.text, true,
+            userid, companyid, company, _username);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "Incorrect email and password.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+        );
+      }
+    }
+  }
+
   void fetchUsers() async {
     if (!emailController.text.isEmpty && !passwordController.text.isEmpty) {
       final resp = await BaseClient().get('/User/ValidateUserLogin?email=' +
@@ -314,32 +479,25 @@ class _LoginViewState extends State<LoginView> {
       if (i > 0) {
         if (emailController.text.isNotEmpty &&
             passwordController.text.isNotEmpty) {
-          if (company.comapanyName == "Select Company") {
-            Fluttertoast.showToast(
-              msg: "Please select a company.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 2,
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
-            if (value)
-              storeTokenAndData(emailController.text, passwordController.text,
-                  value, i, companyid, company);
-            else
-              storeTokenAndData(emailController.text, passwordController.text,
-                  value, i, companyid, company);
+          final resp = await BaseClient()
+              .get('/User/GetUser?userid=' + i.toString() + '');
 
-            Fluttertoast.showToast(
-              msg: "Login successfully.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 2,
-            );
-          }
+          setState(() {
+            final body = jsonDecode(resp);
+            String? username = body['name'];
+
+            _username = username!;
+            isLogin = 1;
+          });
+
+          Fluttertoast.showToast(
+            msg: "Login successfully.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 2,
+          );
+          Navigator.pop(context);
+          getCompanyList();
         }
       } else {
         Fluttertoast.showToast(
@@ -354,18 +512,19 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<void> storeTokenAndData(
-    String email,
-    String usercredential,
-    bool remember,
-    int userid,
-    int companyid,
-    UserCompanyLoginSelectionDto company,
-  ) async {
+      String email,
+      String usercredential,
+      bool remember,
+      int userid,
+      int companyid,
+      UserCompanyLoginSelectionDto company,
+      String username) async {
     await storage.write(key: "email", value: email);
     await storage.write(key: "usercredential", value: usercredential);
     await storage.write(key: "remember", value: remember.toString());
     await storage.write(key: "userid", value: userid.toString());
     await storage.write(key: "companyid", value: companyid.toString());
+    await storage.write(key: "username", value: username);
     await storage.write(
         key: "company", value: UserCompanyLoginSelectionDto.serialize(company));
     await BaseClient()
@@ -379,6 +538,7 @@ class _LoginViewState extends State<LoginView> {
     String? _userid = await storage.read(key: "userid");
     String? _companyid = await storage.read(key: "companyid");
     String? _company2 = await storage.read(key: "company");
+    String? _username2 = await storage.read(key: "username");
     _company = UserCompanyLoginSelectionDto.deserialize(_company2!);
 
     if (_company != null) {
@@ -386,6 +546,8 @@ class _LoginViewState extends State<LoginView> {
       companylist.add(_company);
       company = companylist[0];
     }
+
+    _username = _username2!;
 
     userid = int.parse(_userid.toString());
     companyid = int.parse(_companyid.toString());
@@ -425,12 +587,6 @@ class _LoginViewState extends State<LoginView> {
       int k = int.parse(resp.toString());
 
       if (k != 0) {
-        Fluttertoast.showToast(
-          msg: "Validating...",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 2,
-        );
         String response = await BaseClient()
             .get('/User/GetCompanyLoginList?userid=' + k.toString() + '');
 

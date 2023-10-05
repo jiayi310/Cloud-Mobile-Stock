@@ -41,7 +41,7 @@ class _StockCardState extends State<StockCard> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => StockDetails(
-                      product: productlist[i],
+                      product: productlist[i].title!,
                     ),
                   ));
             },

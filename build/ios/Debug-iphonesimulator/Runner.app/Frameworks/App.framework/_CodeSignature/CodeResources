@@ -8,13 +8,13 @@
 		<data>
 		85iaADE5tc/NukRC+KGdiZaZ0ZA=
 		</data>
+		<key>flutter_assets/AssetManifest.bin</key>
+		<data>
+		21XsCcVSeKIg2UvgqrGRjQXgoCg=
+		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		DskOWEBLG0p5z+VTD19whws6/jM=
-		</data>
-		<key>flutter_assets/AssetManifest.smcbin</key>
-		<data>
-		fKmvc27JspWGG7/NFO6MD1/vAbk=
+		K/zcdFdkH8BIJV4CZNYyVDjaL/8=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -22,7 +22,15 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		+F5FNxMdwBmcssa1cRWHWdw8FMg=
+		3jEr05OMUSsGj2vlaMxstGd8Aos=
+		</data>
+		<key>flutter_assets/assets/home_menu.json</key>
+		<data>
+		XdWt1JmSlBD2FV9ze5IMw3RyXMA=
+		</data>
+		<key>flutter_assets/assets/images/.DS_Store</key>
+		<data>
+		3y++sUAKzaCQmjLBz2v0kvESHgc=
 		</data>
 		<key>flutter_assets/assets/images/agiliti_logo.png</key>
 		<data>
@@ -56,6 +64,10 @@
 		<data>
 		GeuzqwZj95bCJOJ/VaxU6j3ZWKA=
 		</data>
+		<key>flutter_assets/assets/images/customer.png</key>
+		<data>
+		k9IzyumsEaJjhr8+z1TAiErX3dY=
+		</data>
 		<key>flutter_assets/assets/images/five.png</key>
 		<data>
 		9c6uohWK8H/71WbYLHA6eqpi5sk=
@@ -67,6 +79,10 @@
 		<key>flutter_assets/assets/images/google.svg</key>
 		<data>
 		96KZs+hMbd/aERSgle4Ny7gS+t0=
+		</data>
+		<key>flutter_assets/assets/images/inventory.png</key>
+		<data>
+		wwsYTvafct+M4qX84kdMCMdaAos=
 		</data>
 		<key>flutter_assets/assets/images/light-1.png</key>
 		<data>
@@ -120,6 +136,10 @@
 		<data>
 		HrIzX7/N8XTB9RyteUVPQEwpgJY=
 		</data>
+		<key>flutter_assets/assets/images/salesflow.png</key>
+		<data>
+		RWUn++hOr2qBRsMX0wcsOSthj+w=
+		</data>
 		<key>flutter_assets/assets/images/salesworkflow.png</key>
 		<data>
 		nOTL3M99L5fhchZE6HGPNYbQTpc=
@@ -146,11 +166,11 @@
 		</data>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<data>
-		G7f+W7DM6WgAF6e4R0YmmZObSn4=
+		gLUZUNbndCKs00+ddk9hgePiKHQ=
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		FgeF0R42A1FQKl68mM28FsMCQZQ=
+		VyU/xYBDkPLBhkUw8gNqp01ilgg=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -164,29 +184,37 @@
 		<data>
 		v5LMft1C/Ps/+tw6D+zco3p3Urk=
 		</data>
+		<key>flutter_assets/packages/simple_barcode_scanner/assets/barcode.html</key>
+		<data>
+		DNfI2vRRzvy8fiW0XE6ZTr0pf0Q=
+		</data>
+		<key>flutter_assets/packages/simple_barcode_scanner/assets/html5-qrcode.min.js</key>
+		<data>
+		5OvoJ2fbWmDE//c/WOsJAVIwEeA=
+		</data>
 		<key>flutter_assets/shaders/ink_sparkle.frag</key>
 		<data>
 		KL+7f3IYR/Y9WDlxxUeDmgGoluc=
 		</data>
 		<key>flutter_assets/vm_snapshot_data</key>
 		<data>
-		GIVOmCdKRJPjhwyeBDaqRSmW/rc=
+		+HsWKuOINTMijVvKruokFpzcml8=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>flutter_assets/AssetManifest.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+vOVdzSUGJ5a7Tx4macI+T7EF5g17Aaj+99Lz2NkBAk=
+			</data>
+		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			7/l2EiPVRX13q5z1XdZaYXWPoes1p8bqUIM9IZmp2sQ=
-			</data>
-		</dict>
-		<key>flutter_assets/AssetManifest.smcbin</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			m8JxqZ50qzBakxm/0Q/9df5PCu1L9WFKreTWC/Fw+9k=
+			HVtSr404pCPWV7DpLXiFPAStcdpv3Ukr0QGVGdymNb4=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -200,7 +228,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			owPNlBJ32IyOoPE8hMlrjfqIpvgAxzNSMztoa31DmFU=
+			jCiCwUmb3CFOPzvFlJ+w87RlInU04yKdfMGqYaOTe4o=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/home_menu.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			WD5iG4dE2Egq0fZh+hA+ED8i5hnf9rUBqUFardbRrag=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/agiliti_logo.png</key>
@@ -259,6 +294,13 @@
 			YXtrmNLhrFPj5JYq+Ri5mpOE4EKX70EhvedC0qv7bGo=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/customer.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			id4xR56zeUA2PAhAvkaEVzpKpsLAYAodetBC8ePssvQ=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/five.png</key>
 		<dict>
 			<key>hash2</key>
@@ -278,6 +320,13 @@
 			<key>hash2</key>
 			<data>
 			M1UdKwwy/ylqjuRcYeKabzFa0SerUx2mBglC2hifIno=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/inventory.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			JqmxGR1JV6ahuEPKhztUmTwrjZgPbs00+sLyQcjsgG8=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/light-1.png</key>
@@ -371,6 +420,13 @@
 			X9/dfrmmrV+H6L9nwwd39gChutRVNeN0aNycMN47YNc=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/salesflow.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			5vdNisqYsM7sXrkuZVkVWiJLsrz7aFqyY5qunwzV9yc=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/salesworkflow.png</key>
 		<dict>
 			<key>hash2</key>
@@ -417,14 +473,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			a0WltY9enMx/xAaluQU9u54Z/KOGA8WPZlZ1IIuzDMM=
+			rnNRNqkjfwz6o+ECah8gei8ooCiw3YLryTTvYxQ0uLg=
 			</data>
 		</dict>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tJYC11RLmjwd9y4QkfrHSN/a4nJtxTjPnLng7fKuxtM=
+			rYM/OuMVU4gpTsJsn7v0cba/3kbTuULnL0HyWYEvx0E=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -448,6 +504,20 @@
 			CRyacJlKIATuArBPER1Aq+QMB7BmhWOZ9YxYcELsKZA=
 			</data>
 		</dict>
+		<key>flutter_assets/packages/simple_barcode_scanner/assets/barcode.html</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			gctfkPyXkYHL6x1oFEo8FZBfN6R1hjTUAiqiMGw/Cx8=
+			</data>
+		</dict>
+		<key>flutter_assets/packages/simple_barcode_scanner/assets/html5-qrcode.min.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2UIwBBwKc2IeUsftGnsvlVMGLXe3FW8bhRxcJV3oteg=
+			</data>
+		</dict>
 		<key>flutter_assets/shaders/ink_sparkle.frag</key>
 		<dict>
 			<key>hash2</key>
@@ -459,7 +529,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			K4h+E8VrnmlmBepiVsQbyWlUOtVSA/UGiqBRPbjQJ+8=
+			XRpcsR0vWGkDzG+35GjjzaJtqN3CuV3azmWWPti/o3M=
 			</data>
 		</dict>
 	</dict>

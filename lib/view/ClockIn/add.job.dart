@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/view/ClockIn/input.fields.dart';
 
+import '../../models/Job.dart';
 import '../../utils/global.colors.dart';
 
 class AddJobPage extends StatefulWidget {
@@ -196,6 +197,19 @@ class _AddJobPageState extends State<AddJobPage> {
             color: Colors.red,
           ));
     }
+  }
+
+  _addTask() {
+    Job(
+        note: _noteController.text,
+        title: _titleController.text,
+        date: DateFormat.yMd().format(_selectedDate),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _selectedColor,
+        isCompleted: 0);
   }
 
   _colorPallete() {

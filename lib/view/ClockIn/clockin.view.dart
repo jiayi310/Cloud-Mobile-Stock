@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/ClockIn/clockin.header.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:mobilestock/view/ClockIn/job.card.dart';
 
 class ClockInHomeScreen extends StatefulWidget {
   const ClockInHomeScreen({Key? key}) : super(key: key);
@@ -35,9 +36,9 @@ class _ClockInHomeScreenState extends State<ClockInHomeScreen> {
             ),
             Container(
               child: CalendarTimeline(
-                initialDate: DateTime(2020, 4, 20),
-                firstDate: DateTime(2019, 1, 15),
-                lastDate: DateTime(2020, 11, 20),
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2019),
+                lastDate: DateTime(2100),
                 onDateSelected: (date) => print(date),
                 leftMargin: 20,
                 monthColor: Colors.grey,
@@ -47,7 +48,11 @@ class _ClockInHomeScreenState extends State<ClockInHomeScreen> {
                 dotsColor: Color(0xFF333A47),
                 locale: 'en_ISO',
               ),
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            JobCard(),
           ],
         ),
       ),
