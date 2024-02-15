@@ -29,7 +29,7 @@ class ListingHeader extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  collection.DocNo,
+                  collection.docNo.toString(),
                   style: TextStyle(fontSize: 16, color: Colors.black38),
                 ),
                 SizedBox(

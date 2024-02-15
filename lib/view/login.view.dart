@@ -36,22 +36,22 @@ class _LoginViewState extends State<LoginView> {
         userMappingID: 0,
         userTypeID: 0,
         type: null,
-        comapanyName: "Select Company",
-        isActive: true)
+        companyName: "Select Company",
+        isDeletedTemporarily: true)
   ];
   UserCompanyLoginSelectionDto company = new UserCompanyLoginSelectionDto(
       userMappingID: 0,
       userTypeID: 0,
       type: null,
-      comapanyName: "Select Company",
-      isActive: true);
+      companyName: "Select Company",
+      isDeletedTemporarily: true);
 
   UserCompanyLoginSelectionDto _company = new UserCompanyLoginSelectionDto(
       userMappingID: 0,
       userTypeID: 0,
       type: null,
-      comapanyName: "Select Company",
-      isActive: true);
+      companyName: "Select Company",
+      isDeletedTemporarily: true);
   @override
   void initState() {
     super.initState();
@@ -151,9 +151,9 @@ class _LoginViewState extends State<LoginView> {
                       isExpanded: true,
                       onChanged: (UserCompanyLoginSelectionDto? newvalue) {
                         setState(() {
-                          print("company " + newvalue!.comapanyName);
+                          print("company " + newvalue!.companyName);
                           setState(() {
-                            company.comapanyName = newvalue.comapanyName;
+                            company.companyName = newvalue.companyName;
                             companyid = newvalue!.companyID!;
                           });
                         });
@@ -163,7 +163,7 @@ class _LoginViewState extends State<LoginView> {
                               (UserCompanyLoginSelectionDto value2) {
                         return DropdownMenuItem<UserCompanyLoginSelectionDto>(
                           value: value2,
-                          child: Text(value2.comapanyName!),
+                          child: Text(value2.companyName!),
                         );
                       }).toList(),
                     ),
@@ -230,7 +230,7 @@ class _LoginViewState extends State<LoginView> {
                           false,
                           0,
                           0,
-                          new UserCompanyLoginSelectionDto(comapanyName: ""),
+                          new UserCompanyLoginSelectionDto(companyName: ""),
                           "");
 
                       setState(() {
@@ -430,7 +430,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _validateLogin() async {
-    if (company.comapanyName == "Select Company") {
+    if (company.companyName == "Select Company") {
       Fluttertoast.showToast(
         msg: "Please select a company.",
         toastLength: Toast.LENGTH_SHORT,
@@ -447,7 +447,7 @@ class _LoginViewState extends State<LoginView> {
 
       int i = int.parse(resp.toString());
       if (i > 0) {
-        storeTokenAndData(emailController.text, passwordController.text, true,
+        storeTokenAndData(emailController.text, passwordController.text, value,
             userid, companyid, company, _username);
         Navigator.push(
           context,
@@ -487,6 +487,7 @@ class _LoginViewState extends State<LoginView> {
             String? username = body['name'];
 
             _username = username!;
+            userid = i;
             isLogin = 1;
           });
 
@@ -507,6 +508,13 @@ class _LoginViewState extends State<LoginView> {
           timeInSecForIosWeb: 2,
         );
       }
+    } else {
+      Fluttertoast.showToast(
+        msg: "Please key in the details.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+      );
     }
     print("userid: " + i.toString() + " companyid:" + companyid.toString());
   }
@@ -559,6 +567,10 @@ class _LoginViewState extends State<LoginView> {
       setState(() {
         value = true;
       });
+    } else {
+      setState(() {
+        value = false;
+      });
     }
 
     final resp = await BaseClient().get('/User/ValidateMobileRemember?email=' +
@@ -567,7 +579,10 @@ class _LoginViewState extends State<LoginView> {
         pass! +
         '');
 
-    return int.parse(resp.toString());
+    if (value == false)
+      return 0;
+    else
+      return int.parse(resp.toString());
   }
 
   Future<void> getCompanyList() async {
@@ -581,14 +596,14 @@ class _LoginViewState extends State<LoginView> {
           userMappingID: 0,
           userTypeID: 0,
           type: null,
-          comapanyName: "Select Company",
-          isActive: true);
+          companyName: "Select Company",
+          isDeletedTemporarily: true);
 
       int k = int.parse(resp.toString());
 
       if (k != 0) {
         String response = await BaseClient()
-            .get('/User/GetCompanyLoginList?userid=' + k.toString() + '');
+            .get('/User/GetCompanySelectionList?userid=' + k.toString() + '');
 
         List<UserCompanyLoginSelectionDto> userlist =
             UserCompanyLoginSelectionDto.userFromJson(response);
@@ -610,8 +625,8 @@ class _LoginViewState extends State<LoginView> {
                 userMappingID: 0,
                 userTypeID: 0,
                 type: null,
-                comapanyName: "Select Company",
-                isActive: true)
+                companyName: "Select Company",
+                isDeletedTemporarily: true)
           ];
         });
       }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobilestock/utils/global.colors.dart';
 
 class TextFieldWidget extends StatefulWidget {
   final String label;
-  final String text;
   final ValueChanged<String> onChanged;
+  final TextEditingController controller;
+  final Icon icon;
 
   const TextFieldWidget(
       {Key? key,
       required this.label,
-      required this.text,
+      required this.icon,
+      required this.controller,
       required this.onChanged})
       : super(key: key);
 
@@ -17,33 +20,61 @@ class TextFieldWidget extends StatefulWidget {
 }
 
 class _TextFieldWidgetState extends State<TextFieldWidget> {
-  late final TextEditingController controller;
-
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController(text: widget.text);
   }
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
+  }
+
+  void _updateText(val) {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.label,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
-          ),
-          TextField(
-            controller: controller,
+          TextFormField(
+            onChanged: (val) {},
+            decoration: InputDecoration(
+                labelText: widget.label,
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: GlobalColors.mainColor),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: GlobalColors.mainColor),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: GlobalColors.mainColor),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                hintText: widget.label,
+                prefixIcon: widget.icon),
+            controller: widget.controller,
+            validator: (value) {
+              if (widget.label == "Customer Code" || widget.label == "Name") {
+                if (value!.isEmpty)
+                  return "Cannot be empty";
+                else
+                  return null;
+              }
+
+              if (widget.label == "Email") {
+                if (value!.isNotEmpty) {
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.])+[\w]{2,4}')
+                      .hasMatch(value!))
+                    return "Enter correct email: example@gmail.com";
+                  else
+                    return null;
+                }
+              }
+            },
           )
         ],
       );

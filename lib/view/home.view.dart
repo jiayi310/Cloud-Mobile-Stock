@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:mobilestock/utils/global.colors.dart';
-import 'package:mobilestock/view/Stock/StockDetails/details.view.dart';
-import 'package:mobilestock/view/home.phone.view.dart';
-import 'package:mobilestock/view/home.tablet.view.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../api/base.client.dart';
-import 'SalesWorkflow/sales.workflow.dart';
+import '../models/Menu.dart';
 import 'Settings/settings.screen.dart';
 
 class Home extends StatefulWidget {
@@ -21,24 +22,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final storage = new FlutterSecureStorage();
   double containerheight = 0;
-  List menu = [];
-  String deviceType = "Phone";
-
-  _initData() {
-    DefaultAssetBundle.of(context)
-        .loadString("assets/home_menu.json")
-        .then((value) {
-      setState(() {
-        menu = json.decode(value);
-      });
-    });
-  }
+  String? username;
 
   @override
   void initState() {
     super.initState();
-    //_initData();
-    _getDeviceType();
+    // _initData();
+    getData();
   }
 
   @override
@@ -55,13 +45,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   builder: (context) => const SimpleBarcodeScannerPage(),
                 ));
             setState(() {
-              if (res is String) {
-                if (res != null)
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StockDetails(product: res)));
-              }
+              // if (res is String) {
+              //   if (res != null)
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => StockDetails(id: res)));
+              // }
             });
           },
           child: Icon(Icons.qr_code_scanner),
@@ -104,7 +94,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Jainul Arafa',
+                                  username.toString(),
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 24,
@@ -113,7 +103,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  '23 Jan, 2023',
+                                  DateFormat('dd MMM, yyyy')
+                                      .format(DateTime.now()),
                                 ),
                               ],
                             ),
@@ -134,6 +125,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           ],
                         ),
                         SizedBox(height: 20),
+
                         //searchbar
                         Container(
                           decoration: BoxDecoration(
@@ -146,22 +138,45 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                     spreadRadius: 2,
                                     offset: Offset(5, 5))
                               ]),
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Search',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              )
-                            ],
-                          ),
+                          padding: EdgeInsets.only(top: 5),
+                          child: TypeAheadField<Menu>(
+                              hideSuggestionsOnKeyboardHide: true,
+                              textFieldConfiguration: TextFieldConfiguration(
+                                  decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.search),
+                                      border: InputBorder.none,
+                                      fillColor: Colors.white,
+                                      hintText: 'Search')),
+                              suggestionsCallback: getMenuSuggestions,
+                              itemBuilder: (context, Menu suggestion) {
+                                final menu = suggestion;
+
+                                return ListTile(
+                                  leading: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      menu.img.toString(),
+                                      height: 70,
+                                      width: 70,
+                                    ),
+                                  ),
+                                  title: Text(menu.title.toString()),
+                                );
+                              },
+                              onSuggestionSelected: (Menu suggestions) {
+                                final _menu = suggestions;
+
+                                if (_menu.title != "ClockIn")
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: _menu.nav!));
+                                else
+                                  Fluttertoast.showToast(
+                                    msg: "Coming Soon.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 2,
+                                  );
+                              }),
                         ),
                       ],
                     ),
@@ -197,10 +212,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           controller: _tabController,
                           children: <Widget>[
                             _tabController1(),
-                            Container(
-                              width: double.maxFinite,
-                              height: 300,
-                            ),
+                            _tabController2(),
                             Container(
                               width: double.maxFinite,
                               height: 300,
@@ -216,122 +228,237 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   _tabController1() {
-    return Column(
+    // return Column(
+    //   children: [
+    //     //JobList
+    //     // Align(
+    //     //   alignment: Alignment.centerLeft,
+    //     //   child: Padding(
+    //     //     padding: const EdgeInsets.only(left: 10),
+    //     //     child: Text(
+    //     //       "Today task",
+    //     //       style: TextStyle(
+    //     //           color: Colors.black,
+    //     //           fontWeight: FontWeight.bold,
+    //     //           fontSize: 18),
+    //     //     ),
+    //     //   ),
+    //     // ),
+    //     // SizedBox(
+    //     //   height: 10,
+    //     // ),
+    //     // InkWell(
+    //     //   onTap: () {},
+    //     //   child: Container(
+    //     //     height: 110,
+    //     //     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+    //     //     padding: EdgeInsets.all(5),
+    //     //     decoration: BoxDecoration(
+    //     //       color: CupertinoColors.activeBlue,
+    //     //       borderRadius: BorderRadius.circular(20),
+    //     //     ),
+    //     //     child: Padding(
+    //     //       padding: const EdgeInsets.only(left: 10.0, right: 10),
+    //     //       child: Column(
+    //     //         mainAxisAlignment: MainAxisAlignment.center,
+    //     //         children: [
+    //     //           Row(
+    //     //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     //             children: [
+    //     //               Flexible(
+    //     //                 flex: 1,
+    //     //                 child: Text(
+    //     //                   "Job Task 1",
+    //     //                   style: TextStyle(
+    //     //                     overflow: TextOverflow.ellipsis,
+    //     //                     fontWeight: FontWeight.bold,
+    //     //                     fontSize: 16,
+    //     //                     color: Colors.white,
+    //     //                   ),
+    //     //                 ),
+    //     //               ),
+    //     //             ],
+    //     //           ),
+    //     //           SizedBox(height: 10),
+    //     //           Row(
+    //     //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     //             children: [
+    //     //               Flexible(
+    //     //                 flex: 1,
+    //     //                 child: Text(
+    //     //                   "6:00PM - 10:00PM",
+    //     //                   style: TextStyle(
+    //     //                     overflow: TextOverflow.ellipsis,
+    //     //                     fontWeight: FontWeight.bold,
+    //     //                     fontSize: 15,
+    //     //                     color: Colors.white,
+    //     //                   ),
+    //     //                 ),
+    //     //               ),
+    //     //             ],
+    //     //           ),
+    //     //           SizedBox(height: 5),
+    //     //           Row(
+    //     //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     //             children: [
+    //     //               Flexible(
+    //     //                 flex: 1,
+    //     //                 child: Text(
+    //     //                   "Job Description 123........",
+    //     //                   style: TextStyle(
+    //     //                     overflow: TextOverflow.ellipsis,
+    //     //                     fontSize: 15,
+    //     //                     color: Colors.white,
+    //     //                   ),
+    //     //                 ),
+    //     //               ),
+    //     //             ],
+    //     //           ),
+    //     //         ],
+    //     //       ),
+    //     //     ),
+    //     //   ),
+    //     // ),
+    //     // SizedBox(
+    //     //   height: 10,
+    //     // ),
+    //     if (deviceType == "Phone") PhoneView(),
+    //     if (deviceType == "Tablet") TabletView()
+    //   ],
+    // );
+
+    return GridView.extent(
+      maxCrossAxisExtent: 200,
+      crossAxisSpacing: 11,
+      mainAxisSpacing: 11,
+      childAspectRatio: (1 / 1),
+      controller: new ScrollController(keepScrollOffset: false),
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              "Today task",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        InkWell(
-          onTap: () {},
-          child: Container(
-            height: 110,
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: CupertinoColors.activeBlue,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10),
+        for (int i = 0; i < menu_list.length; i++)
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: menu_list[i].nav!));
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+              decoration: BoxDecoration(
+                  color: HexColor(menu_list[i].color!),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(5.0, 5.0),
+                        blurRadius: 10.0,
+                        spreadRadius: 2.0),
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0)
+                  ]),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          "Job Task 1",
-                          style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Image.asset(menu_list[i].img!),
+                  SizedBox(
+                    height: 15,
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          "6:00PM - 10:00PM",
-                          style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          "Job Description 123........",
-                          style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    menu_list[i].title!,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        if (deviceType == "Phone") PhoneView(),
-        if (deviceType == "Tablet") TabletView()
       ],
     );
   }
 
-  int _getDeviceType() {
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-    if (data.size.shortestSide < 600) {
-      //phone
-      deviceType = "Phone";
-      return (menu.length.toDouble() / 2).toInt();
-    } else {
-      //tablet
-      deviceType = "Tablet";
-      return (menu.length.toDouble() / 4).toInt();
-    }
+  _tabController2() {
+    return GridView.extent(
+      maxCrossAxisExtent: 200,
+      crossAxisSpacing: 11,
+      mainAxisSpacing: 11,
+      childAspectRatio: (1 / 1),
+      controller: new ScrollController(keepScrollOffset: false),
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      children: [
+        for (int i = 0; i < warehouse_menu_list.length; i++)
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+              decoration: BoxDecoration(
+                  color: HexColor(warehouse_menu_list[i].color!),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(5.0, 5.0),
+                        blurRadius: 10.0,
+                        spreadRadius: 2.0),
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0)
+                  ]),
+              child: Column(
+                children: [
+                  Image.asset(
+                    warehouse_menu_list[i].img!,
+                    width: 110,
+                    height: 110,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    warehouse_menu_list[i].title!,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Future<List<Menu>> getMenuSuggestions(String query) async {
+    List<Menu> menulist = new List.from(menu_list)..addAll(warehouse_menu_list);
+    if (query.length > 0) {
+      return menulist.where((menutitle) {
+        final nameLower = menutitle.title.toString().toLowerCase();
+        final queryLower = query.toLowerCase();
+
+        return nameLower.contains(queryLower);
+      }).toList();
+    } else
+      return List.empty();
   }
 
   void updateMobileRemember() async {
     String? email = await storage.read(key: "email");
     await BaseClient()
         .get('/UpdateMobileRemember?email=' + email! + '&grant=0');
+  }
+
+  Future<void> getData() async {
+    String? _username2 = await storage.read(key: "username");
+
+    setState(() {
+      username = _username2;
+    });
   }
 }
 

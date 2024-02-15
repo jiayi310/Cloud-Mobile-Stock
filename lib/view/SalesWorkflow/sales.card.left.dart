@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobilestock/view/Analysis/analysis.view.dart';
 import 'package:mobilestock/view/ClockIn/clockin.view.dart';
 import 'package:mobilestock/view/Sales/home.sales.dart';
@@ -26,8 +27,14 @@ class SalesCardLeft extends StatelessWidget {
         InkWell(
           onTap: () {
             if (route == "clockin")
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ClockInHomeScreen()));
+              Fluttertoast.showToast(
+                msg: "Coming Soon.",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 2,
+              );
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => ClockInHomeScreen()));
             else if (route == "sales")
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => HomeSalesScreen()));

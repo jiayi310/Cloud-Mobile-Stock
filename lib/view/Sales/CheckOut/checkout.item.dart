@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
-import '../../../models/Product.dart';
+import '../../../models/Stock.dart';
 import '../../../utils/global.colors.dart';
 
 class ItemCheckout extends StatelessWidget {
@@ -31,7 +31,7 @@ class ItemCheckout extends StatelessWidget {
                     color: Color.fromARGB(255, 224, 224, 244),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image.asset(demo_product[i].image.toString()),
+                  // child: Image.asset(demo_product[i].image.toString()),
                 ),
                 Expanded(
                   child: Container(
@@ -42,7 +42,7 @@ class ItemCheckout extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          demo_product[i].title.toString(),
+                          demo_product[i].stockCode.toString(),
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class ItemCheckout extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "RM " + demo_product[i].price.toString(),
+                        "RM " + demo_product[i].stockCode.toString(),
                         style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,

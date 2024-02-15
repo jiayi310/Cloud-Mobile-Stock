@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilestock/view/Settings/about.us.dart';
+import 'package:mobilestock/view/Settings/faq.page.dart';
+import 'package:mobilestock/view/Settings/personal.data.dart';
+import 'package:mobilestock/view/Settings/privacy.settings.dart';
 import 'package:mobilestock/view/Settings/settings.constant.dart';
 
 import '../../../models/Settings.dart';
@@ -16,6 +19,24 @@ class SettingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (setting.title == "Personal Data")
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PersonalData()),
+          );
+
+        if (setting.title == "Privacy")
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Privacy()),
+          );
+
+        if (setting.title == "FAQ")
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FAQPage()),
+          );
+
         if (setting.title == "About Us")
           Navigator.push(
             context,

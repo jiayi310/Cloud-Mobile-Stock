@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
-import '../../../models/Product.dart';
+import '../../../models/Stock.dart';
 import '../../../utils/global.colors.dart';
 
 class InvoiceCollection extends StatefulWidget {
@@ -24,7 +24,7 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
           shrinkWrap: true,
           itemCount: demo_product.length,
           itemBuilder: (BuildContext context, int i) {
-            final item = demo_product[i].title;
+            final item = demo_product[i].desc2;
             return Slidable(
               key: Key(item.toString()),
               endActionPane: ActionPane(
@@ -96,7 +96,7 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "RM " + demo_product[i].price.toString(),
+                            "RM " + demo_product[i].stockID.toString(),
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,

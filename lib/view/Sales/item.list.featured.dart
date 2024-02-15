@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobilestock/view/Sales/product.card.dart';
 import 'package:mobilestock/view/Sales/section.title.dart';
 
-import '../../models/Product.dart';
+import '../../models/Stock.dart';
 import '../../size.config.dart';
 import 'SalesDetails/details.screen.dart';
 
@@ -30,16 +32,19 @@ class ItemsWidget extends StatelessWidget {
               (index) => Padding(
                 padding: const EdgeInsets.only(right: defaultPadding),
                 child: ProductCard(
-                  title: demo_product[index].title.toString(),
-                  image: demo_product[index].image.toString(),
-                  price: demo_product[index].price!,
-                  bgColor: demo_product[index].bgColor!,
+                  stockcode: demo_product[index].desc2.toString(),
+                  title: demo_product[index].desc2.toString(),
+                  uom: demo_product[index].desc2.toString(),
+                  image: Base64Decoder()
+                      .convert(demo_product[index].desc2.toString()),
+                  price: demo_product[index].baseUOMPrice1 ?? 0.00,
+                  bgColor: Color(0xfff),
                   press: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              DetailsScreen(product: demo_product[index]),
+                          builder: (context) => DetailsScreen(
+                              stockid: demo_product[index].stockID!),
                         ));
                   },
                 ),

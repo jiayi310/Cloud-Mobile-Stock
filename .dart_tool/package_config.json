@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "archive",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/archive-3.3.9",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/archive-3.4.10",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -20,6 +20,18 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "barcode",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/barcode-2.2.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "bidi",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/bidi-2.0.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
@@ -30,6 +42,24 @@
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/bubble_tab_indicator-0.1.6",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "cached_network_image",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/cached_network_image-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cached_network_image_platform_interface",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/cached_network_image_platform_interface-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cached_network_image_web",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/cached_network_image_web-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "calendar_timeline",
@@ -57,9 +87,9 @@
     },
     {
       "name": "cli_util",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/cli_util-0.4.0",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/cli_util-0.4.1",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "clock",
@@ -78,6 +108,12 @@
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/convert-3.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "cross_file",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/cross_file-0.3.3+7",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "crypto",
@@ -99,7 +135,7 @@
     },
     {
       "name": "dotted_border",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/dotted_border-2.0.0+3",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/dotted_border-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -122,6 +158,36 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "file",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/file-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "file_selector_linux",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.2+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "file_selector_macos",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.3+3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "file_selector_platform_interface",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/file_selector_platform_interface-2.6.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "file_selector_windows",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "fl_chart",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/fl_chart-0.63.0",
       "packageUri": "lib/",
@@ -140,6 +206,54 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_cache_manager",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_cache_manager-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_faq",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_faq-1.0.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "flutter_keyboard_visibility",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_keyboard_visibility-5.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_linux",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_keyboard_visibility_linux-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_macos",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_keyboard_visibility_macos-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_platform_interface",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_keyboard_visibility_platform_interface-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_web",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_keyboard_visibility_web-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_keyboard_visibility_windows",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_keyboard_visibility_windows-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_launcher_icons",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_launcher_icons-0.13.1",
       "packageUri": "lib/",
@@ -147,7 +261,7 @@
     },
     {
       "name": "flutter_plugin_android_lifecycle",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.16",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.17",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -189,13 +303,25 @@
     },
     {
       "name": "flutter_slidable",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_slidable-3.0.0",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_slidable-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_spinkit",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_spinkit-5.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_staggered_grid_view",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_staggered_grid_view-0.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_svg",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_svg-2.0.7",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_svg-2.0.9",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -206,6 +332,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_typeahead",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/flutter_typeahead-4.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "flutter_web_plugins",
       "rootUri": "file:///Users/agilec/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
@@ -213,7 +345,7 @@
     },
     {
       "name": "fluttertoast",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/fluttertoast-8.2.2",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/fluttertoast-8.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -249,9 +381,57 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image-4.0.17",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image-4.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.15"
+    },
+    {
+      "name": "image_picker",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker-1.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "image_picker_android",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_android-0.8.9+3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "image_picker_for_web",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "image_picker_ios",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.9+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "image_picker_linux",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "image_picker_macos",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_macos-0.2.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "image_picker_platform_interface",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_platform_interface-2.9.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "image_picker_windows",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/image_picker_windows-0.2.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "intl",
@@ -273,9 +453,9 @@
     },
     {
       "name": "lottie",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/lottie-2.6.0",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/lottie-2.7.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.1"
     },
     {
       "name": "matcher",
@@ -292,6 +472,18 @@
     {
       "name": "meta",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/meta-1.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "mime",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/mime-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "octo_image",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/octo_image-2.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -321,21 +513,21 @@
     },
     {
       "name": "path_provider",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider-2.1.1",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider-2.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_android-2.2.0",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_android-2.2.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.1",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "path_provider_linux",
@@ -345,15 +537,21 @@
     },
     {
       "name": "path_provider_platform_interface",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_platform_interface-2.1.1",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_platform_interface-2.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "path_provider_windows",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/path_provider_windows-2.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.19"
+    },
+    {
+      "name": "pdf",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/pdf-3.10.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "permission_handler",
@@ -375,7 +573,7 @@
     },
     {
       "name": "permission_handler_platform_interface",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-3.11.5",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-3.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -392,28 +590,70 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "platform",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/platform-3.1.2",
+      "name": "pie_chart",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/pie_chart-5.4.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "platform",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/platform-3.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.6",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "pointer_interceptor",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/pointer_interceptor-0.9.3+7",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
     },
     {
       "name": "pointycastle",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/pointycastle-3.7.3",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/pointycastle-3.7.4",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "printing",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/printing-5.11.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "qr",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/qr-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "rxdart",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/rxdart-0.27.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "scrollable_positioned_list",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/scrollable_positioned_list-0.3.8",
       "packageUri": "lib/",
       "languageVersion": "2.15"
+    },
+    {
+      "name": "share_plus",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/share_plus-7.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "share_plus_platform_interface",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/share_plus_platform_interface-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "simple_animations",
@@ -440,6 +680,24 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "sprintf",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "sqflite",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/sqflite-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/sqflite_common-2.5.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/stack_trace-1.11.0",
       "packageUri": "lib/",
@@ -459,15 +717,21 @@
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-23.1.36",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-23.2.7",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_signaturepad",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/syncfusion_flutter_signaturepad-23.1.36",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/syncfusion_flutter_signaturepad-23.2.7",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "synchronized",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/synchronized-3.1.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "term_glyph",
@@ -501,67 +765,73 @@
     },
     {
       "name": "url_launcher",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher-6.1.14",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher-6.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_android",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_android-6.2.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
-      "name": "url_launcher_android",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_android-6.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "url_launcher_ios",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_ios-6.1.5",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_ios-6.2.4",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "url_launcher_linux",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_linux-3.0.6",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "url_launcher_macos",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_macos-3.0.7",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "url_launcher_platform_interface",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_platform_interface-2.1.5",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_platform_interface-2.3.1",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "url_launcher_web",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_web-2.0.19",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.1"
     },
     {
       "name": "url_launcher_windows",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_windows-3.0.8",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "uuid",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/uuid-4.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
     },
     {
       "name": "vector_graphics",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/vector_graphics-1.1.7",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/vector_graphics-1.1.9+2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "vector_graphics_codec",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.7",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.9+2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.7",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.9+2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -585,15 +855,15 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/win32-5.0.7",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/win32-5.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.1"
     },
     {
       "name": "xdg_directories",
-      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/xdg_directories-1.0.3",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/xdg_directories-1.0.4",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "xml",
@@ -614,7 +884,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-09-18T08:00:05.660591Z",
+  "generated": "2024-02-15T02:50:59.713585Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

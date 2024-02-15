@@ -1,8 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilestock/view/Collection/collection.invoice.dart';
-import 'package:mobilestock/view/Quotation/quotation.customer.dart';
-import 'package:mobilestock/view/Quotation/quotation.price.dart';
+import 'package:mobilestock/view/Quotation/NewQuotation/quotation.customer.dart';
+import 'package:mobilestock/view/Quotation/NewQuotation/quotation.total.dart';
 
 import '../../utils/global.colors.dart';
 import '../Sales/CheckOut/checkout.bottom.dart';

@@ -1,21 +1,22 @@
 class Sales {
-  final String DocNo;
-  final String DocDate;
-  final String DebtorCode;
-  final String DebtorName;
-  final String Agent;
-  final double Total;
-  final String Remark;
+  String? docNo;
+  String? docDate;
+  String? customerCode;
+  String? customerName;
+  String? salesAgent;
+  double? finalTotal;
+  String? remark;
 
-  Sales(this.DocNo, this.DocDate, this.DebtorCode, this.DebtorName, this.Agent,
-      this.Total, this.Remark);
+  Sales(this.docNo, this.docDate, this.customerCode, this.customerName,
+      this.salesAgent, this.finalTotal, this.remark);
+
+  Sales.fromJson(Map<String, dynamic> json) {
+    docNo = json["docNo"];
+    docDate = json["docDate"];
+    customerCode = json["customerCode"];
+    customerName = json["customerName"];
+    salesAgent = json["salesAgent"];
+    finalTotal = json["finalTotal"];
+    remark = json["remark"];
+  }
 }
-
-final List<Sales> demo_Sales = [
-  Sales("IV-123896", "09/05/2000", "XER00001", "Sing Sdn Bhd", "Jason", 500.00,
-      "jason@gmail.com"),
-  Sales("IV-123896", "09/05/2000", "XER00001", "Sing Sdn Bhd", "Jason", 500.00,
-      "jason@gmail.com"),
-  Sales("IV-123896", "09/05/2000", "XER00001", "Sing Sdn Bhd", "Jason", 500.00,
-      "jason@gmail.com"),
-];

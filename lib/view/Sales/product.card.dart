@@ -1,17 +1,23 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:mobilestock/utils/global.colors.dart';
-import 'package:mobilestock/view/Sales/SalesDetails/add.cartbutton.dart';
+
+import 'SalesDetails/add.cartbutton.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
+  ProductCard({
     Key? key,
     required this.image,
     required this.title,
+    required this.stockcode,
+    required this.uom,
     required this.price,
     required this.press,
     required this.bgColor,
   }) : super(key: key);
-  final String image, title;
+  final String title, stockcode, uom;
+  final Uint8List image;
   final VoidCallback press;
   final double price;
   final Color bgColor;
@@ -39,12 +45,20 @@ class ProductCard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Center(
-                    child: Image.asset(
-                      image,
-                      height: 132,
+                  if (image != null && image.isNotEmpty)
+                    Center(
+                      child: Image.memory(
+                        image!,
+                        height: 132,
+                      ),
                     ),
-                  ),
+                  if (image == null || image.isEmpty)
+                    Center(
+                      child: Image.asset(
+                        "assets/images/no-image.png",
+                        width: 100,
+                      ),
+                    ),
                   Positioned(top: 5, right: -5, child: AddCartButton()),
                 ],
               ),
@@ -59,7 +73,7 @@ class ProductCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'B0001',
+                            stockcode,
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
@@ -78,7 +92,7 @@ class ProductCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'UOM',
+                              uom,
                               style: const TextStyle(color: Colors.grey),
                               overflow: TextOverflow.ellipsis,
                             ),

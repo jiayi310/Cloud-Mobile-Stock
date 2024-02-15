@@ -29,7 +29,7 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          collection.DocNo,
+          collection.docNo.toString(),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobilestock/view/Sales/OrderHistory/history.header.dart';
 
+import '../../../api/base.client.dart';
 import '../../../models/Sales.dart';
 import '../../../utils/global.colors.dart';
 import 'listingsales.details.dart';
@@ -28,7 +32,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          sales.DocNo,
+          sales.docNo.toString(),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [

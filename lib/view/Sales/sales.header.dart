@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Sales/OrderHistory/history.view.dart';
+import 'package:mobilestock/view/Sales/sales.filter.dart';
 
 import 'Cart/cart.view.dart';
 
@@ -65,7 +67,9 @@ class SalesAppBar extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Get.to(() => SalesFilters());
+          },
           borderRadius: BorderRadius.circular(50),
           child: Stack(
             clipBehavior: Clip.none,

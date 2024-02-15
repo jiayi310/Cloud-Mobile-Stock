@@ -29,7 +29,7 @@ class HistoryListingHeader extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  sales.DocNo,
+                  sales.docNo.toString(),
                   style: TextStyle(fontSize: 16, color: Colors.black38),
                 ),
                 SizedBox(

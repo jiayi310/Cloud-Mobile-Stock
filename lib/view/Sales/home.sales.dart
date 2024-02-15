@@ -25,7 +25,7 @@ class HomeSalesScreen extends StatelessWidget {
                         height: 20,
                       ),
                       SearchWidget(),
-                      ItemsWidget(),
+                      // ItemsWidget(),
                       ItemsGridWidget(),
                     ],
                   ),

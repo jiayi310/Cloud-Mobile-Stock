@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		21XsCcVSeKIg2UvgqrGRjQXgoCg=
+		cFcS8LRDBKh4wYMzaFyKol5iDHA=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		K/zcdFdkH8BIJV4CZNYyVDjaL/8=
+		YWvu9jbU+D9RtZ2QGRWEZ1/tsbU=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -22,15 +22,19 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		3jEr05OMUSsGj2vlaMxstGd8Aos=
+		Z9p1wRskCk83B1DJO8c4gQAwm6k=
+		</data>
+		<key>flutter_assets/assets/.DS_Store</key>
+		<data>
+		SkSLg7kRvn/NDXPciup04TzuhR4=
 		</data>
 		<key>flutter_assets/assets/home_menu.json</key>
 		<data>
-		XdWt1JmSlBD2FV9ze5IMw3RyXMA=
+		eWnhU+BKtMUL3UJPzsFMMphv4wY=
 		</data>
 		<key>flutter_assets/assets/images/.DS_Store</key>
 		<data>
-		3y++sUAKzaCQmjLBz2v0kvESHgc=
+		1lvc/8nJZBGQvX8bANQoucdN1wg=
 		</data>
 		<key>flutter_assets/assets/images/agiliti_logo.png</key>
 		<data>
@@ -56,6 +60,10 @@
 		<data>
 		SIWcr+16d3zauwrsMwwDFL4WmJA=
 		</data>
+		<key>flutter_assets/assets/images/barcode.png</key>
+		<data>
+		vvh3u4tN0jyo/eCfiB6QIHEy10A=
+		</data>
 		<key>flutter_assets/assets/images/clock.png</key>
 		<data>
 		qY4Lk68yJvCZhbbnhf6MpVMRSlk=
@@ -79,6 +87,10 @@
 		<key>flutter_assets/assets/images/google.svg</key>
 		<data>
 		96KZs+hMbd/aERSgle4Ny7gS+t0=
+		</data>
+		<key>flutter_assets/assets/images/imageupload.png</key>
+		<data>
+		c8NL5d1g7cZRiIPPl10+l/x6ol4=
 		</data>
 		<key>flutter_assets/assets/images/inventory.png</key>
 		<data>
@@ -104,13 +116,17 @@
 		<data>
 		arXpNZG9LsBOwOfOmGZxOsZm4qg=
 		</data>
+		<key>flutter_assets/assets/images/no-image.png</key>
+		<data>
+		lRZc1ZY8NRYxB7gSOsVDCAIBS6g=
+		</data>
 		<key>flutter_assets/assets/images/one.png</key>
 		<data>
 		C1Iymx56cxqSpCtmVxMccqQLbY8=
 		</data>
-		<key>flutter_assets/assets/images/pos-terminal.png</key>
+		<key>flutter_assets/assets/images/picking.png</key>
 		<data>
-		HDqbWl45eSRK6UbKuHuRZpmJQAM=
+		rizoOEMzz/8XQWX8YmHbvFDwa0Y=
 		</data>
 		<key>flutter_assets/assets/images/product_0.png</key>
 		<data>
@@ -128,9 +144,17 @@
 		<data>
 		HTs5SSzd0uUIqm6Zzb9V0nWwQ6o=
 		</data>
+		<key>flutter_assets/assets/images/putaway.png</key>
+		<data>
+		abIhz04T0VF/WhKTht+44IRtpT8=
+		</data>
 		<key>flutter_assets/assets/images/quotation.png</key>
 		<data>
 		LNunCveVNE3UL2ciJ19ChFZusgQ=
+		</data>
+		<key>flutter_assets/assets/images/receiving.png</key>
+		<data>
+		qK3FEZe7NqDMcweoEnZp+E7PbzY=
 		</data>
 		<key>flutter_assets/assets/images/sales.png</key>
 		<data>
@@ -144,9 +168,25 @@
 		<data>
 		nOTL3M99L5fhchZE6HGPNYbQTpc=
 		</data>
+		<key>flutter_assets/assets/images/shipping.png</key>
+		<data>
+		tmG15InHk98vVKyLMLsWpjgM8Vc=
+		</data>
+		<key>flutter_assets/assets/images/stocktake.png</key>
+		<data>
+		asMDMwnENMgkM+m33a2lHlFM9SE=
+		</data>
+		<key>flutter_assets/assets/images/storage.png</key>
+		<data>
+		f3sXXsMJ4I786UZGCSByIetex70=
+		</data>
 		<key>flutter_assets/assets/images/three.png</key>
 		<data>
 		xcANCvXgpy3cWXEi5VSEw2mpbl8=
+		</data>
+		<key>flutter_assets/assets/images/transfer.png</key>
+		<data>
+		pxiZ9shSph3rq5lMg5Cc5jzKtSw=
 		</data>
 		<key>flutter_assets/assets/images/two.png</key>
 		<data>
@@ -154,7 +194,7 @@
 		</data>
 		<key>flutter_assets/assets/images/warehouse.png</key>
 		<data>
-		ifoyFe984R0AbrU5iuHDR0TgN78=
+		Wh0lcNUv/l+Hn205YFkunZKUotA=
 		</data>
 		<key>flutter_assets/assets/loading.json</key>
 		<data>
@@ -170,7 +210,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		VyU/xYBDkPLBhkUw8gNqp01ilgg=
+		lpKdNRZqRaKO5GwIirRTa8R8x24=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -178,11 +218,11 @@
 		</data>
 		<key>flutter_assets/packages/fluttertoast/assets/toastify.css</key>
 		<data>
-		HVkEhoid+n6bwOYCwZg4DdmGBHY=
+		w0yScZgyE5s0j7sPuGOLXy3ISfM=
 		</data>
 		<key>flutter_assets/packages/fluttertoast/assets/toastify.js</key>
 		<data>
-		v5LMft1C/Ps/+tw6D+zco3p3Urk=
+		gPIgba2QIn/qWmLFfVogsD4MxPU=
 		</data>
 		<key>flutter_assets/packages/simple_barcode_scanner/assets/barcode.html</key>
 		<data>
@@ -207,14 +247,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+vOVdzSUGJ5a7Tx4macI+T7EF5g17Aaj+99Lz2NkBAk=
+			384firLKRuOQw9IvrYCx65rbkn7MRC8aHxV04VA4VCM=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			HVtSr404pCPWV7DpLXiFPAStcdpv3Ukr0QGVGdymNb4=
+			YrhxyKXWtOMms48q8T20k1L3X0IfQ0zV1v95Hbj3nvU=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -228,14 +268,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			jCiCwUmb3CFOPzvFlJ+w87RlInU04yKdfMGqYaOTe4o=
+			Th1R/aVEYe5aNe9paTHDTd2hkyos4rzXwVLDx9EZjxQ=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/home_menu.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WD5iG4dE2Egq0fZh+hA+ED8i5hnf9rUBqUFardbRrag=
+			0JRAUKHZ95N5AIOWonSBBx48/jVR9vmXh3fsalclWnw=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/agiliti_logo.png</key>
@@ -280,6 +320,13 @@
 			2ayKau8aMrJTUe3E8Ar54SCir8UaLSqMyJKYTZt48rs=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/barcode.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pNDbHR6yU4fXiK5ixdN02i1PlvsR3gwEtFVJQhMhPnA=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/clock.png</key>
 		<dict>
 			<key>hash2</key>
@@ -320,6 +367,13 @@
 			<key>hash2</key>
 			<data>
 			M1UdKwwy/ylqjuRcYeKabzFa0SerUx2mBglC2hifIno=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/imageupload.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			43pQYQc1b4+U4zxtYYf9lXW80mGNIqEPt153oVazMrs=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/inventory.png</key>
@@ -364,6 +418,13 @@
 			8S9C6FPgLQ67ZXWAibEqGeAPxYJomBCg31jYX7Hl79k=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/no-image.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			WxV01GsqiRa92vlkm894j+odCtLteaGYc8MEJd20kkw=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/one.png</key>
 		<dict>
 			<key>hash2</key>
@@ -371,11 +432,11 @@
 			VBnejaWd9iMQ/8HYUJTpIhSdq7JgRi1gdmneCgajG/0=
 			</data>
 		</dict>
-		<key>flutter_assets/assets/images/pos-terminal.png</key>
+		<key>flutter_assets/assets/images/picking.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bbJMR/JkxF7cXUg9a4xJJdnLvOeX52/Phcg2kCjWsnc=
+			E/SvjWy2L2OmAH0hK04KhnVTS+CUJ+o9nFh/wUvmAJ8=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/product_0.png</key>
@@ -406,11 +467,25 @@
 			qIRyT/UhF46X5hv83lsrAVkr2qocmDAx84he66FpLGs=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/putaway.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			XfF41VW2ACBoCTtjCwIuhwsixOOzClaTFsY9umVULJk=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/quotation.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			AHpi76Kq92hU9uymxujg54hyh7k6TMIiaqYwBLO2o04=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/receiving.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ad/GjObZCfd6cKAMBlf3sfAC/pDPE/ru1POcaYwgc5w=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/sales.png</key>
@@ -434,11 +509,39 @@
 			7d0H7L46VQB1j++V0W2a/ZgbrQs+0h9gdFEIwnLL1ts=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/images/shipping.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			YFrdOxaEBI6iMTHyRJIQ7lwgdYpMWXnfrPnRV93sm80=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/stocktake.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sekRzpkp+WN28CpBk9Vu8e5b09aM74HRNchLNSTttQ0=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/storage.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vqsiBxYcuNTa5S4fECNaazC+1TUuI1CxHxCBdklLD+w=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/images/three.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			vswaIWFw4IrHmEUE98DAJDEEta6iukMJFsxEf12R3EM=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/transfer.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vx5ZM2/UAcqaRGj0pr/KQrkgmREUK4m9In6uvfV7BSE=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/two.png</key>
@@ -452,7 +555,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			bh8RZpVxPMuVZvubGY6PeEjFLE31V93fvlbHp5MNiuU=
+			vzB+f9J6FWHosZvfefeipK9mGP3Kof6+zXbLL2wYOQo=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/loading.json</key>
@@ -480,7 +583,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			rYM/OuMVU4gpTsJsn7v0cba/3kbTuULnL0HyWYEvx0E=
+			kWsc80h9GLQcrOCfzAdjd+D4/dOgHIHtOqSDrzV0XgE=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -494,14 +597,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			abr0T+pbPv0zd7q8FU7xuDv4JjuRAgKox9bnRddRNJ8=
+			OA6cPd56JZLHb6TFMDSJcQW1dQpoPp1gk3TDCrW7kJY=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/fluttertoast/assets/toastify.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			CRyacJlKIATuArBPER1Aq+QMB7BmhWOZ9YxYcELsKZA=
+			zYIrdfUdie9n3mKKElLvN1sxiImupJ++RP/PCwgqbb0=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/simple_barcode_scanner/assets/barcode.html</key>

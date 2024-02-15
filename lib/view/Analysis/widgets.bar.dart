@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/DataModel.dart';
+import 'package:pie_chart/pie_chart.dart' as Pie;
 
 class BarChartWidget extends StatefulWidget {
   @override
@@ -10,11 +11,23 @@ class BarChartWidget extends StatefulWidget {
 
 class _BarChartWidgetState extends State<BarChartWidget> {
   List<DataModel> _list = List<DataModel>.empty(growable: true);
+  Map<String, double> dataMap = {
+    "Flutter": 5,
+    "React": 3,
+    "Xamarin": 2,
+    "Ionic": 2,
+    "Flutter2": 5,
+    "React2": 36,
+    "Xamarin2": 23,
+    "Ionic2": 22,
+    "Flutter3": 15,
+    "React3": 23
+  };
 
   @override
   void initState() {
     super.initState();
-    _list.add(DataModel(key: "0", value: "2"));
+    _list.add(DataModel(key: "product 0", value: "2"));
     _list.add(DataModel(key: "1", value: "4"));
     _list.add(DataModel(key: "2", value: "6"));
     _list.add(DataModel(key: "3", value: "8"));
@@ -25,8 +38,21 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colorList = <Color>[
+      Colors.green,
+      Colors.lightBlue,
+      Colors.red,
+      Colors.orange,
+      Colors.purple,
+      Colors.pinkAccent,
+      Colors.yellow,
+      Colors.cyan,
+      Colors.indigo,
+      Colors.greenAccent
+    ];
+
     return Container(
-      height: 350.0,
+      height: 1000.0,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -42,42 +68,58 @@ class _BarChartWidgetState extends State<BarChartWidget> {
             child: Text(
               'Top 10 Products',
               style: const TextStyle(
-                fontSize: 22.0,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: 300,
+            child: BarChart(BarChartData(
+              maxY: 15,
+              minY: 0,
+              gridData: FlGridData(show: false),
+              borderData: FlBorderData(show: false),
+              titlesData: FlTitlesData(
+                show: true,
+                topTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              ),
+              barGroups: _chartGroups(),
+            )),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Top 10 Products',
+              style: const TextStyle(
+                fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.85,
-            // child: BarChart(
-            //   BarChartData(
-            //     backgroundColor: Colors.white,
-            //     barGroups: _chartGroups(),
-            //     borderData: FlBorderData(
-            //         border:
-            //             const Border(bottom: BorderSide(), left: BorderSide())),
-            //     gridData: FlGridData(show: false),
-            //     titlesData: FlTitlesData(
-            //       bottomTitles: AxisTitles(sideTitles: _bottomTitles),
-            //       leftTitles: AxisTitles(
-            //           sideTitles: SideTitles(
-            //         showTitles: true,
-            //         interval: 1,
-            //         getTitlesWidget: (value, meta) {
-            //           return Text(
-            //             value.toString(),
-            //             style: const TextStyle(fontSize: 10),
-            //           );
-            //         },
-            //       )),
-            //       topTitles:
-            //           AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            //       rightTitles:
-            //           AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            //     ),
-            //   ),
-            // ),
-          ),
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: 300,
+              child: Pie.PieChart(
+                dataMap: dataMap,
+                colorList: colorList,
+                animationDuration: Duration(milliseconds: 800),
+                chartLegendSpacing: 32,
+                chartRadius: MediaQuery.of(context).size.width / 2.0,
+                initialAngleInDegree: 0,
+                ringStrokeWidth: 32,
+              )),
         ],
       ),
     );
@@ -89,7 +131,15 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     for (int i = 0; i < _list.length; i++) {
       list.add(BarChartGroupData(x: i, barRods: [
         BarChartRodData(
-            toY: double.parse(_list[i].value!), color: Colors.deepOrange)
+            toY: double.parse(_list[i].value!),
+            gradient: LinearGradient(colors: [Colors.blue, Colors.purple]),
+            width: 20,
+            borderRadius: BorderRadius.circular(4),
+            backDrawRodData: BackgroundBarChartRodData(
+              show: true,
+              toY: 15,
+              color: Colors.grey[200],
+            ))
       ]));
     }
     return list;

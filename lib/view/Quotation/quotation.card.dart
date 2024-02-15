@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 
 import '../../models/Quotation.dart';
-import 'details.listing.dart';
+import 'QuotationRepView/details.listing.dart';
 
 class QuotationCard extends StatelessWidget {
   QuotationCard({Key? key}) : super(key: key);

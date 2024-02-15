@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobilestock/models/Customer.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/global.colors.dart';
 
@@ -80,7 +82,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    customer.phone1.toString(),
+                    customer.phone1 ?? "",
                     style: TextStyle(fontSize: 15),
                   ),
                 ),
@@ -93,9 +95,13 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(
-                      Icons.phone,
-                      color: Colors.green,
+                    IconButton(
+                      onPressed: () =>
+                          launch("tel://" + customer.phone1.toString()),
+                      icon: Icon(
+                        Icons.phone,
+                        color: Colors.green,
+                      ),
                     ),
                     Icon(
                       Icons.message,
@@ -105,10 +111,20 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                       Icons.email,
                       color: Colors.orange,
                     ),
-                    Icon(
-                      Icons.map,
-                      color: Colors.pinkAccent,
-                    ),
+                    IconButton(
+                      onPressed: () => MapUtils.openMap(
+                          customer.address1.toString() +
+                              customer.address2.toString() +
+                              "" +
+                              customer.address3.toString() +
+                              "" +
+                              customer.address4.toString() +
+                              ""),
+                      icon: Icon(
+                        Icons.map,
+                        color: Colors.pinkAccent,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -134,7 +150,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Description 2322ekwndksndskds",
+                            customer.name2 ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -150,7 +166,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Address 1",
+                            customer.address1 ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -164,7 +180,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Address 2",
+                            customer.address2 ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -178,7 +194,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Address 3",
+                            customer.address3 ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -192,7 +208,94 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Address 4",
+                            customer.address4 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "PostCode",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.deliverAddr4 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      //Deliver Address
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Deliver Address",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.deliverAddr1 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.deliverAddr2 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.deliverAddr3 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.deliverAddr4 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Deliver PostCode",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.deliverPostCode ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -208,7 +311,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "011-58845652",
+                            customer.phone2 ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -224,7 +327,23 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "09-855426",
+                            customer.fax1 ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      //Fax2
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Fax2",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.fax2 ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -240,7 +359,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Jason Chong",
+                            customer.salesAgent.salesAgent ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -255,7 +374,22 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "jason@gmail.com",
+                            customer.email ?? "",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Attention",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            customer.attention ?? "",
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -267,118 +401,118 @@ class _CustomerDetailsState extends State<CustomerDetails> {
               SizedBox(
                 height: 40,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      //Type & Area
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "Type",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "Wholesales",
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "Area",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "Puchong",
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      //Terms & tax Code
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "Terms",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "C.O.D",
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "Currency",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                "RM",
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Container(
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(
+              //       color: Colors.grey.withOpacity(0.1),
+              //       borderRadius: BorderRadius.circular(20)),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(20.0),
+              //     child: Column(
+              //       children: [
+              //         //Type & Area
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: [
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "Type",
+              //                   style: TextStyle(
+              //                       fontSize: 13, fontWeight: FontWeight.bold),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "Wholesales",
+              //                   style: TextStyle(fontSize: 13),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //             SizedBox(width: 10),
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "Area",
+              //                   style: TextStyle(
+              //                       fontSize: 13, fontWeight: FontWeight.bold),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "Puchong",
+              //                   style: TextStyle(fontSize: 13),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //         SizedBox(height: 10),
+              //         //Terms & tax Code
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: [
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "Terms",
+              //                   style: TextStyle(
+              //                       fontSize: 13, fontWeight: FontWeight.bold),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "C.O.D",
+              //                   style: TextStyle(fontSize: 13),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //             SizedBox(width: 10),
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "Currency",
+              //                   style: TextStyle(
+              //                       fontSize: 13, fontWeight: FontWeight.bold),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //             Expanded(
+              //               flex: 1,
+              //               child: Container(
+              //                 child: Text(
+              //                   "RM",
+              //                   style: TextStyle(fontSize: 13),
+              //                   overflow: TextOverflow.ellipsis,
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: 40,
               ),
@@ -416,3 +550,16 @@ Widget buildCircle({
         padding: EdgeInsets.all(all),
       ),
     );
+
+class MapUtils {
+  MapUtils._();
+
+  static Future<void> openMap(String addr) async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$addr';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+}

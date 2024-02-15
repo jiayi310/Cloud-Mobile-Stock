@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mobilestock/models/Product.dart';
+import 'package:mobilestock/models/Stock.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
@@ -21,7 +21,7 @@ class _CartItemState extends State<CartItem> {
           shrinkWrap: true,
           itemCount: demo_product.length,
           itemBuilder: (BuildContext context, int i) {
-            final item = demo_product[i].title;
+            final item = demo_product[i].desc2;
             return Slidable(
                 key: Key(item.toString()),
                 endActionPane: ActionPane(
@@ -62,7 +62,7 @@ class _CartItemState extends State<CartItem> {
                           color: Color.fromARGB(255, 224, 224, 244),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Image.asset(demo_product[i].image.toString()),
+                        // child: Image.asset(demo_product[i].image.toString()),
                       ),
                       Expanded(
                         child: Container(
@@ -73,7 +73,7 @@ class _CartItemState extends State<CartItem> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                demo_product[i].title.toString(),
+                                demo_product[i].stockCode.toString(),
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.bold,
@@ -98,7 +98,7 @@ class _CartItemState extends State<CartItem> {
                                 ),
                               ),
                               Text(
-                                "RM " + demo_product[i].price.toString(),
+                                "RM " + demo_product[i].stockCode.toString(),
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.bold,

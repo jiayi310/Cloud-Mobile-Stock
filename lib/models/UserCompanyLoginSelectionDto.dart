@@ -5,16 +5,16 @@ class UserCompanyLoginSelectionDto {
   int? userTypeID;
   String? type;
   int? companyID;
-  late String comapanyName;
-  bool? isActive = false;
+  late String companyName;
+  bool? isDeletedTemporarily = false;
 
   UserCompanyLoginSelectionDto(
       {this.userMappingID,
       this.userTypeID,
       this.type,
       this.companyID,
-      required this.comapanyName,
-      this.isActive});
+      required this.companyName,
+      this.isDeletedTemporarily});
 
   // static String serialize(UserCompanyLoginSelectionDto model) =>json.encode(UserCompanyLoginSelectionDto.toJson(model, ""));
   static List<UserCompanyLoginSelectionDto> userFromJson(String str) =>
@@ -31,13 +31,13 @@ class UserCompanyLoginSelectionDto {
       UserCompanyLoginSelectionDto.fromJson2(jsonDecode(json));
 
   UserCompanyLoginSelectionDto.fromJson(
-      Map<String, dynamic> json, this.comapanyName) {
+      Map<String, dynamic> json, this.companyName) {
     userMappingID = json["userMappingID"];
     userTypeID = json["userTypeID"];
     type = json["type"];
     companyID = json["companyID"];
-    comapanyName = json["comapanyName"];
-    isActive = json["isActive"];
+    companyName = json["companyName"];
+    isDeletedTemporarily = json["isDeletedTemporarily"];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,8 +46,8 @@ class UserCompanyLoginSelectionDto {
     data['userTypeID'] = this.userTypeID;
     data['type'] = this.type;
     data['companyID'] = this.companyID;
-    data['comapanyName'] = this.comapanyName;
-    data['isActive'] = this.isActive;
+    data['companyName'] = this.companyName;
+    data['isDeletedTemporarily'] = this.isDeletedTemporarily;
     return data;
   }
 
@@ -57,8 +57,8 @@ class UserCompanyLoginSelectionDto {
     data['userTypeID'] = model.userTypeID;
     data['type'] = model.type;
     data['companyID'] = model.companyID;
-    data['comapanyName'] = model.comapanyName;
-    data['isActive'] = model.isActive;
+    data['companyName'] = model.companyName;
+    data['isDeletedTemporarily'] = model.isDeletedTemporarily;
     return data;
   }
 
@@ -68,8 +68,8 @@ class UserCompanyLoginSelectionDto {
         userTypeID: json["userTypeID"],
         type: json["type"],
         companyID: json["companyID"],
-        comapanyName: json["comapanyName"],
-        isActive: json["isActive"],
+        companyName: json["companyName"],
+        isDeletedTemporarily: json["isDeletedTemporarily"],
       );
 
   // Map<String, dynamic> toJson() => {
@@ -77,7 +77,7 @@ class UserCompanyLoginSelectionDto {
   //       "userTypeID": userTypeID,
   //       "type": type,
   //       "companyID": companyID,
-  //       "comapanyName": comapanyName,
-  //       "isActive": isActive,
+  //       "companyName": companyName,
+  //       "isDeletedTemporarily": isDeletedTemporarily,
   //     };
 }
