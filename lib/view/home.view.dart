@@ -391,8 +391,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         for (int i = 0; i < warehouse_menu_list.length; i++)
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
+              Fluttertoast.showToast(
+                msg: "Coming Soon.",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 2,
+              );
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
