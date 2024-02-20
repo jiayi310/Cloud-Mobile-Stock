@@ -85,7 +85,9 @@ class ItemCheckout extends StatelessWidget {
                           color: GlobalColors.mainColor,
                         ),
                       ),
-                      AddCartButtonCart(),
+                      AddCartButtonCart(
+                        quantity: 2,
+                      ),
                     ],
                   ),
                 )

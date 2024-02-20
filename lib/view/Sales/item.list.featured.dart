@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mobilestock/models/Sales.dart';
 import 'package:mobilestock/view/Sales/product.card.dart';
 import 'package:mobilestock/view/Sales/section.title.dart';
 
@@ -39,6 +40,7 @@ class ItemsWidget extends StatelessWidget {
                       .convert(demo_product[index].desc2.toString()),
                   price: demo_product[index].baseUOMPrice1 ?? 0.00,
                   bgColor: Color(0xfff),
+                  sales: new Sales(),
                   press: () {
                     Navigator.push(
                         context,

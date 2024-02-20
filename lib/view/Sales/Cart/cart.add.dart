@@ -4,15 +4,15 @@ import 'package:mobilestock/utils/global.colors.dart';
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
 class AddCartButtonCart extends StatefulWidget {
-  const AddCartButtonCart({Key? key}) : super(key: key);
+  AddCartButtonCart({Key? key, required this.quantity}) : super(key: key);
+
+  int quantity;
 
   @override
   State<AddCartButtonCart> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<AddCartButtonCart> {
-  int quantity = 0;
-
   Widget showWidget(int qty) {
     if (qty == 0) {
       return Align(
@@ -26,7 +26,7 @@ class _MyWidgetState extends State<AddCartButtonCart> {
               backgroundColor: Colors.grey.withOpacity(0.05)),
           onPressed: () {
             setState(() {
-              quantity++;
+              widget.quantity++;
             });
           },
         ),
@@ -45,12 +45,12 @@ class _MyWidgetState extends State<AddCartButtonCart> {
               ),
               onPressed: () {
                 setState(() {
-                  quantity--;
+                  widget.quantity--;
                 });
               },
             ),
             Text(
-              quantity.toString(),
+              widget.quantity.toString(),
               style: TextStyle(color: GlobalColors.mainColor),
             ),
             IconButton(
@@ -60,7 +60,7 @@ class _MyWidgetState extends State<AddCartButtonCart> {
               ),
               onPressed: () {
                 setState(() {
-                  quantity++;
+                  widget.quantity++;
                 });
               },
             ),
@@ -74,10 +74,10 @@ class _MyWidgetState extends State<AddCartButtonCart> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
-      width: 110,
+      width: 120,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
-        child: showWidget(quantity),
+        child: showWidget(widget.quantity),
       ),
     );
   }

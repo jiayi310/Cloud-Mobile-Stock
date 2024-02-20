@@ -114,7 +114,9 @@ class _ItemQuotationState extends State<ItemQuotation> {
                               color: GlobalColors.mainColor,
                             ),
                           ),
-                          AddCartButtonCart(),
+                          AddCartButtonCart(
+                            quantity: 1,
+                          ),
                         ],
                       ),
                     )

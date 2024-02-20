@@ -7,11 +7,15 @@ import 'package:mobilestock/api/base.client.dart';
 import 'package:mobilestock/models/Stock.dart';
 import 'package:mobilestock/view/Sales/product.card.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../models/Sales.dart';
 import '../../size.config.dart';
 import 'SalesDetails/details.screen.dart';
 
 class ItemsGridWidget extends StatefulWidget {
-  const ItemsGridWidget({Key? key}) : super(key: key);
+  final String searchQuery;
+
+  const ItemsGridWidget({Key? key, required this.searchQuery})
+      : super(key: key);
 
   @override
   _ItemsGridWidgetState createState() => _ItemsGridWidgetState();
@@ -21,6 +25,7 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
   List<Stock> productlist = [];
   String companyid = "";
   final storage = new FlutterSecureStorage();
+  Sales new_sales = new Sales();
 
   @override
   void initState() {
@@ -32,6 +37,19 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
 
   List<Stock> productFromJson(String str) =>
       List<Stock>.from(json.decode(str).map((x) => Stock.fromJson(x)));
+
+  List<Stock> filterProductsBySearch(List<Stock> products, String query) {
+    if (query.isEmpty) {
+      return products;
+    }
+
+    return products.where((product) {
+      // Customize your filtering logic based on your data model
+      return product.stockCode!.toLowerCase().contains(query.toLowerCase()) ||
+          product.description!.toLowerCase().contains(query.toLowerCase()) ||
+          product.baseUOM!.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +72,15 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Text('No data available.');
             } else {
+              final filteredProducts =
+                  filterProductsBySearch(snapshot.data!, widget.searchQuery);
+
               return StaggeredGrid.count(
                 crossAxisCount:
                     MediaQuery.of(context).size.shortestSide < 600 ? 2 : 4,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                children: snapshot.data!.asMap().entries.map((entry) {
+                children: filteredProducts.asMap().entries.map((entry) {
                   final index = entry.key;
                   final stock = entry.value;
 
@@ -70,6 +91,7 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
                     image: Base64Decoder().convert(stock.image.toString()),
                     price: stock.baseUOMPrice1 ?? 0.00,
                     bgColor: Color(0xfff),
+                    sales: new_sales,
                     press: () {
                       Navigator.push(
                         context,

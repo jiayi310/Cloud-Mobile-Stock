@@ -4,7 +4,10 @@ import 'package:mobilestock/utils/global.colors.dart';
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
 class AddCartButton extends StatefulWidget {
-  const AddCartButton({Key? key}) : super(key: key);
+  final ValueChanged<int> onQuantityChanged;
+
+  const AddCartButton({Key? key, required this.onQuantityChanged})
+      : super(key: key);
 
   @override
   State<AddCartButton> createState() => _MyWidgetState();
@@ -20,12 +23,15 @@ class _MyWidgetState extends State<AddCartButton> {
         child: ElevatedButton(
           child: Icon(Icons.add),
           style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(0),
-              backgroundColor: GlobalColors.mainColor),
+            shape: CircleBorder(),
+            padding: EdgeInsets.all(0),
+            backgroundColor: GlobalColors.mainColor,
+          ),
           onPressed: () {
             setState(() {
               quantity++;
+              widget.onQuantityChanged(
+                  quantity); // Notify parent about the change
             });
           },
         ),
@@ -45,6 +51,8 @@ class _MyWidgetState extends State<AddCartButton> {
               onPressed: () {
                 setState(() {
                   quantity--;
+                  widget.onQuantityChanged(
+                      quantity); // Notify parent about the change
                 });
               },
             ),
@@ -60,6 +68,8 @@ class _MyWidgetState extends State<AddCartButton> {
               onPressed: () {
                 setState(() {
                   quantity++;
+                  widget.onQuantityChanged(
+                      quantity); // Notify parent about the change
                 });
               },
             ),

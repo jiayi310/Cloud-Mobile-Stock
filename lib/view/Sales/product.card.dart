@@ -1,12 +1,12 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:mobilestock/models/Sales.dart';
 import 'package:mobilestock/utils/global.colors.dart';
-
 import 'SalesDetails/add.cartbutton.dart';
+import 'SalesProvider.dart';
 
-class ProductCard extends StatelessWidget {
-  ProductCard({
+class ProductCard extends StatefulWidget {
+  const ProductCard({
     Key? key,
     required this.image,
     required this.title,
@@ -15,22 +15,30 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.press,
     required this.bgColor,
+    required this.sales,
   }) : super(key: key);
+
   final String title, stockcode, uom;
   final Uint8List image;
   final VoidCallback press;
   final double price;
   final Color bgColor;
+  final Sales sales;
 
+  @override
+  _ProductCardState createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: press,
+      onTap: widget.press,
       child: Container(
         width: 170,
         height: 220,
         padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
@@ -40,26 +48,49 @@ class ProductCard extends StatelessWidget {
               width: double.infinity,
               height: 132,
               decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                color: widget.bgColor,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Stack(
                 children: [
-                  if (image != null && image.isNotEmpty)
+                  if (widget.image != null && widget.image.isNotEmpty)
                     Center(
                       child: Image.memory(
-                        image!,
+                        widget.image!,
                         height: 132,
                       ),
                     ),
-                  if (image == null || image.isEmpty)
+                  if (widget.image == null || widget.image.isEmpty)
                     Center(
                       child: Image.asset(
                         "assets/images/no-image.png",
                         width: 100,
                       ),
                     ),
-                  Positioned(top: 5, right: -5, child: AddCartButton()),
+                  Positioned(
+                    top: 5,
+                    right: -5,
+                    child: AddCartButton(
+                      onQuantityChanged: (newQuantity) {
+                        setState(() {
+                          // Add the item to the sales object
+                          final salesProvider = SalesProvider.of(context);
+                          if (salesProvider != null) {
+                            salesProvider.sales.addItem(
+                              stockCode: widget.stockcode,
+                              description: widget.title,
+                              uom: widget.uom,
+                              quantity: newQuantity,
+                              price: widget.price,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Item added to cart')),
+                            );
+                          }
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -73,18 +104,19 @@ class ProductCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            stockcode,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                            widget.stockcode,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            title,
-                            style: const TextStyle(color: Colors.black),
+                            widget.title,
+                            style: TextStyle(color: Colors.black),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -92,15 +124,16 @@ class ProductCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              uom,
-                              style: const TextStyle(color: Colors.grey),
+                              widget.uom,
+                              style: TextStyle(color: Colors.grey),
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              "RM " + price.toString(),
+                              "RM " + widget.price.toString(),
                               style: TextStyle(
-                                  color: GlobalColors.mainColor,
-                                  fontWeight: FontWeight.bold),
+                                color: GlobalColors.mainColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),

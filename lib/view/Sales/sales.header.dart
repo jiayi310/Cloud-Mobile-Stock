@@ -4,10 +4,29 @@ import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Sales/OrderHistory/history.view.dart';
 import 'package:mobilestock/view/Sales/sales.filter.dart';
 
+import '../../models/Sales.dart';
 import 'Cart/cart.view.dart';
+import 'SalesProvider.dart';
 
-class SalesAppBar extends StatelessWidget {
-  int numOfitem = 2;
+class SalesAppBar extends StatefulWidget {
+  const SalesAppBar({Key? key}) : super(key: key);
+
+  @override
+  State<SalesAppBar> createState() => _SalesAppBarState();
+}
+
+class _SalesAppBarState extends State<SalesAppBar> {
+  int numOfitem = 0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Access context and salesProvider here
+    final salesProvider = SalesProvider.of(context);
+    numOfitem = salesProvider!.sales.items.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(

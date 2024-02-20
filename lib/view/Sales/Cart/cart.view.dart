@@ -48,21 +48,6 @@ class _CartListState extends State<CartList> {
                     ),
                   ),
                   Spacer(),
-                  // Align(
-                  //   alignment: Alignment.centerRight,
-                  //   child: InkWell(
-                  //     onTap: () {
-                  //       setState(() {
-                  //         deleteButton = !deleteButton;
-                  //       });
-                  //     },
-                  //     child: Text(
-                  //       "Edit",
-                  //       style: TextStyle(
-                  //           fontSize: 15, color: GlobalColors.mainColor),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

@@ -4,6 +4,9 @@ import 'package:mobilestock/models/Stock.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
+import '../../../models/Sales.dart';
+import '../SalesProvider.dart';
+
 class CartItem extends StatefulWidget {
   const CartItem({Key? key}) : super(key: key);
 
@@ -12,6 +15,17 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
+  List<SalesItem> salesItems = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Access context and salesProvider here
+    final salesProvider = SalesProvider.of(context);
+    salesItems = salesProvider?.sales.items ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,9 +33,9 @@ class _CartItemState extends State<CartItem> {
         ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: demo_product.length,
+          itemCount: salesItems.length,
           itemBuilder: (BuildContext context, int i) {
-            final item = demo_product[i].desc2;
+            final item = salesItems[i].description;
             return Slidable(
                 key: Key(item.toString()),
                 endActionPane: ActionPane(
@@ -30,7 +44,7 @@ class _CartItemState extends State<CartItem> {
                     ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            demo_product.removeAt(i);
+                            salesItems.removeAt(i);
                           });
                         },
                         style: ElevatedButton.styleFrom(primary: Colors.red),
@@ -62,7 +76,7 @@ class _CartItemState extends State<CartItem> {
                           color: Color.fromARGB(255, 224, 224, 244),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        // child: Image.asset(demo_product[i].image.toString()),
+                        // child: Image.asset(salesItems[i].image.toString()),
                       ),
                       Expanded(
                         child: Container(
@@ -73,7 +87,7 @@ class _CartItemState extends State<CartItem> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                demo_product[i].stockCode.toString(),
+                                salesItems[i].stockCode.toString(),
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.bold,
@@ -82,7 +96,7 @@ class _CartItemState extends State<CartItem> {
                                 ),
                               ),
                               Text(
-                                "Descriptionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+                                salesItems[i].description.toString(),
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 13,
@@ -90,7 +104,7 @@ class _CartItemState extends State<CartItem> {
                                 ),
                               ),
                               Text(
-                                "UOM",
+                                salesItems[i].uom.toString(),
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 13,
@@ -98,7 +112,7 @@ class _CartItemState extends State<CartItem> {
                                 ),
                               ),
                               Text(
-                                "RM " + demo_product[i].stockCode.toString(),
+                                "RM " + salesItems[i].price.toString(),
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.bold,
@@ -116,7 +130,9 @@ class _CartItemState extends State<CartItem> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            AddCartButtonCart(),
+                            AddCartButtonCart(
+                              quantity: salesItems[i].quantity,
+                            ),
                           ],
                         ),
                       )
