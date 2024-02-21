@@ -82,6 +82,7 @@ class _ProductCardState extends State<ProductCard> {
                               uom: widget.uom,
                               quantity: newQuantity,
                               price: widget.price,
+                              image: widget.image,
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Item added to cart')),

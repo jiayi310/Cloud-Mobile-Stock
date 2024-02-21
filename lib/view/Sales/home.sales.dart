@@ -4,6 +4,8 @@ import 'package:mobilestock/view/Sales/item.list.featured.dart';
 import 'package:mobilestock/view/Sales/sales.header.dart';
 import 'package:mobilestock/view/Sales/search.sales.dart';
 
+import '../../models/Stock.dart';
+
 class HomeSalesScreen extends StatefulWidget {
   HomeSalesScreen({Key? key}) : super(key: key);
 

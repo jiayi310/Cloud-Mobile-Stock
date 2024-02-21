@@ -59,17 +59,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: FutureBuilder<Uint8List>(
-                          future: decodeImage(widget.stock.image!),
+                          future: widget.stock.image != null
+                              ? decodeImage(widget.stock.image!)
+                              : null,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               // Display the image using Image.memory
-                              return Image.memory(
-                                snapshot.data!,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.3,
-                                fit: BoxFit.cover,
-                              );
+                              if (snapshot.data != null &&
+                                  snapshot.data!.length > 0) {
+                                return Image.memory(
+                                  snapshot.data!,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  fit: BoxFit.cover,
+                                );
+                              } else {
+                                // Handle the case when snapshot.data is null or empty
+                                return Image.asset(
+                                  "assets/images/no-image.png",
+                                  width: 100,
+                                );
+                              }
                             } else if (snapshot.hasError) {
                               // Handle errors during the Future execution
                               return Placeholder(); // Replace with an appropriate widget for error handling

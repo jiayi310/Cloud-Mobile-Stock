@@ -44,7 +44,6 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
     }
 
     return products.where((product) {
-      // Customize your filtering logic based on your data model
       return product.stockCode!.toLowerCase().contains(query.toLowerCase()) ||
           product.description!.toLowerCase().contains(query.toLowerCase()) ||
           product.baseUOM!.toLowerCase().contains(query.toLowerCase());
@@ -70,10 +69,14 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No data available.');
+              return Text('No products available.');
             } else {
               final filteredProducts =
                   filterProductsBySearch(snapshot.data!, widget.searchQuery);
+
+              if (filteredProducts.isEmpty) {
+                return Text('No matching products found.');
+              }
 
               return StaggeredGrid.count(
                 crossAxisCount:
@@ -112,17 +115,22 @@ class _ItemsGridWidgetState extends State<ItemsGridWidget> {
   }
 
   Future<List<Stock>> getStockData() async {
-    companyid = (await storage.read(key: "companyid"))!;
-    if (companyid != null) {
-      String response = await BaseClient()
-          .get('/Stock/GetStockListByCompanyId?companyid=' + companyid);
-      List<Stock> _productlist = productFromJson(response);
+    try {
+      companyid = (await storage.read(key: "companyid"))!;
+      if (companyid != null) {
+        String response = await BaseClient()
+            .get('/Stock/GetStockListByCompanyId?companyid=' + companyid);
+        List<Stock> _productlist = productFromJson(response);
 
-      setState(() {
-        productlist = _productlist;
-      });
+        setState(() {
+          productlist = _productlist;
+        });
+      }
+
+      return productlist;
+    } catch (error) {
+      print('Error fetching data: $error');
+      throw error; // Rethrow the error to be caught by the FutureBuilder
     }
-
-    return productlist;
   }
 }

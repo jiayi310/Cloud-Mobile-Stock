@@ -4,13 +4,23 @@ import 'package:mobilestock/utils/global.colors.dart';
 import '../../models/Stock.dart';
 
 class SalesFilters extends StatefulWidget {
-  const SalesFilters({Key? key}) : super(key: key);
+  final Function(List<Stock> filteredProducts) onApplyFilters;
+  final List<Stock> products; // Add this
+
+  const SalesFilters({
+    Key? key,
+    required this.onApplyFilters,
+    required this.products, // Add this
+  }) : super(key: key);
 
   @override
   State<SalesFilters> createState() => _SalesFiltersState();
 }
 
 class _SalesFiltersState extends State<SalesFilters> {
+  RangeValues _priceRange = RangeValues(0, 100);
+  Set<String> selectedCategories = Set();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +39,11 @@ class _SalesFiltersState extends State<SalesFilters> {
             ),
             CustomPriceFilter(
               stock: demo_product,
+              onPriceChanged: (values) {
+                setState(() {
+                  _priceRange = values;
+                });
+              },
             ),
             Text(
               'Group',
@@ -42,32 +57,58 @@ class _SalesFiltersState extends State<SalesFilters> {
               'Categories',
               style: TextStyle(color: GlobalColors.mainColor),
             ),
-            CustomCategoryFilter()
+            CustomCategoryFilter(
+              onCategoriesChanged: (categories) {
+                setState(() {
+                  selectedCategories = categories;
+                });
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Get selected filters and apply them to the product list
+                List<Stock> filteredProducts =
+                    applyFilters(_priceRange, selectedCategories);
+                // Pass the filtered products to the callback
+                widget.onApplyFilters(filteredProducts);
+                // Close the filter screen or perform other actions as needed
+              },
+              child: Text('Apply Filters'),
+            ),
           ],
         ),
       ),
     );
   }
+
+  List<Stock> applyFilters(RangeValues priceRange, Set<String> categories) {
+    // Apply your filters and return the filtered product list
+    // You can use the selected filters to filter the 'demo_product' list
+    // For example, filter by price and category
+    List<Stock> filteredProducts = demo_product
+        .where((stock) =>
+            stock.baseUOMPrice1! >= priceRange.start &&
+            stock.baseUOMPrice1! <= priceRange.end &&
+            categories.contains(stock.stockGroupDescription))
+        .toList();
+
+    return filteredProducts;
+  }
 }
 
 class CustomCategoryFilter extends StatefulWidget {
-  const CustomCategoryFilter({Key? key}) : super(key: key);
+  final Function(Set<String> categories) onCategoriesChanged;
+
+  const CustomCategoryFilter({Key? key, required this.onCategoriesChanged})
+      : super(key: key);
 
   @override
   State<CustomCategoryFilter> createState() => _CustomCategoryFilterState();
 }
 
 class _CustomCategoryFilterState extends State<CustomCategoryFilter> {
+  Set<String> selectedCategories = Set();
   Set<String> uniqueCategories = Set();
-
-  @override
-  void initState() {
-    super.initState();
-    // Populate uniqueCategories set with distinct categories
-    demo_product.forEach((stock) {
-      uniqueCategories.add(stock.stockGroupDescription.toString());
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +135,18 @@ class _CustomCategoryFilterState extends State<CustomCategoryFilter> {
               SizedBox(
                 height: 25,
                 child: Checkbox(
-                  value: false, // Set your checkbox value based on your logic
+                  value: selectedCategories.contains(category),
                   onChanged: (bool? newValue) {
-                    setState(() {});
+                    setState(() {
+                      if (newValue != null) {
+                        if (newValue) {
+                          selectedCategories.add(category);
+                        } else {
+                          selectedCategories.remove(category);
+                        }
+                        widget.onCategoriesChanged(selectedCategories);
+                      }
+                    });
                   },
                 ),
               ),
@@ -110,9 +160,12 @@ class _CustomCategoryFilterState extends State<CustomCategoryFilter> {
 
 class CustomPriceFilter extends StatefulWidget {
   final List<Stock> stock;
+  final Function(RangeValues) onPriceChanged;
+
   const CustomPriceFilter({
     Key? key,
     required this.stock,
+    required this.onPriceChanged,
   }) : super(key: key);
 
   @override
@@ -129,6 +182,8 @@ class _CustomPriceFilterState extends State<CustomPriceFilter> {
     required this.stock,
   });
 
+  RangeValues get priceRange => _priceRange; // Add this getter
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -141,6 +196,8 @@ class _CustomPriceFilterState extends State<CustomPriceFilter> {
             setState(() {
               _priceRange = values;
             });
+            widget.onPriceChanged(
+                _priceRange); // Notify the parent about the change
           },
         ),
         SizedBox(height: 10),

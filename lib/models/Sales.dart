@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:collection/collection.dart';
 
 class Sales {
@@ -28,6 +30,7 @@ class Sales {
     required String uom,
     required int quantity,
     required double price,
+    required Uint8List image,
   }) {
     // Check if an item with the same code already exists in the list
     var existingItem =
@@ -44,6 +47,7 @@ class Sales {
         uom: uom ?? "",
         quantity: quantity,
         price: price,
+        image: image,
       ));
     }
   }
@@ -55,6 +59,7 @@ class SalesItem {
   String uom;
   int quantity;
   double price;
+  Uint8List? image;
 
   SalesItem({
     required this.stockCode,
@@ -62,5 +67,6 @@ class SalesItem {
     required this.uom,
     required this.quantity,
     required this.price,
+    this.image,
   });
 }

@@ -87,7 +87,16 @@ class _SalesAppBarState extends State<SalesAppBar> {
         ),
         InkWell(
           onTap: () {
-            Get.to(() => SalesFilters());
+            Get.to(() => SalesFilters(
+                  onApplyFilters: (filteredProducts) {
+                    // Update the state of the parent widget with the filtered products
+                    setState(() {
+                      // Assuming you have a variable called 'filteredProductsList' in the parent widget
+                      filteredProductsList = filteredProducts;
+                    });
+                  },
+                  products: demo_product, // Pass the product list
+                ));
           },
           borderRadius: BorderRadius.circular(50),
           child: Stack(

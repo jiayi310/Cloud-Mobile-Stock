@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mobilestock/models/Stock.dart';
@@ -68,16 +70,32 @@ class _CartItemState extends State<CartItem> {
                         value: true,
                         onChanged: (value) {},
                       ),
-                      Container(
-                        height: 70,
-                        width: 70,
-                        margin: EdgeInsets.only(right: 15),
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 224, 224, 244),
-                          borderRadius: BorderRadius.circular(10),
+                      if (salesItems[i].image!.length > 0)
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: EdgeInsets.only(right: 15),
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 224, 224, 244),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child:
+                              Image.memory(salesItems[i].image ?? Uint8List(0)),
                         ),
-                        // child: Image.asset(salesItems[i].image.toString()),
-                      ),
+                      if (salesItems[i].image!.length <= 0)
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: EdgeInsets.only(right: 15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Image.asset(
+                            "assets/images/no-image.png",
+                            width: 100,
+                          ),
+                        ),
                       Expanded(
                         child: Container(
                           width: 200,
