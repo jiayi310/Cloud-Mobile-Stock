@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:mobilestock/models/Stock.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/StockBalance.dart';
 
 class StockDetails extends StatefulWidget {
   StockDetails({Key? key, required this.id}) : super(key: key);
@@ -20,6 +21,10 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
   int id;
   Uint8List? bytes;
   String? uomSelected;
+  List<StockBalance> stockbalancelist = [];
+  List<StockBalance> stockBalanceFromJson(String str) =>
+      List<StockBalance>.from(
+          json.decode(str).map((x) => StockBalance.fromJson(x)));
 
   StockDetail productDetails = new StockDetail();
 
@@ -28,6 +33,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     getData();
+    getStockBalance();
   }
 
   @override
@@ -166,9 +172,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                     Tab(
                       text: "Batch",
                     ),
-                    Tab(
-                      text: "History Price",
-                    )
+                    // Tab(
+                    //   text: "History Price",
+                    // )
                   ],
                 ),
               ),
@@ -945,41 +951,60 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                             SizedBox(
                               height: 20,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "HQ",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
+                            Container(
+                              height:
+                                  300, // Set a fixed height or adjust as needed
+                              child: ListView.builder(
+                                itemCount: stockbalancelist.length,
+                                itemBuilder: (context, index) {
+                                  return SizedBox(
+                                    height:
+                                        30, // Set the desired space between rows
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            stockbalancelist[index]
+                                                .location
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            stockbalancelist[index].batchNo ??
+                                                "",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            stockbalancelist[index]
+                                                .qty
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "B93832",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "94",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -1028,6 +1053,22 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> getStockBalance() async {
+    if (id != null) {
+      final response = await BaseClient().get(
+          '/Stock/GetStockBalance?stockId=' +
+              id.toString() +
+              "&stockUom=" +
+              uomSelected.toString());
+
+      List<StockBalance> _stlist = stockBalanceFromJson(response);
+
+      setState(() {
+        stockbalancelist = _stlist;
+      });
+    }
+  }
+
   Widget buildDropdown() {
     return DropdownButton<String>(
       value: uomSelected ?? productDetails.baseUOM,
@@ -1048,6 +1089,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
         setState(() {
           uomSelected = value;
         });
+        getStockBalance();
       },
     );
   }

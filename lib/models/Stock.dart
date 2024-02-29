@@ -478,35 +478,36 @@ class StockUOMDtoList {
   int? createdUserID;
   int? stockID;
   int? companyID;
-  Null? stockBarcodeDtoList;
+//  StockBarcodeDtoList? stockBarcodeDtoList;
   int? barcodeCount;
-  Null? stockBarcodeDtoDeletedList;
+  // Null? stockBarcodeDtoDeletedList;
 
-  StockUOMDtoList(
-      {this.stockUOMID,
-      this.uom,
-      this.shelf,
-      this.rate,
-      this.price,
-      this.cost,
-      this.minSalePrice,
-      this.maxSalePrice,
-      this.minQty,
-      this.maxQty,
-      this.price2,
-      this.price3,
-      this.price4,
-      this.price5,
-      this.price6,
-      this.lastModifiedDateTime,
-      this.lastModifiedUserID,
-      this.createdDateTime,
-      this.createdUserID,
-      this.stockID,
-      this.companyID,
-      this.stockBarcodeDtoList,
-      this.barcodeCount,
-      this.stockBarcodeDtoDeletedList});
+  StockUOMDtoList({
+    this.stockUOMID,
+    this.uom,
+    this.shelf,
+    this.rate,
+    this.price,
+    this.cost,
+    this.minSalePrice,
+    this.maxSalePrice,
+    this.minQty,
+    this.maxQty,
+    this.price2,
+    this.price3,
+    this.price4,
+    this.price5,
+    this.price6,
+    this.lastModifiedDateTime,
+    this.lastModifiedUserID,
+    this.createdDateTime,
+    this.createdUserID,
+    this.stockID,
+    this.companyID,
+    //this.stockBarcodeDtoList,
+    this.barcodeCount,
+    //  this.stockBarcodeDtoDeletedList
+  });
 
   StockUOMDtoList.fromJson(Map<String, dynamic> json) {
     stockUOMID = json['stockUOMID'];
@@ -530,9 +531,9 @@ class StockUOMDtoList {
     createdUserID = json['createdUserID'];
     stockID = json['stockID'];
     companyID = json['companyID'];
-    stockBarcodeDtoList = json['stockBarcodeDtoList'];
+    // stockBarcodeDtoList = json['stockBarcodeDtoList'];
     barcodeCount = json['barcodeCount'];
-    stockBarcodeDtoDeletedList = json['stockBarcodeDtoDeletedList'];
+    //  stockBarcodeDtoDeletedList = json['stockBarcodeDtoDeletedList'];
   }
 
   Map<String, dynamic> toJson() {
@@ -558,9 +559,9 @@ class StockUOMDtoList {
     data['createdUserID'] = this.createdUserID;
     data['stockID'] = this.stockID;
     data['companyID'] = this.companyID;
-    data['stockBarcodeDtoList'] = this.stockBarcodeDtoList;
+    //data['stockBarcodeDtoList'] = this.stockBarcodeDtoList;
     data['barcodeCount'] = this.barcodeCount;
-    data['stockBarcodeDtoDeletedList'] = this.stockBarcodeDtoDeletedList;
+    //data['stockBarcodeDtoDeletedList'] = this.stockBarcodeDtoDeletedList;
     return data;
   }
 }

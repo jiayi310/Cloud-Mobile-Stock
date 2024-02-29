@@ -4,14 +4,10 @@ import 'package:mobilestock/utils/global.colors.dart';
 import '../../models/Stock.dart';
 
 class SalesFilters extends StatefulWidget {
-  final Function(List<Stock> filteredProducts) onApplyFilters;
-  final List<Stock> products; // Add this
+  // Function(List<Stock> filteredProducts) onApplyFilters;
+  // List<Stock> products; // Add this
 
-  const SalesFilters({
-    Key? key,
-    required this.onApplyFilters,
-    required this.products, // Add this
-  }) : super(key: key);
+  const SalesFilters({Key? key}) : super(key: key);
 
   @override
   State<SalesFilters> createState() => _SalesFiltersState();
@@ -70,7 +66,7 @@ class _SalesFiltersState extends State<SalesFilters> {
                 List<Stock> filteredProducts =
                     applyFilters(_priceRange, selectedCategories);
                 // Pass the filtered products to the callback
-                widget.onApplyFilters(filteredProducts);
+                //   widget.onApplyFilters(filteredProducts);
                 // Close the filter screen or perform other actions as needed
               },
               child: Text('Apply Filters'),

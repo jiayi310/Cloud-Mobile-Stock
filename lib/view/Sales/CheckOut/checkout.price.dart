@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/Sales.dart';
+import '../SalesProvider.dart';
+
 class PriceCheckOut extends StatefulWidget {
   const PriceCheckOut({Key? key}) : super(key: key);
 
@@ -10,6 +13,12 @@ class PriceCheckOut extends StatefulWidget {
 class _PriceCheckOutState extends State<PriceCheckOut> {
   @override
   Widget build(BuildContext context) {
+    Sales? sales = SalesProvider.of(context)?.sales;
+
+    if (sales == null) {
+      // Handle the case where Sales is not available
+      return Text('Sales data not available');
+    }
     return Container(
       height: 110,
       width: double.infinity,
@@ -30,7 +39,7 @@ class _PriceCheckOutState extends State<PriceCheckOut> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '100,000',
+                '${sales.calculateTotalPrice().toStringAsFixed(2)}',
               ),
             ],
           ),
@@ -42,7 +51,9 @@ class _PriceCheckOutState extends State<PriceCheckOut> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '3.90',
+                sales.taxAmt != null
+                    ? sales.taxAmt!.toStringAsFixed(2)
+                    : "0.00",
               ),
             ],
           ),
@@ -54,7 +65,7 @@ class _PriceCheckOutState extends State<PriceCheckOut> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '- 3.90',
+                '0.00',
               ),
             ],
           ),
@@ -66,7 +77,9 @@ class _PriceCheckOutState extends State<PriceCheckOut> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '100,000',
+                sales.finalTotal != null
+                    ? sales.finalTotal!.toStringAsFixed(2)
+                    : "N/A",
               ),
             ],
           ),

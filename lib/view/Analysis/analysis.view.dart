@@ -89,7 +89,9 @@ class _StatsScreenState extends State<AnalysisScreen> {
               Text('Individual'),
               Text('All'),
             ],
-            onTap: (index) {},
+            onTap: (index) {
+              print('Selected tab index: $index');
+            },
           ),
         ),
       ),
@@ -112,7 +114,9 @@ class _StatsScreenState extends State<AnalysisScreen> {
               Text('Today'),
               Text('Yesterday'),
             ],
-            onTap: (index) {},
+            onTap: (index) {
+              print('Selected tab index: $index');
+            },
           ),
         ),
       ),

@@ -15,9 +15,10 @@ class AddCartButton extends StatefulWidget {
 
 class _MyWidgetState extends State<AddCartButton> {
   int quantity = 0;
+  bool isRectangle = false;
 
   Widget showWidget(int qty) {
-    if (qty == 0) {
+    if (!isRectangle || qty == 0) {
       return Align(
         alignment: Alignment.centerRight,
         child: ElevatedButton(
@@ -32,30 +33,46 @@ class _MyWidgetState extends State<AddCartButton> {
               quantity++;
               widget.onQuantityChanged(
                   quantity); // Notify parent about the change
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Item added to cart')),
+              );
+              // Switch to the rectangle widget
+              isRectangle = true;
+              // Delayed switch back to the circle button after 3 seconds
+              Future.delayed(Duration(seconds: 3), () {
+                setState(() {
+                  isRectangle = false;
+                  quantity = 0;
+                });
+              });
             });
           },
         ),
       );
     } else {
       return Container(
+        width: 80,
         color: Colors.white,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(
-                Icons.remove,
-                color: Colors.indigo,
-              ),
-              onPressed: () {
-                setState(() {
-                  quantity--;
-                  widget.onQuantityChanged(
-                      quantity); // Notify parent about the change
-                });
-              },
-            ),
+            // IconButton(
+            //   icon: const Icon(
+            //     Icons.remove,
+            //     color: Colors.indigo,
+            //   ),
+            //   onPressed: () {
+            //     setState(() {
+            //       quantity--;
+            //       widget.onQuantityChanged(
+            //           quantity); // Notify parent about the change
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         SnackBar(content: Text('Item quantity changed')),
+            //       );
+            //     });
+            //   },
+            // ),
             Text(
               quantity.toString(),
               style: TextStyle(color: GlobalColors.mainColor),
@@ -70,6 +87,9 @@ class _MyWidgetState extends State<AddCartButton> {
                   quantity++;
                   widget.onQuantityChanged(
                       quantity); // Notify parent about the change
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Item added to cart')),
+                  );
                 });
               },
             ),

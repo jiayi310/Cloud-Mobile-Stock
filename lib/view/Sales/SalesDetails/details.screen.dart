@@ -18,7 +18,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  List<String> uom = ["PCS", "PC", "BOX"];
+  List<String> uom = [];
   TextEditingController _controller = TextEditingController();
   int quantity = 1;
 
@@ -32,7 +32,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     String remark = "";
-    String base64String = "";
+    List<bool> selectedUOM = List.generate(uom.length, (index) => false);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -242,49 +243,48 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
+                                        SizedBox(width: 30),
                                         for (int i = 0; i < uom.length; i++)
-                                          Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 8),
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFFF7F8FA),
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            child: Text(uom[i]),
-                                          ),
+                                          StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    // Toggle the current one to true and others to false
+                                                    for (int j = 0;
+                                                        j < selectedUOM.length;
+                                                        j++) {
+                                                      selectedUOM[j] = (j == i);
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: selectedUOM[i]
+                                                        ? Colors.blue
+                                                        : Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                  child: Text(
+                                                    uom[i],
+                                                    style: TextStyle(
+                                                      color: selectedUOM[i]
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          )
                                       ],
                                     ),
                                     SizedBox(height: 20),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Color:",
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        for (int i = 0; i < uom.length; i++)
-                                          Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 8),
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFFF7F8FA),
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            child: Text(uom[i]),
-                                          ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 30),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -486,8 +486,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
       setState(() {
         widget.stock = _productlist;
+
+        for (var item in _productlist.stockUOMDtoList!) {
+          if (item.uom != null) {
+            uom.add(item.uom!);
+          }
+        }
       });
     }
+  }
+
+  void updateTotalPrice() {
+    double pricePerUnit = widget.stock.baseUOMPrice1!;
+
+    // Add your logic to fetch the actual pricing based on selected UOM
+    // You may need to modify this based on your actual pricing strategy
+
+    //totalPrice = quantity * pricePerUnit;
+    setState(() {});
   }
 }
 
@@ -526,4 +542,58 @@ Future<String> _showRemarkDialog(BuildContext context) async {
     },
   );
   return enteredRemark;
+}
+
+class CustomRadioButton extends StatefulWidget {
+  final List<String> options;
+  final List<bool> selectedOptions;
+  final Function(int) onChanged;
+
+  CustomRadioButton({
+    required this.options,
+    required this.selectedOptions,
+    required this.onChanged,
+  });
+
+  @override
+  _CustomRadioButtonState createState() => _CustomRadioButtonState();
+}
+
+class _CustomRadioButtonState extends State<CustomRadioButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          "UOM:",
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(width: 30),
+        for (int i = 0; i < widget.options.length; i++)
+          GestureDetector(
+            onTap: () {
+              widget.onChanged(i);
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: widget.selectedOptions[i] ? Colors.blue : Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Text(
+                widget.options[i],
+                style: TextStyle(
+                  color:
+                      widget.selectedOptions[i] ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          )
+      ],
+    );
+  }
 }

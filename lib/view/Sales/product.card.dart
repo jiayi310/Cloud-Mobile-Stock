@@ -81,11 +81,12 @@ class _ProductCardState extends State<ProductCard> {
                               description: widget.title,
                               uom: widget.uom,
                               quantity: newQuantity,
+                              discount: 0,
+                              taxrate: 0,
+                              taxAmt: 0,
+                              taxableAmount: 0,
                               price: widget.price,
                               image: widget.image,
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Item added to cart')),
                             );
                           }
                         });

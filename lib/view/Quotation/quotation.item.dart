@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:mobilestock/models/Sales.dart';
 import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
 import '../../../models/Stock.dart';
@@ -114,9 +115,9 @@ class _ItemQuotationState extends State<ItemQuotation> {
                               color: GlobalColors.mainColor,
                             ),
                           ),
-                          AddCartButtonCart(
-                            quantity: 1,
-                          ),
+                          // AddCartButtonCart(
+                          //   salesItem: new SalesItem(),
+                          // ),
                         ],
                       ),
                     )
