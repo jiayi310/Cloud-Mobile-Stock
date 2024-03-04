@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -97,7 +98,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
             SizedBox(width: 10),
             InkWell(
               onTap: () {
-                MaterialPageRoute(builder: (context) => CheckOutPage());
+                sendSalesData();
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -400,6 +401,74 @@ class _CheckOutPageState extends State<CheckOutPage> {
     } catch (error) {
       print('Error fetching data: $error');
       throw error; // Rethrow the error to be caught by the FutureBuilder
+    }
+  }
+
+  // Function to send JSON data to the API
+  void sendSalesData() async {
+    // Your JSON data
+    Map<String, dynamic> jsonData = {
+      "docNo": "test-1125",
+      "docDate": "2024-03-01T03:43:53.314Z",
+      "customerID": 3,
+      "customerCode": "C001",
+      "customerName": "string",
+      "subtotal": 800,
+      "taxableAmt": 0,
+      "taxAmt": 0,
+      "finalTotal": 800,
+      "paymentTotal": 800,
+      "outstanding": 0,
+      "isVoid": false,
+      "lastModifiedUserID": 1,
+      "lastModifiedDateTime": "2024-03-01T03:43:53.314Z",
+      "createdUserID": 1,
+      "createdDateTime": "2024-03-01T03:43:53.314Z",
+      "companyID": 1,
+      "salesDetails": salesItems.map((salesItem) {
+        return {
+          "dtlID": 0,
+          "docID": 0,
+          "stockID": salesItem.stockID,
+          "stockCode": salesItem.stockCode,
+          "description": salesItem.description,
+          "uom": salesItem.uom,
+          "qty": salesItem.quantity,
+          "unitPrice": salesItem.unitprice,
+          "discount": salesItem.discount,
+          "total": 0,
+          "taxableAmt": 0,
+          "taxRate": 0,
+          "taxAmt": salesItem.taxAmt,
+          "locationID": 1,
+          "location": "HQ",
+        };
+      }).toList(),
+    };
+
+    // Encode the JSON data
+    String jsonString = jsonEncode(jsonData);
+
+    // Make the API request
+    try {
+      final response = await BaseClient().post(
+        '/Sales/CreateSales',
+        jsonString,
+      );
+
+      // // Check the status code of the response
+      // if (response == 1) {
+      //   // Successful API request
+      //   print('API request successful');
+      //   print('Response: ${response.body}');
+      // } else {
+      //   // Handle errors
+      //   print('Error: ${response.statusCode}');
+      //   print('Response: ${response.body}');
+      // }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception during API request: $e');
     }
   }
 }

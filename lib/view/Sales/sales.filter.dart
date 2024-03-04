@@ -4,10 +4,16 @@ import 'package:mobilestock/utils/global.colors.dart';
 import '../../models/Stock.dart';
 
 class SalesFilters extends StatefulWidget {
-  // Function(List<Stock> filteredProducts) onApplyFilters;
-  // List<Stock> products; // Add this
+  final RangeValues initialPriceRange;
+  final Function(RangeValues, Set<String>, List<Stock>) onApplyFilters;
+  final List<Stock> productlist;
 
-  const SalesFilters({Key? key}) : super(key: key);
+  const SalesFilters({
+    Key? key,
+    required this.initialPriceRange,
+    required this.productlist,
+    required this.onApplyFilters,
+  }) : super(key: key);
 
   @override
   State<SalesFilters> createState() => _SalesFiltersState();
@@ -16,6 +22,14 @@ class SalesFilters extends StatefulWidget {
 class _SalesFiltersState extends State<SalesFilters> {
   RangeValues _priceRange = RangeValues(0, 100);
   Set<String> selectedCategories = Set();
+  List<Stock> filteredProducts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _priceRange = widget.initialPriceRange;
+    filteredProducts = applyFilters(_priceRange, selectedCategories);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +76,15 @@ class _SalesFiltersState extends State<SalesFilters> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Get selected filters and apply them to the product list
-                List<Stock> filteredProducts =
+                filteredProducts =
                     applyFilters(_priceRange, selectedCategories);
-                // Pass the filtered products to the callback
-                //   widget.onApplyFilters(filteredProducts);
-                // Close the filter screen or perform other actions as needed
+                widget.onApplyFilters(
+                  _priceRange,
+                  selectedCategories,
+                  filteredProducts,
+                );
+                Navigator.pop(
+                    context, filteredProducts); // Close the filter screen
               },
               child: Text('Apply Filters'),
             ),
@@ -81,11 +98,10 @@ class _SalesFiltersState extends State<SalesFilters> {
     // Apply your filters and return the filtered product list
     // You can use the selected filters to filter the 'demo_product' list
     // For example, filter by price and category
-    List<Stock> filteredProducts = demo_product
+    List<Stock> filteredProducts = widget.productlist
         .where((stock) =>
             stock.baseUOMPrice1! >= priceRange.start &&
-            stock.baseUOMPrice1! <= priceRange.end &&
-            categories.contains(stock.stockGroupDescription))
+            stock.baseUOMPrice1! <= priceRange.end)
         .toList();
 
     return filteredProducts;

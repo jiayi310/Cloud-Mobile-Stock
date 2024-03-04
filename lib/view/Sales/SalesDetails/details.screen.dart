@@ -6,6 +6,7 @@ import 'package:mobilestock/utils/global.colors.dart';
 import '../../../api/base.client.dart';
 import '../../../models/Stock.dart';
 import '../../../size.config.dart';
+import '../SalesProvider.dart';
 
 class DetailsScreen extends StatefulWidget {
   DetailsScreen({Key? key, required this.stockid}) : super(key: key);
@@ -18,9 +19,10 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  List<String> uom = [];
+  List<Map<String, String>> uom = [];
   TextEditingController _controller = TextEditingController();
   int quantity = 1;
+  String selectedUOM = "";
 
   @override
   void initState() {
@@ -32,7 +34,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     String remark = "";
-    List<bool> selectedUOM = List.generate(uom.length, (index) => false);
+    selectedUOM = widget.stock.baseUOM.toString();
+    List<bool> selectedUOMList = List.generate(
+        uom.length, (index) => uom[index]["uom"] == widget.stock.baseUOM);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -195,253 +199,298 @@ class _DetailsScreenState extends State<DetailsScreen> {
             InkWell(
               onTap: () {
                 showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
-                              physics: BouncingScrollPhysics(),
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                    left: 20, right: 20, bottom: 50),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30),
-                                      topRight: Radius.circular(30),
-                                    )),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      height: 4,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                              255, 223, 221, 221),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      widget.stock.description.toString(),
-                                      style: TextStyle(
-                                        color: GlobalColors.mainColor,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w800,
+                  backgroundColor: Colors.transparent,
+                  context: context,
+                  builder: (context) {
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return Column(
+                          children: [
+                            Expanded(
+                              child: SingleChildScrollView(
+                                physics: BouncingScrollPhysics(),
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 50),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
+                                      )),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 4,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 223, 221, 221),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
-                                    ),
-                                    SizedBox(height: 30),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "UOM:",
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                      SizedBox(height: 20),
+                                      Text(
+                                        widget.stock.description.toString(),
+                                        style: TextStyle(
+                                          color: GlobalColors.mainColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w800,
                                         ),
-                                        SizedBox(width: 30),
-                                        for (int i = 0; i < uom.length; i++)
-                                          StatefulBuilder(
-                                            builder: (context, setState) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    // Toggle the current one to true and others to false
-                                                    for (int j = 0;
-                                                        j < selectedUOM.length;
-                                                        j++) {
-                                                      selectedUOM[j] = (j == i);
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 8),
-                                                  padding: EdgeInsets.all(8),
-                                                  decoration: BoxDecoration(
-                                                    color: selectedUOM[i]
-                                                        ? Colors.blue
-                                                        : Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30),
-                                                  ),
-                                                  child: Text(
-                                                    uom[i],
-                                                    style: TextStyle(
-                                                      color: selectedUOM[i]
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                      ],
-                                    ),
-                                    SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Qty:",
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(width: 50),
-                                        Container(
-                                          color: Colors.white,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              IconButton(
-                                                icon: const Icon(
-                                                  Icons.remove,
-                                                  color: Colors.indigo,
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    if (quantity > 1)
-                                                      quantity--;
-                                                    _controller.text =
-                                                        quantity.toString();
-                                                  });
-                                                },
-                                              ),
-                                              SizedBox(
-                                                width: 50,
-                                                child: TextField(
-                                                  decoration: InputDecoration(
-                                                      border: InputBorder.none),
-                                                  textAlign: TextAlign.center,
-                                                  controller: _controller,
-                                                  style: TextStyle(
-                                                      color: GlobalColors
-                                                          .mainColor,
-                                                      fontSize: 17),
-                                                ),
-                                              ),
-                                              IconButton(
-                                                icon: const Icon(
-                                                  Icons.add,
-                                                  color: Colors.indigo,
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    quantity++;
-                                                    _controller.text =
-                                                        quantity.toString();
-                                                  });
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 30),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        String enteredRemark =
-                                            await _showRemarkDialog(context);
-                                        if (enteredRemark != null) {
-                                          setState(() {
-                                            remark = enteredRemark;
-                                          });
-                                        }
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                      ),
+                                      SizedBox(height: 30),
+                                      Row(
                                         children: [
                                           Text(
-                                            "Remark:",
+                                            "UOM:",
                                             style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          Icon(Icons.chevron_right)
+                                          SizedBox(width: 30),
+                                          for (int i = 0; i < uom.length; i++)
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  // Toggle the current one to true and others to false
+                                                  for (int j = 0;
+                                                      j <
+                                                          selectedUOMList
+                                                              .length;
+                                                      j++) {
+                                                    selectedUOMList[j] =
+                                                        (j == i);
+
+                                                    selectedUOM = uom[i]["uom"]
+                                                        .toString();
+                                                  }
+
+                                                  updateTotalPrice();
+                                                });
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 8),
+                                                padding: EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                  color: selectedUOMList[i]
+                                                      ? Colors.blue
+                                                      : Colors.grey.shade50,
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                ),
+                                                child: Text(
+                                                  uom[i]["uom"].toString(),
+                                                  style: TextStyle(
+                                                    color: selectedUOMList[i]
+                                                        ? Colors.grey.shade50
+                                                        : Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                         ],
                                       ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          remark,
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                      SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Qty:",
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 80),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Total:",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
+                                          SizedBox(width: 50),
+                                          Container(
+                                            color: Colors.white,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    Icons.remove,
+                                                    color: Colors.indigo,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      if (quantity > 1)
+                                                        quantity--;
+                                                      _controller.text =
+                                                          quantity.toString();
+                                                    });
+                                                    updateTotalPrice();
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                  width: 50,
+                                                  child: TextField(
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none),
+                                                    textAlign: TextAlign.center,
+                                                    controller: _controller,
+                                                    style: TextStyle(
+                                                        color: GlobalColors
+                                                            .mainColor,
+                                                        fontSize: 17),
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    Icons.add,
+                                                    color: Colors.indigo,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      quantity++;
+                                                      _controller.text =
+                                                          quantity.toString();
+                                                    });
+                                                    updateTotalPrice();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
                                           ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 30),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          String enteredRemark =
+                                              await _showRemarkDialog(context);
+                                          if (enteredRemark != null) {
+                                            setState(() {
+                                              remark = enteredRemark;
+                                            });
+                                          }
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Remark:",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Icon(Icons.chevron_right)
+                                          ],
                                         ),
-                                        Text(
-                                          "RM" +
-                                              widget.stock.baseUOMPrice1
-                                                  .toString(),
-                                          style: TextStyle(
-                                              color: GlobalColors.mainColor,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            remark,
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 80),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Total:",
+                                            style: TextStyle(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(height: 40),
-                                    InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 100),
-                                        decoration: BoxDecoration(
-                                            color: GlobalColors.mainColor,
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: Text(
-                                          "Add to Cart",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 1,
-                                            color:
-                                                Colors.white.withOpacity(0.8),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Text(
+                                            "RM" +
+                                                widget.stock.baseUOMPrice1
+                                                    .toString(),
+                                            style: TextStyle(
+                                                color: GlobalColors.mainColor,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 40),
+                                      InkWell(
+                                        onTap: () async {
+                                          final salesProvider =
+                                              SalesProvider.of(context);
+                                          if (salesProvider != null) {
+                                            Uint8List? decodedImage =
+                                                await decodeImage(
+                                                    widget.stock.image);
+                                            salesProvider.sales.addItem(
+                                              stockCode: widget.stock.stockCode
+                                                  .toString(),
+                                              description: widget
+                                                  .stock.description
+                                                  .toString(),
+                                              uom: selectedUOM,
+                                              quantity: quantity,
+                                              discount: 0,
+                                              taxrate: 0,
+                                              total: 0,
+                                              taxAmt: 0,
+                                              taxableAmount: 0,
+                                              price:
+                                                  widget.stock.baseUOMPrice1!,
+                                              image: decodedImage,
+                                            );
+
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      'Item added to cart')),
+                                            );
+                                            // Close the modal
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 100),
+                                          decoration: BoxDecoration(
+                                              color: GlobalColors.mainColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(30)),
+                                          child: Text(
+                                            "Add to Cart",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 1,
+                                              color:
+                                                  Colors.white.withOpacity(0.8),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    });
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
@@ -467,13 +516,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<Uint8List> decodeImage(base64String) async {
     try {
-      // Decode the Base64 string to Uint8List
       return base64Decode(base64String);
     } catch (e) {
-      // Handle decoding errors
       print('Error decoding Base64 image: $e');
-      // Return a default value or throw an error
-      rethrow; // rethrow the exception to let FutureBuilder handle it
+      rethrow;
     }
   }
 
@@ -488,8 +534,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
         widget.stock = _productlist;
 
         for (var item in _productlist.stockUOMDtoList!) {
-          if (item.uom != null) {
-            uom.add(item.uom!);
+          if (item.uom != null && item.price != null) {
+            uom.add({"uom": item.uom!, "price": item.price!.toString()});
           }
         }
       });
@@ -497,13 +543,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void updateTotalPrice() {
-    double pricePerUnit = widget.stock.baseUOMPrice1!;
+    double pricePerUnit = getPriceBasedOnUOM(selectedUOM);
+    double totalPrice = quantity * pricePerUnit;
 
-    // Add your logic to fetch the actual pricing based on selected UOM
-    // You may need to modify this based on your actual pricing strategy
+    setState(() {
+      widget.stock.baseUOMPrice1 = totalPrice;
+    });
+  }
 
-    //totalPrice = quantity * pricePerUnit;
-    setState(() {});
+  double getPriceBasedOnUOM(String uom_) {
+    for (var priceInfo in uom) {
+      if (priceInfo["uom"] == uom_) {
+        return double.parse(priceInfo["price"]!);
+      }
+    }
+    return 0.0;
+  }
+}
+
+Future<Uint8List?> decodeImage(String? base64String) async {
+  try {
+    if (base64String != null) {
+      return base64Decode(base64String);
+    } else {
+      return null; // or return an appropriate default image
+    }
+  } catch (e) {
+    print('Error decoding Base64 image: $e');
+    return null;
   }
 }
 
@@ -542,58 +609,4 @@ Future<String> _showRemarkDialog(BuildContext context) async {
     },
   );
   return enteredRemark;
-}
-
-class CustomRadioButton extends StatefulWidget {
-  final List<String> options;
-  final List<bool> selectedOptions;
-  final Function(int) onChanged;
-
-  CustomRadioButton({
-    required this.options,
-    required this.selectedOptions,
-    required this.onChanged,
-  });
-
-  @override
-  _CustomRadioButtonState createState() => _CustomRadioButtonState();
-}
-
-class _CustomRadioButtonState extends State<CustomRadioButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          "UOM:",
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        SizedBox(width: 30),
-        for (int i = 0; i < widget.options.length; i++)
-          GestureDetector(
-            onTap: () {
-              widget.onChanged(i);
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: widget.selectedOptions[i] ? Colors.blue : Colors.white,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Text(
-                widget.options[i],
-                style: TextStyle(
-                  color:
-                      widget.selectedOptions[i] ? Colors.white : Colors.black,
-                ),
-              ),
-            ),
-          )
-      ],
-    );
-  }
 }

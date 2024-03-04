@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../models/Sales.dart';
 import '../../../size.config.dart';
@@ -118,10 +119,22 @@ class _CartListState extends State<CartList> {
                 SizedBox(width: 10),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
+                    if (salesItems.length > 0) {
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => CheckOutPage()));
+                        MaterialPageRoute(builder: (context) => CheckOutPage()),
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "No items to check out",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),

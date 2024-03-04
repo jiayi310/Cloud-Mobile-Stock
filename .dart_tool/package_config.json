@@ -26,6 +26,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "barcode_scan2",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/barcode_scan2-4.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "bidi",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/bidi-2.0.10",
       "packageUri": "lib/",
@@ -184,6 +190,12 @@
     {
       "name": "file_selector_windows",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fixnum",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/fixnum-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -626,6 +638,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "protobuf",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/protobuf-3.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "qr",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/qr-3.0.1",
       "packageUri": "lib/",
@@ -884,7 +902,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-02-19T03:16:15.390413Z",
+  "generated": "2024-03-01T07:51:13.679870Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

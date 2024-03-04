@@ -93,6 +93,7 @@ class Sales {
     required int quantity,
     required double price,
     required double discount,
+    required double total,
     required double taxAmt,
     required double taxableAmount,
     required double taxrate,
@@ -104,7 +105,7 @@ class Sales {
 
     if (existingItem != null) {
       // If the item exists, update its quantity
-      existingItem.quantity += 1;
+      existingItem.quantity += quantity;
     } else {
       // If the item doesn't exist, add a new item to the list
       items.add(SalesItem(
@@ -113,6 +114,7 @@ class Sales {
         uom: uom ?? "",
         quantity: quantity,
         unitprice: price,
+        total: total,
         discount: discount,
         taxableAmt: taxableAmount,
         taxAmt: taxAmt,
@@ -153,6 +155,7 @@ class SalesItem {
   String uom;
   int quantity;
   double unitprice;
+  double total;
   double discount;
   double taxableAmt;
   double taxrate;
@@ -166,6 +169,7 @@ class SalesItem {
     required this.uom,
     required this.quantity,
     required this.unitprice,
+    required this.total,
     required this.discount,
     required this.taxableAmt,
     required this.taxAmt,

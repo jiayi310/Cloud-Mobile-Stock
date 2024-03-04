@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-const String baseUrl = "http://192.168.0.104:5210/api";
+const String baseUrl = "http://192.168.0.199:5210/api";
 
 class BaseClient {
   var client = http.Client();
@@ -21,18 +21,23 @@ class BaseClient {
 
   Future<dynamic> post(String api, dynamic obj) async {
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse(baseUrl + api));
 
-    request.body = json.encode(obj);
+    try {
+      final response = await http.post(
+        Uri.parse(baseUrl + api),
+        headers: headers,
+        body: obj,
+      );
 
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      return 1;
-    } else {
-      return 0;
+      if (response.statusCode == 200) {
+        print('API request successful');
+        print('Response: ${response.body}');
+      } else {
+        print('Error: ${response.statusCode}');
+        print('Response: ${response.body}');
+      }
+    } catch (e) {
+      // Handle exceptions
     }
   }
 
