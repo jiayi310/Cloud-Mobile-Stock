@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:mobilestock/view/Quotation/NewQuotation/product.quotation.dart';
 import 'package:mobilestock/view/Quotation/NewQuotation/quotation.customer.dart';
 import 'package:mobilestock/view/Quotation/quotation.item.dart';
 import 'package:mobilestock/view/Quotation/NewQuotation/quotation.total.dart';
@@ -73,19 +74,6 @@ class _QuotationAddState extends State<QuotationAdd> {
                 ),
               ),
             ),
-
-            // ElevatedButton(
-            //   onPressed: () {
-            //     showModalBottomSheet(
-            //         backgroundColor: Colors.transparent,
-            //         context: context,
-            //         builder: (context) {
-            //           return AddToCartModal();
-            //         });
-            //   },
-            //   style: ElevatedButton.styleFrom(primary: GlobalColors.mainColor),
-            //   child: const Text("Add to Cart"),
-            // ),
           ],
         ),
       ),
@@ -142,22 +130,31 @@ class _QuotationAddState extends State<QuotationAdd> {
           ),
           Padding(
               padding: const EdgeInsets.all(20),
-              child: DottedBorder(
-                borderType: BorderType.RRect,
-                radius: Radius.circular(20),
-                dashPattern: [10, 10],
-                color: GlobalColors.mainColor.withOpacity(0.50),
-                strokeWidth: 2,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Center(
-                      child: Icon(
-                        Icons.add,
-                        color: GlobalColors.mainColor,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuotationProductList(),
+                      ));
+                },
+                child: DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(20),
+                  dashPattern: [10, 10],
+                  color: GlobalColors.mainColor.withOpacity(0.50),
+                  strokeWidth: 2,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Center(
+                        child: Icon(
+                          Icons.add,
+                          color: GlobalColors.mainColor,
+                        ),
                       ),
                     ),
                   ),

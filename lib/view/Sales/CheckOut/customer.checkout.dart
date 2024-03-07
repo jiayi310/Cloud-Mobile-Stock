@@ -4,6 +4,7 @@ import 'package:mobilestock/utils/global.colors.dart';
 
 import '../../../models/Customer.dart';
 import '../../Customer/customer.home.dart';
+import '../SalesProvider.dart';
 
 class CusCheckOut extends StatefulWidget {
   const CusCheckOut({Key? key}) : super(key: key);
@@ -14,8 +15,10 @@ class CusCheckOut extends StatefulWidget {
 
 class _CusCheckOutState extends State<CusCheckOut> {
   Customer? customer;
+
   @override
   Widget build(BuildContext context) {
+    final salesProvider = SalesProvider.of(context);
     return InkWell(
       onTap: () {
         _navigateToCustomerScreen(context);
@@ -23,65 +26,78 @@ class _CusCheckOutState extends State<CusCheckOut> {
       child: Column(
         children: [
           if (customer != null)
-            Container(
-              height: 110,
-              width: double.infinity,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    customer!.customerCode.toString() +
-                        " " +
-                        customer!.name.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Expanded(
-                    child: Text(
-                      (customer!.address1 != null
-                              ? customer!.address1.toString() + " "
-                              : "") +
+            Builder(builder: (context) {
+              salesProvider!.sales.customerCode =
+                  customer!.customerCode.toString();
+              salesProvider!.sales.customerName = customer!.name.toString();
+              salesProvider!.sales.address1 = customer!.address1.toString();
+              salesProvider!.sales.address2 = customer!.address2.toString();
+              salesProvider!.sales.address3 = customer!.address3.toString();
+              salesProvider!.sales.address4 = customer!.address4.toString();
+              salesProvider!.sales.salesAgent =
+                  customer!.salesAgent.salesAgent.toString();
+              salesProvider!.sales.phone = customer!.phone1.toString();
+              salesProvider!.sales.email = customer!.email.toString();
+              return Container(
+                height: 110,
+                width: double.infinity,
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      customer!.customerCode.toString() +
                           " " +
-                          (customer!.address2 != null
-                              ? customer!.address2.toString() + " "
-                              : "") +
-                          " " +
-                          (customer!.address3 != null
-                              ? customer!.address3.toString() + " "
-                              : "") +
-                          " " +
-                          (customer!.address4 != null
-                              ? customer!.address4.toString() + " "
-                              : ""),
-                      overflow: TextOverflow.ellipsis,
+                          customer!.name.toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Text(
-                    (customer!.phone1 != null
-                        ? customer!.phone1.toString() + " "
-                        : ""),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        customer!.salesAgent.salesAgent.toString(),
-                        style: TextStyle(fontStyle: FontStyle.italic),
+                    Expanded(
+                      child: Text(
+                        (customer!.address1 != null
+                                ? customer!.address1.toString() + " "
+                                : "") +
+                            " " +
+                            (customer!.address2 != null
+                                ? customer!.address2.toString() + " "
+                                : "") +
+                            " " +
+                            (customer!.address3 != null
+                                ? customer!.address3.toString() + " "
+                                : "") +
+                            " " +
+                            (customer!.address4 != null
+                                ? customer!.address4.toString() + " "
+                                : ""),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Icon(
-                        CupertinoIcons.right_chevron,
-                        color: GlobalColors.mainColor,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                    ),
+                    Text(
+                      (customer!.phone1 != null
+                          ? customer!.phone1.toString() + " "
+                          : ""),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          customer!.salesAgent.salesAgent.toString(),
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                        Icon(
+                          CupertinoIcons.right_chevron,
+                          color: GlobalColors.mainColor,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }),
           if (customer == null)
             Container(
               height: 60,

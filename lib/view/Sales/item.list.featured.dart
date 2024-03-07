@@ -33,6 +33,7 @@ class ItemsWidget extends StatelessWidget {
               (index) => Padding(
                 padding: const EdgeInsets.only(right: defaultPadding),
                 child: ProductCard(
+                  stockid: demo_product[index].desc2.toString(),
                   stockcode: demo_product[index].desc2.toString(),
                   title: demo_product[index].desc2.toString(),
                   uom: demo_product[index].desc2.toString(),

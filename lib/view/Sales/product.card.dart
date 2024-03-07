@@ -10,6 +10,7 @@ class ProductCard extends StatefulWidget {
     Key? key,
     required this.image,
     required this.title,
+    required this.stockid,
     required this.stockcode,
     required this.uom,
     required this.price,
@@ -18,7 +19,7 @@ class ProductCard extends StatefulWidget {
     required this.sales,
   }) : super(key: key);
 
-  final String title, stockcode, uom;
+  final String title, stockcode, uom, stockid;
   final Uint8List image;
   final VoidCallback press;
   final double price;
@@ -77,6 +78,7 @@ class _ProductCardState extends State<ProductCard> {
                           final salesProvider = SalesProvider.of(context);
                           if (salesProvider != null) {
                             salesProvider.sales.addItem(
+                              stockID: widget.stockid,
                               stockCode: widget.stockcode,
                               description: widget.title,
                               uom: widget.uom,

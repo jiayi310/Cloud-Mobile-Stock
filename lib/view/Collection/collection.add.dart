@@ -1,12 +1,19 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobilestock/models/Collection.dart';
+import 'package:mobilestock/view/Collection/CollectionProvider.dart';
 import 'package:mobilestock/view/Collection/collection.invoice.dart';
+import 'package:mobilestock/view/Collection/customer.collection.dart';
 import 'package:mobilestock/view/Quotation/NewQuotation/quotation.customer.dart';
 import 'package:mobilestock/view/Quotation/NewQuotation/quotation.total.dart';
 
+import '../../api/base.client.dart';
 import '../../size.config.dart';
 import '../../utils/global.colors.dart';
 import '../Sales/CheckOut/checkout.view.dart';
+import 'invoice.customer.dart';
 
 class CollectionAdd extends StatefulWidget {
   const CollectionAdd({Key? key}) : super(key: key);
@@ -16,8 +23,36 @@ class CollectionAdd extends StatefulWidget {
 }
 
 class _CollectionAddState extends State<CollectionAdd> {
+  String docNo = "";
+  String companyid = "", userid = "";
+  final storage = new FlutterSecureStorage();
+  Collection? collection;
+
+  List<CollectionDetails> collectionItems = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Access context and salesProvider here
+    final collectProvider = CollectionProvider.of(context);
+    collectionItems = collectProvider?.collection.collectionDetails ?? [];
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getDocNo();
+  }
+
   @override
   Widget build(BuildContext context) {
+    collection = CollectionProvider.of(context)?.collection;
+
+    if (collection == null) {
+      // Handle the case where Sales is not available
+      return Text('Collection data not available');
+    }
     return Scaffold(
       bottomNavigationBar: Container(
         height: 100,
@@ -40,11 +75,11 @@ class _CollectionAddState extends State<CollectionAdd> {
             Row(
               children: [
                 Text(
-                  "Total (10): ",
+                  "Total (" + collectionItems.length.toString() + "): ",
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
                 Text(
-                  "RM 100,000.00",
+                  "RM ${collection!.paymentTotal!.toStringAsFixed(2)}",
                   style: TextStyle(
                       color: GlobalColors.mainColor,
                       fontWeight: FontWeight.bold,
@@ -55,7 +90,7 @@ class _CollectionAddState extends State<CollectionAdd> {
             SizedBox(width: 10),
             InkWell(
               onTap: () {
-                MaterialPageRoute(builder: (context) => CheckOutPage());
+                sendCollectionData();
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -73,19 +108,6 @@ class _CollectionAddState extends State<CollectionAdd> {
                 ),
               ),
             ),
-
-            // ElevatedButton(
-            //   onPressed: () {
-            //     showModalBottomSheet(
-            //         backgroundColor: Colors.transparent,
-            //         context: context,
-            //         builder: (context) {
-            //           return AddToCartModal();
-            //         });
-            //   },
-            //   style: ElevatedButton.styleFrom(primary: GlobalColors.mainColor),
-            //   child: const Text("Add to Cart"),
-            // ),
           ],
         ),
       ),
@@ -95,7 +117,7 @@ class _CollectionAddState extends State<CollectionAdd> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "AR-00001",
+          docNo,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [],
@@ -121,7 +143,7 @@ class _CollectionAddState extends State<CollectionAdd> {
               ),
             ),
           ),
-          CusQuotation(),
+          CusCollection(),
           Container(
             color: GlobalColors.mainColor,
             height: 50,
@@ -142,28 +164,58 @@ class _CollectionAddState extends State<CollectionAdd> {
           ),
           Padding(
               padding: const EdgeInsets.all(20),
-              child: DottedBorder(
-                borderType: BorderType.RRect,
-                radius: Radius.circular(20),
-                dashPattern: [10, 10],
-                color: GlobalColors.mainColor.withOpacity(0.50),
-                strokeWidth: 2,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Center(
-                      child: Icon(
-                        Icons.add,
-                        color: GlobalColors.mainColor,
+              child: InkWell(
+                onTap: () {
+                  if (collection!.customerID != null) {
+                    var collectionProvider = Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CollectionInvoiceList(
+                              customerid: collection!.customerID!),
+                        )).then((returnedData) {
+                      setState(() {
+                        collectionItems = returnedData;
+                      });
+                    });
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Please select a customer",
+                      toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+                      gravity: ToastGravity
+                          .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+                      timeInSecForIosWeb:
+                          1, // Time in seconds before the toast disappears on iOS and web
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
+                child: DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(20),
+                  dashPattern: [10, 10],
+                  color: GlobalColors.mainColor.withOpacity(0.50),
+                  strokeWidth: 2,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Center(
+                        child: Icon(
+                          Icons.add,
+                          color: GlobalColors.mainColor,
+                        ),
                       ),
                     ),
                   ),
                 ),
               )),
-          InvoiceCollection(),
+          InvoiceCollection(
+            collectionItems: collectionItems,
+          ),
           Container(
             color: GlobalColors.mainColor,
             height: 50,
@@ -185,9 +237,106 @@ class _CollectionAddState extends State<CollectionAdd> {
           SizedBox(
             height: 10,
           ),
-          PriceQuotation(),
+          Container(
+            height: 110,
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'SubTotal',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      collection!.paymentTotal.toStringAsFixed(2),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Tax',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '0.00',
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Discount',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '0.00',
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      collection!.paymentTotal.toStringAsFixed(2),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
         ],
       )),
     );
+  }
+
+  void getDocNo() async {
+    try {
+      companyid = (await storage.read(key: "companyid"))!;
+      userid = (await storage.read(key: "userid"))!;
+      if (companyid != null) {
+        String response = await BaseClient()
+            .get('/Collection/GetNewCollectionDoc?companyid=' + companyid);
+
+        setState(() {
+          docNo = response.toString();
+        });
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+      throw error; // Rethrow the error to be caught by the FutureBuilder
+    }
+  }
+
+  void sendCollectionData() {
+    if (collection!.customerCode != null) {
+    } else {
+      Fluttertoast.showToast(
+        msg: "Please select a customer",
+        toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+        gravity: ToastGravity
+            .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+        timeInSecForIosWeb:
+            1, // Time in seconds before the toast disappears on iOS and web
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
   }
 }

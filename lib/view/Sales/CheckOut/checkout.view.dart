@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mobilestock/view/Sales/CheckOut/checkout.item.dart';
 import 'package:mobilestock/view/Sales/CheckOut/checkout.price.dart';
 import 'package:mobilestock/view/Sales/CheckOut/customer.checkout.dart';
@@ -18,6 +20,7 @@ import '../../../models/Sales.dart';
 import '../../../models/Stock.dart';
 import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
+import '../OrderHistory/history.listing.dart';
 import '../SalesProvider.dart';
 
 class CheckOutPage extends StatefulWidget {
@@ -32,8 +35,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   List<SalesItem> salesItems = [];
   String docNo = "";
-  String companyid = "";
+  String companyid = "", userid = "";
   final storage = new FlutterSecureStorage();
+  Sales? sales;
 
   @override
   void initState() {
@@ -54,7 +58,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   @override
   Widget build(BuildContext context) {
-    Sales? sales = SalesProvider.of(context)?.sales;
+    sales = SalesProvider.of(context)?.sales;
 
     if (sales == null) {
       // Handle the case where Sales is not available
@@ -87,7 +91,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
                 Text(
-                  "RM " + '${sales.calculateTotalPrice().toStringAsFixed(2)}',
+                  "RM " + '${sales!.calculateTotalPrice().toStringAsFixed(2)}',
                   style: TextStyle(
                       color: GlobalColors.mainColor,
                       fontWeight: FontWeight.bold,
@@ -388,6 +392,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
   Future<String> getDocNo() async {
     try {
       companyid = (await storage.read(key: "companyid"))!;
+      userid = (await storage.read(key: "userid"))!;
       if (companyid != null) {
         String response = await BaseClient()
             .get('/Sales/GetNewSalesDoc?companyid=' + companyid);
@@ -406,69 +411,106 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   // Function to send JSON data to the API
   void sendSalesData() async {
-    // Your JSON data
-    Map<String, dynamic> jsonData = {
-      "docNo": "test-1125",
-      "docDate": "2024-03-01T03:43:53.314Z",
-      "customerID": 3,
-      "customerCode": "C001",
-      "customerName": "string",
-      "subtotal": 800,
-      "taxableAmt": 0,
-      "taxAmt": 0,
-      "finalTotal": 800,
-      "paymentTotal": 800,
-      "outstanding": 0,
-      "isVoid": false,
-      "lastModifiedUserID": 1,
-      "lastModifiedDateTime": "2024-03-01T03:43:53.314Z",
-      "createdUserID": 1,
-      "createdDateTime": "2024-03-01T03:43:53.314Z",
-      "companyID": 1,
-      "salesDetails": salesItems.map((salesItem) {
-        return {
-          "dtlID": 0,
-          "docID": 0,
-          "stockID": salesItem.stockID,
-          "stockCode": salesItem.stockCode,
-          "description": salesItem.description,
-          "uom": salesItem.uom,
-          "qty": salesItem.quantity,
-          "unitPrice": salesItem.unitprice,
-          "discount": salesItem.discount,
-          "total": 0,
-          "taxableAmt": 0,
-          "taxRate": 0,
-          "taxAmt": salesItem.taxAmt,
-          "locationID": 1,
-          "location": "HQ",
-        };
-      }).toList(),
-    };
+    if (sales!.customerCode != null) {
+      // Your JSON data
+      Map<String, dynamic> jsonData = {
+        "docNo": docNo,
+        "docDate": getCurrentDateTime(),
+        "customerID": 3,
+        "customerCode": sales!.customerCode.toString(),
+        "customerName": sales!.customerName.toString(),
+        "address1": sales!.address1.toString(),
+        "address2": sales!.address2.toString(),
+        "address3": sales!.address3.toString(),
+        "address4": sales!.address4.toString(),
+        "salesAgent": sales!.salesAgent ?? null,
+        "phone": sales!.phone.toString(),
+        "email": sales!.email.toString(),
+        "subtotal": sales!.subtotal ?? 0.00,
+        "taxableAmt": sales!.taxableAmt ?? 0.00,
+        "taxAmt": sales!.taxAmt ?? 0.00,
+        "finalTotal": sales!.finalTotal ?? 0.00,
+        "paymentTotal": sales!.paymentTotal ?? 0.00,
+        "outstanding": sales!.outstanding ?? 0.00,
+        "isVoid": false,
+        "lastModifiedUserID": userid,
+        "lastModifiedDateTime": getCurrentDateTime(),
+        "createdUserID": userid,
+        "createdDateTime": getCurrentDateTime(),
+        "companyID": companyid,
+        "salesDetails": salesItems.map((salesItem) {
+          return {
+            "dtlID": 0,
+            "docID": 0,
+            "stockID": salesItem.stockID,
+            "stockCode": salesItem.stockCode.toString(),
+            "description": salesItem.description.toString(),
+            "uom": salesItem.uom.toString(),
+            "qty": salesItem.quantity ?? 0,
+            "unitPrice": salesItem.unitprice ?? 0,
+            "discount": salesItem.discount ?? 0,
+            "total": 0,
+            "taxableAmt": 0,
+            "taxRate": 0,
+            "taxAmt": salesItem.taxAmt ?? 0,
+            "locationID": 1,
+            "location": "HQ",
+          };
+        }).toList(),
+      };
 
-    // Encode the JSON data
-    String jsonString = jsonEncode(jsonData);
+      // Encode the JSON data
+      String jsonString = jsonEncode(jsonData);
 
-    // Make the API request
-    try {
-      final response = await BaseClient().post(
-        '/Sales/CreateSales',
-        jsonString,
+      // Make the API request
+      try {
+        final response = await BaseClient().post(
+          '/Sales/CreateSales',
+          jsonString,
+        );
+
+        // Check the status code of the response
+        if (response != null) {
+          Map<String, dynamic> responseBody = json.decode(response);
+          String docID = responseBody['docID'].toString();
+
+          print('API request successful');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HistoryListingScreen(docid: int.parse(docID)),
+            ),
+          );
+        }
+        // else {
+        //   // Handle errors
+        //   print('Error: ${response.statusCode}');
+        //   print('Response: ${response.body}');
+        // }
+      } catch (e) {
+        // Handle exceptions
+        print('Exception during API request: $e');
+      }
+    } else {
+      Fluttertoast.showToast(
+        msg: "Please select a customer",
+        toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+        gravity: ToastGravity
+            .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+        timeInSecForIosWeb:
+            1, // Time in seconds before the toast disappears on iOS and web
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
-
-      // // Check the status code of the response
-      // if (response == 1) {
-      //   // Successful API request
-      //   print('API request successful');
-      //   print('Response: ${response.body}');
-      // } else {
-      //   // Handle errors
-      //   print('Error: ${response.statusCode}');
-      //   print('Response: ${response.body}');
-      // }
-    } catch (e) {
-      // Handle exceptions
-      print('Exception during API request: $e');
     }
+  }
+
+  String getCurrentDateTime() {
+    DateTime now = DateTime.now();
+    String formattedDate =
+        DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(now.toUtc());
+    return formattedDate;
   }
 }

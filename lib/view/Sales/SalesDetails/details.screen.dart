@@ -29,12 +29,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
     super.initState();
     getData();
     _controller.text = quantity.toString();
+    selectedUOM = widget.stock.baseUOM.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     String remark = "";
-    selectedUOM = widget.stock.baseUOM.toString();
+
     List<bool> selectedUOMList = List.generate(
         uom.length, (index) => uom[index]["uom"] == widget.stock.baseUOM);
 
@@ -198,6 +199,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
             InkWell(
               onTap: () {
+                selectedUOM = widget.stock.baseUOM.toString();
+                quantity = 1;
+                updateTotalPrice();
                 showModalBottomSheet(
                   backgroundColor: Colors.transparent,
                   context: context,
@@ -434,6 +438,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 await decodeImage(
                                                     widget.stock.image);
                                             salesProvider.sales.addItem(
+                                              stockID: widget.stock.stockID
+                                                  .toString(),
                                               stockCode: widget.stock.stockCode
                                                   .toString(),
                                               description: widget

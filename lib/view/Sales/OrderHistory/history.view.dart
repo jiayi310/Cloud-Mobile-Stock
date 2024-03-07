@@ -63,8 +63,7 @@ class _OrderHistoryScreen extends State<OrderHistoryScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-            child: Column(
+        child: Column(
           children: [
             Visibility(
               visible: _visible,
@@ -102,237 +101,210 @@ class _OrderHistoryScreen extends State<OrderHistoryScreen> {
               ),
             ),
 
-            // child: SearchWidget(
-            //   salesList: saleslist,
-            // )),
-
-            FutureBuilder(
-                future: myfuture,
-                builder: (context, snapshort) {
-                  if (snapshort.hasData) {
-                    return Column(
-                      children: [
-                        Stack(
-                          children: [
-                            ListView.builder(
-                                itemCount: saleslist.length,
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int i) {
-                                  return Column(
-                                    children: [
-                                      // for (int i = 0; i < saleslist.length; i++)
-                                      InkWell(
-                                        onLongPress: () {
-                                          Get.defaultDialog(
-                                              cancelTextColor:
-                                                  GlobalColors.mainColor,
-                                              confirmTextColor: Colors.white,
-                                              buttonColor:
-                                                  GlobalColors.mainColor,
-                                              titlePadding:
-                                                  EdgeInsets.only(top: 20),
-                                              title: "Warning",
-                                              content: Container(
-                                                padding: EdgeInsets.all(20.0),
-                                                child: Column(
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        "Are you sure want to delete " +
-                                                            saleslist[i]
-                                                                .docNo
-                                                                .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              textConfirm: "Confirm",
-                                              textCancel: "Cancel");
-                                        },
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HistoryListingScreen(
-                                                  sales: saleslist[i],
-                                                ),
-                                              ));
-                                        },
-                                        child: Container(
-                                          height: 130,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 10),
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0, right: 10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        saleslist[i]
-                                                            .docNo
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          color: GlobalColors
-                                                              .mainColor,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 20),
-                                                    Text(
+            Expanded(
+              child: FutureBuilder(
+                  future: myfuture,
+                  builder: (context, snapshort) {
+                    if (snapshort.hasData) {
+                      return ListView.builder(
+                          itemCount: saleslist.length,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int i) {
+                            return Column(
+                              children: [
+                                // for (int i = 0; i < saleslist.length; i++)
+                                InkWell(
+                                  onLongPress: () {
+                                    Get.defaultDialog(
+                                        cancelTextColor: GlobalColors.mainColor,
+                                        confirmTextColor: Colors.white,
+                                        buttonColor: GlobalColors.mainColor,
+                                        titlePadding: EdgeInsets.only(top: 20),
+                                        title: "Warning",
+                                        content: Container(
+                                          padding: EdgeInsets.all(20.0),
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                child: Text(
+                                                  "Are you sure want to delete " +
                                                       saleslist[i]
-                                                          .docDate
-                                                          .toString()
-                                                          .substring(0, 10),
-                                                      style: TextStyle(
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        fontSize: 15,
-                                                        color: Colors.black
-                                                            .withOpacity(0.8),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                          .docNo
+                                                          .toString(),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                                SizedBox(height: 10),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        saleslist[i]
-                                                            .customerCode
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 15,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 20),
-                                                    Text(
-                                                      "Approved",
-                                                      style: TextStyle(
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        fontSize: 15,
-                                                        color: Colors.green,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 5),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        saleslist[i]
-                                                                .customerName ??
-                                                            "",
-                                                        style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontSize: 15,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        saleslist[i]
-                                                                .salesAgent ??
-                                                            "",
-                                                        style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontSize: 13,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 20),
-                                                    Text(
-                                                      "RM" +
-                                                              saleslist[i]
-                                                                  .finalTotal
-                                                                  .toString() ??
-                                                          "0.00",
-                                                      style: TextStyle(
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                              )
+                                            ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  );
-                                })
-                          ],
-                        ),
-                      ],
-                    );
-                  } else
-                    return const LoadingPage();
-                }),
+                                        textConfirm: "Confirm",
+                                        textCancel: "Cancel");
+                                  },
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              HistoryListingScreen(
+                                            docid: saleslist[i]!.docID!,
+                                          ),
+                                        ));
+                                  },
+                                  child: Container(
+                                    height: 130,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 10),
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0, right: 10),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: Text(
+                                                  saleslist[i].docNo.toString(),
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color:
+                                                        GlobalColors.mainColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 20),
+                                              Text(
+                                                saleslist[i]
+                                                    .docDate
+                                                    .toString()
+                                                    .substring(0, 10),
+                                                style: TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: 15,
+                                                  color: Colors.black
+                                                      .withOpacity(0.8),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: Text(
+                                                  saleslist[i]
+                                                      .customerCode
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 20),
+                                              Text(
+                                                "Approved",
+                                                style: TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: 15,
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: Text(
+                                                  saleslist[i].customerName ??
+                                                      "",
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontSize: 15,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                flex: 1,
+                                                child: Text(
+                                                  saleslist[i].salesAgent ?? "",
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontSize: 13,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 20),
+                                              Text(
+                                                "RM" +
+                                                        saleslist[i]
+                                                            .finalTotal
+                                                            .toString() ??
+                                                    "0.00",
+                                                style: TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          });
+                    } else
+                      return const LoadingPage();
+                  }),
+            ),
 
             // SalesCard(
             //   saleslist: saleslist,
             // ),
           ],
-        )),
+        ),
       ),
     );
   }

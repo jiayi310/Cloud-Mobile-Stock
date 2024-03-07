@@ -1,4 +1,5 @@
 class Customer {
+  int? customerID;
   String? customerCode;
   String? name;
   String? name2;
@@ -14,6 +15,7 @@ class Customer {
   String? attention;
 
   Customer(
+      this.customerID,
       this.customerCode,
       this.name,
       this.name2,
@@ -34,6 +36,7 @@ class Customer {
       {required this.salesAgent});
 
   Customer.fromJson(Map<String, dynamic> json) {
+    customerID = json["customerID"];
     customerCode = json["customerCode"];
     name = json["name"];
     name2 = json["name2"];
@@ -60,6 +63,7 @@ class Customer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['customerID'] = this.customerID;
     data['customerCode'] = this.customerCode;
     data['name'] = this.name;
     data['name2'] = this.name2;

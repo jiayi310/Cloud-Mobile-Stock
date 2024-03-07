@@ -30,14 +30,15 @@ class BaseClient {
       );
 
       if (response.statusCode == 200) {
-        print('API request successful');
-        print('Response: ${response.body}');
+        return response.body;
       } else {
         print('Error: ${response.statusCode}');
         print('Response: ${response.body}');
+        return null;
       }
     } catch (e) {
-      // Handle exceptions
+      print('Exception: $e');
+      return null;
     }
   }
 

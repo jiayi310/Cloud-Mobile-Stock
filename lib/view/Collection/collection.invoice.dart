@@ -4,9 +4,13 @@ import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
 import '../../../models/Stock.dart';
 import '../../../utils/global.colors.dart';
+import '../../models/Collection.dart';
+import 'CollectionProvider.dart';
 
 class InvoiceCollection extends StatefulWidget {
-  const InvoiceCollection({Key? key}) : super(key: key);
+  InvoiceCollection({Key? key, required this.collectionItems})
+      : super(key: key);
+  List<CollectionDetails> collectionItems;
 
   @override
   State<InvoiceCollection> createState() => _InvoiceCollectionState();
@@ -22,9 +26,9 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
         ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: demo_product.length,
+          itemCount: widget.collectionItems.length,
           itemBuilder: (BuildContext context, int i) {
-            final item = demo_product[i].desc2;
+            final item = widget.collectionItems[i].salesDocID;
             return Slidable(
               key: Key(item.toString()),
               endActionPane: ActionPane(
@@ -33,7 +37,11 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          demo_product.removeAt(i);
+                          final collectionProvider =
+                              CollectionProvider.of(context);
+                          if (collectionProvider != null) {
+                            collectionProvider.collection.removeItem(item!);
+                          }
                         });
                       },
                       style: ElevatedButton.styleFrom(primary: Colors.red),
@@ -61,19 +69,11 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "IV-00021",
+                              widget.collectionItems[i].sales!.docNo.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
-                                color: Colors.black.withOpacity(0.7),
-                              ),
-                            ),
-                            Text(
-                              "AG-23829 Benice & Co. Sdn Bhd",
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 13,
                                 color: Colors.black.withOpacity(0.7),
                               ),
                             ),
@@ -96,7 +96,8 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "RM " + demo_product[i].stockID.toString(),
+                            "RM " +
+                                widget.collectionItems[i].paymentAmt.toString(),
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,

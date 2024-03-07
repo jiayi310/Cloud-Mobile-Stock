@@ -52,12 +52,11 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-            child: Column(
+        child: Column(
           children: [
             QuotationCard(),
           ],
-        )),
+        ),
       ),
     );
   }

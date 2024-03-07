@@ -104,10 +104,26 @@ class Stock {
 }
 
 final List<Stock> demo_product = [
-  Stock(stockID: 1, baseUOMPrice1: 33, stockGroupDescription: 'Group12'),
-  Stock(stockID: 2, baseUOMPrice1: 45, stockGroupDescription: 'Group13'),
-  Stock(stockID: 3, baseUOMPrice1: 55, stockGroupDescription: 'Group12'),
-  Stock(stockID: 4, baseUOMPrice1: 66, stockGroupDescription: 'Group12'),
+  Stock(
+      stockID: 1,
+      stockCode: "St001",
+      baseUOMPrice1: 33,
+      stockGroupDescription: 'Group12'),
+  Stock(
+      stockID: 2,
+      stockCode: "St001",
+      baseUOMPrice1: 45,
+      stockGroupDescription: 'Group13'),
+  Stock(
+      stockID: 3,
+      stockCode: "St001",
+      baseUOMPrice1: 55,
+      stockGroupDescription: 'Group12'),
+  Stock(
+      stockID: 4,
+      stockCode: "St001",
+      baseUOMPrice1: 66,
+      stockGroupDescription: 'Group12'),
 ];
 
 //Stock Detail

@@ -289,6 +289,7 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
                                   final stock = entry.value;
 
                                   return ProductCard(
+                                    stockid: stock.stockID.toString(),
                                     stockcode: stock.stockCode.toString(),
                                     title: stock.description.toString(),
                                     uom: stock.baseUOM.toString(),
