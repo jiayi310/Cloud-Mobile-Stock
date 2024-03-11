@@ -416,7 +416,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       Map<String, dynamic> jsonData = {
         "docNo": docNo,
         "docDate": getCurrentDateTime(),
-        "customerID": 3,
+        "customerID": sales!.customerID,
         "customerCode": sales!.customerCode.toString(),
         "customerName": sales!.customerName.toString(),
         "address1": sales!.address1.toString(),

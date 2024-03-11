@@ -1,7 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../api/base.client.dart';
 import '../../../models/Sales.dart';
@@ -15,6 +21,20 @@ class HistoryListingScreen extends StatefulWidget {
   @override
   State<HistoryListingScreen> createState() =>
       _HistoryListingScreen(docid: docid);
+}
+
+class UserSessionDto {
+  final int userid;
+  final int companyid;
+
+  UserSessionDto(this.userid, this.companyid);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userid': userid,
+      'companyid': companyid,
+    };
+  }
 }
 
 class _HistoryListingScreen extends State<HistoryListingScreen> {
@@ -45,26 +65,34 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: InkWell(
-              onTap: () {},
-              child: Icon(
-                Icons.share,
-                size: 25,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(right: 20),
+          //   child: InkWell(
+          //     onTap: () {},
+          //     child: Icon(
+          //       Icons.share,
+          //       size: 25,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
           PopupMenuButton<MenuItem>(
-              onSelected: (value) {
+              onSelected: (value) async {
                 if (value == MenuItem.item1) {
                   //Clicked
-                } else if (value == MenuItem.item2) {}
+                } else if (value == MenuItem.item2) {
+                  final storage = new FlutterSecureStorage();
+                  String? _userid = await storage.read(key: "userid");
+                  String? _companyid = await storage.read(key: "companyid");
+                  final userSessionDto = UserSessionDto(
+                      int.parse(_userid!), int.parse(_companyid!));
+
+                  await getSalesReport(userSessionDto, sales.docID!);
+                }
               },
               itemBuilder: (context) => [
                     PopupMenuItem(
-                        value: MenuItem.item2, child: Text('Print Receipt'))
+                        value: MenuItem.item2, child: Text('Download Receipt'))
                   ]),
         ],
       ),
@@ -344,6 +372,44 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
         )),
       ),
     );
+  }
+
+  Future<void> getSalesReport(
+      UserSessionDto userSessionDto, int salesid) async {
+    final body = jsonEncode({
+      'userid': userSessionDto.userid,
+      'companyid': userSessionDto.companyid
+    });
+    final resp = await BaseClient()
+        .postPDF('/Report/GetSalesReport?salesid=' + salesid.toString(), body);
+
+    try {
+      if (resp != null) {
+        // Successfully received the response
+        // Download the PDF file
+        final Uint8List pdfBytes = resp;
+
+        Directory documentsDirectory = await getApplicationDocumentsDirectory();
+
+        String currentDate =
+            DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+        String fileName = '${currentDate}_${sales.docNo}.pdf';
+        String filePath = '${documentsDirectory.path}/$fileName';
+
+        // Save the PDF file to local storage
+        File file = File(filePath);
+        await file.writeAsBytes(pdfBytes);
+
+        // Open and view the PDF using open_file
+        await OpenFile.open(file.path);
+      } else {
+        // Handle errors based on the response status code
+        print('Error: ${resp.statusCode}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+      print('Error: $e');
+    }
   }
 
   Future<void> getSalesDetail() async {

@@ -8,6 +8,7 @@ import '../../api/base.client.dart';
 import '../../utils/global.colors.dart';
 import '../../utils/loading.dart';
 import 'collection.add.dart';
+import 'HistoryListing/collection.listing.dart';
 
 class CollectionHomeScreen extends StatefulWidget {
   const CollectionHomeScreen({Key? key}) : super(key: key);
@@ -148,14 +149,14 @@ class _CollectionHomeScreen extends State<CollectionHomeScreen> {
                                         textCancel: "Cancel");
                                   },
                                   onTap: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           HistoryListingScreen(
-                                    //             sales: collectionlist[i],
-                                    //           ),
-                                    //     ));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CollectionListingScreen(
+                                            collection: collectionlist[i],
+                                          ),
+                                        ));
                                   },
                                   child: Container(
                                     height: 130,

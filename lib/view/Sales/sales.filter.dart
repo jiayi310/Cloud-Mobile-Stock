@@ -23,12 +23,35 @@ class _SalesFiltersState extends State<SalesFilters> {
   RangeValues _priceRange = RangeValues(0, 100);
   Set<String> selectedCategories = Set();
   List<Stock> filteredProducts = [];
+  Set<String> allCategories = Set();
+  Set<String> allType = Set();
+  Set<String> allGroup = Set();
 
   @override
   void initState() {
     super.initState();
     _priceRange = widget.initialPriceRange;
     filteredProducts = applyFilters(_priceRange, selectedCategories);
+
+    // Calculate unique categories from the product list
+    allCategories = widget.productlist
+        .map((stock) => stock.stockCategoryDescription ?? "")
+        .toSet();
+
+    // Remove empty categories if necessary
+    allCategories.removeWhere((category) => category.isEmpty);
+
+    allType = widget.productlist
+        .map((stock) => stock.stockTypeDescription ?? "")
+        .toSet();
+
+    allType.removeWhere((type) => type.isEmpty);
+
+    allGroup = widget.productlist
+        .map((stock) => stock.stockGroupDescription ?? "")
+        .toSet();
+
+    allGroup.removeWhere((group) => group.isEmpty);
   }
 
   @override
@@ -59,34 +82,171 @@ class _SalesFiltersState extends State<SalesFilters> {
               'Group',
               style: TextStyle(color: GlobalColors.mainColor),
             ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: allGroup.length,
+              itemBuilder: (context, index) {
+                String category = allGroup.elementAt(index);
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        category,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: Checkbox(
+                          value: selectedCategories.contains(category),
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              if (newValue != null) {
+                                if (newValue) {
+                                  selectedCategories.add(category);
+                                } else {
+                                  selectedCategories.remove(category);
+                                }
+                              }
+                            });
+                          },
+                          activeColor: GlobalColors.mainColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             Text(
               'Type',
               style: TextStyle(color: GlobalColors.mainColor),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: allType.length,
+              itemBuilder: (context, index) {
+                String category = allType.elementAt(index);
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        category,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: Checkbox(
+                          value: selectedCategories.contains(category),
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              if (newValue != null) {
+                                if (newValue) {
+                                  selectedCategories.add(category);
+                                } else {
+                                  selectedCategories.remove(category);
+                                }
+                              }
+                            });
+                          },
+                          activeColor: GlobalColors.mainColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             Text(
               'Categories',
               style: TextStyle(color: GlobalColors.mainColor),
             ),
-            CustomCategoryFilter(
-              onCategoriesChanged: (categories) {
-                setState(() {
-                  selectedCategories = categories;
-                });
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: allCategories.length,
+              itemBuilder: (context, index) {
+                String category = allCategories.elementAt(index);
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        category,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 25,
+                        child: Checkbox(
+                          value: selectedCategories.contains(category),
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              if (newValue != null) {
+                                if (newValue) {
+                                  selectedCategories.add(category);
+                                } else {
+                                  selectedCategories.remove(category);
+                                }
+                              }
+                            });
+                          },
+                          activeColor: GlobalColors.mainColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
-            ElevatedButton(
-              onPressed: () {
-                filteredProducts =
-                    applyFilters(_priceRange, selectedCategories);
-                widget.onApplyFilters(
-                  _priceRange,
-                  selectedCategories,
-                  filteredProducts,
-                );
-                Navigator.pop(
-                    context, filteredProducts); // Close the filter screen
-              },
-              child: Text('Apply Filters'),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      filteredProducts =
+                          applyFilters(_priceRange, selectedCategories);
+                      widget.onApplyFilters(
+                        _priceRange,
+                        selectedCategories,
+                        filteredProducts,
+                      );
+                      Navigator.pop(
+                          context, filteredProducts); // Close the filter screen
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: GlobalColors
+                            .mainColor // Change this color to your desired color
+                        ),
+                    child: Text('Apply Filters'),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -105,68 +265,6 @@ class _SalesFiltersState extends State<SalesFilters> {
         .toList();
 
     return filteredProducts;
-  }
-}
-
-class CustomCategoryFilter extends StatefulWidget {
-  final Function(Set<String> categories) onCategoriesChanged;
-
-  const CustomCategoryFilter({Key? key, required this.onCategoriesChanged})
-      : super(key: key);
-
-  @override
-  State<CustomCategoryFilter> createState() => _CustomCategoryFilterState();
-}
-
-class _CustomCategoryFilterState extends State<CustomCategoryFilter> {
-  Set<String> selectedCategories = Set();
-  Set<String> uniqueCategories = Set();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: uniqueCategories.length,
-      itemBuilder: (context, index) {
-        String category = uniqueCategories.elementAt(index);
-        return Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(top: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                category,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 25,
-                child: Checkbox(
-                  value: selectedCategories.contains(category),
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      if (newValue != null) {
-                        if (newValue) {
-                          selectedCategories.add(category);
-                        } else {
-                          selectedCategories.remove(category);
-                        }
-                        widget.onCategoriesChanged(selectedCategories);
-                      }
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 }
 
@@ -211,6 +309,7 @@ class _CustomPriceFilterState extends State<CustomPriceFilter> {
             widget.onPriceChanged(
                 _priceRange); // Notify the parent about the change
           },
+          activeColor: GlobalColors.mainColor,
         ),
         SizedBox(height: 10),
         Text(

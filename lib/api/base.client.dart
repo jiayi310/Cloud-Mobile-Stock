@@ -42,6 +42,28 @@ class BaseClient {
     }
   }
 
+  Future<dynamic> postPDF(String api, dynamic obj) async {
+    var headers = {'Content-Type': 'application/json'};
+
+    try {
+      final response = await http.post(
+        Uri.parse(baseUrl + api),
+        headers: headers,
+        body: obj,
+      );
+
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      } else {
+        print('Error: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      return null;
+    }
+  }
+
   Future<dynamic> put(String api) async {}
 
   Future<dynamic> delete(String api) async {}

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mobilestock/models/Collection.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
 import 'package:mobilestock/view/Collection/collection.invoice.dart';
@@ -323,8 +326,162 @@ class _CollectionAddState extends State<CollectionAdd> {
     }
   }
 
-  void sendCollectionData() {
+  Future<void> sendCollectionData() async {
     if (collection!.customerCode != null) {
+      Map<String, dynamic> jsonData = {
+        "docID": 0,
+        "docNo": docNo,
+        "docDate": getCurrentDateTime(),
+        "customerID": collection!.customerID,
+        "customer": {
+          "customerID": collection!.customerID,
+          "customerCode": collection!.customerCode.toString(),
+          "name": collection!.customerName.toString(),
+          "lastModifiedDateTime": getCurrentDateTime(),
+          "lastModifiedUserID": 0,
+          "createdDateTime": getCurrentDateTime(),
+          "createdUserID": 0,
+          "customerTypeID": 0,
+          "customerType": {
+            "customerTypeID": 0,
+            "description": "string",
+            "desc2": "string",
+            "isActive": true,
+            "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
+            "lastModifiedUserID": 0,
+            "createdDateTime": "2024-03-07T03:59:07.897Z",
+            "createdUserID": 0,
+            "companyID": 0
+          },
+          "salesAgentID": 0,
+          "salesAgent": {
+            "salesAgentID": 0,
+            "salesAgent": "string",
+            "description": "string",
+            "email": "string",
+            "isActive": true,
+            "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
+            "lastModifiedUserID": 0,
+            "createdDateTime": "2024-03-07T03:59:07.897Z",
+            "createdUserID": 0,
+            "companyID": 0
+          },
+          "companyID": 0
+        },
+        "customerCode": "string",
+        "customerName": "string",
+        "salesAgent": "string",
+        "paymentType": "string",
+        "refNo": "string",
+        "paymentTotal": 0,
+        "image": "string",
+        "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
+        "lastModifiedUserID": 0,
+        "createdDateTime": "2024-03-07T03:59:07.897Z",
+        "createdUserID": 0,
+        "companyID": 0,
+        "collectMappings": [
+          {
+            "collectMappingID": 0,
+            "collectDocID": 0,
+            "collect": "string",
+            "paymentAmt": 0,
+            "salesDocID": 0,
+            "sales": {
+              "docID": 0,
+              "docNo": "string",
+              "docDate": "2024-03-07T03:59:07.897Z",
+              "customerID": 0,
+              "customerCode": "string",
+              "customerName": "string",
+              "address1": "string",
+              "address2": "string",
+              "address3": "string",
+              "address4": "string",
+              "deliverAddr1": "string",
+              "deliverAddr2": "string",
+              "deliverAddr3": "string",
+              "deliverAddr4": "string",
+              "salesAgent": "string",
+              "phone": "string",
+              "fax": "string",
+              "email": "string",
+              "attention": "string",
+              "subtotal": 0,
+              "taxableAmt": 0,
+              "taxAmt": 0,
+              "finalTotal": 0,
+              "paymentTotal": 0,
+              "outstanding": 0,
+              "description": "string",
+              "remark": "string",
+              "shippingMethodID": 0,
+              "shippingMethodDescription": "string",
+              "qtDocID": 0,
+              "qtDocNo": "string",
+              "isVoid": true,
+              "lastModifiedUserID": 0,
+              "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
+              "createdUserID": 0,
+              "createdDateTime": "2024-03-07T03:59:07.897Z",
+              "companyID": 0,
+              "salesDetails": [
+                {
+                  "dtlID": 0,
+                  "docID": 0,
+                  "stockID": 0,
+                  "stockCode": "string",
+                  "stockBatchID": 0,
+                  "batchNo": "string",
+                  "description": "string",
+                  "uom": "string",
+                  "qty": 0,
+                  "unitPrice": 0,
+                  "discount": 0,
+                  "total": 0,
+                  "taxTypeID": 0,
+                  "taxableAmt": 0,
+                  "taxRate": 0,
+                  "taxAmt": 0,
+                  "locationID": 0,
+                  "location": "string"
+                }
+              ]
+            },
+            "editOutstanding": 0,
+            "editPaymentAmt": 0
+          }
+        ]
+      };
+
+      // Encode the JSON data
+      String jsonString = jsonEncode(jsonData);
+
+      // Make the API request
+      try {
+        final response = await BaseClient().post(
+          '/Collection/CreateCollection',
+          jsonString,
+        );
+
+        // Check the status code of the response
+        if (response != null) {
+          Map<String, dynamic> responseBody = json.decode(response);
+          String docID = responseBody['docID'].toString();
+
+          print('API request successful');
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) =>
+          //         HistoryListingScreen(docid: int.parse(docID)),
+          //   ),
+          // );
+        }
+      } catch (e) {
+        // Handle exceptions
+        print('Exception during API request: $e');
+      }
     } else {
       Fluttertoast.showToast(
         msg: "Please select a customer",
@@ -338,5 +495,12 @@ class _CollectionAddState extends State<CollectionAdd> {
         fontSize: 16.0,
       );
     }
+  }
+
+  getCurrentDateTime() {
+    DateTime now = DateTime.now();
+    String formattedDate =
+        DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(now.toUtc());
+    return formattedDate;
   }
 }
