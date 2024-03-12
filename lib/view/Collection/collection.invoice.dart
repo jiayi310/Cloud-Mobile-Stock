@@ -10,7 +10,7 @@ import 'CollectionProvider.dart';
 class InvoiceCollection extends StatefulWidget {
   InvoiceCollection({Key? key, required this.collectionItems})
       : super(key: key);
-  List<CollectionDetails> collectionItems;
+  List<CollectMappings> collectionItems;
 
   @override
   State<InvoiceCollection> createState() => _InvoiceCollectionState();

@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/Collection.dart';
-import 'package:mobilestock/view/Collection/HistoryListing/listing.details.dart';
-import 'package:mobilestock/view/Collection/HistoryListing/listing.header.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -16,18 +14,16 @@ import '../../../utils/global.colors.dart';
 import '../../Sales/OrderHistory/history.listing.dart';
 
 class CollectionListingScreen extends StatefulWidget {
-  const CollectionListingScreen({Key? key, required this.collection})
-      : super(key: key);
-  final Collection collection;
+  CollectionListingScreen({Key? key, required this.docid}) : super(key: key);
+  int docid;
 
   @override
-  State<CollectionListingScreen> createState() =>
-      _CollectionListingScreen(collection: collection);
+  State<CollectionListingScreen> createState() => _CollectionListingScreen();
 }
 
 class _CollectionListingScreen extends State<CollectionListingScreen> {
-  _CollectionListingScreen({required this.collection});
-  final Collection collection;
+  _CollectionListingScreen();
+  Collection collection = new Collection(paymentTotal: 0);
 
   @override
   void initState() {
@@ -75,13 +71,261 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
         child: SingleChildScrollView(
             child: Column(
           children: [
-            ListingHeader(
-              collection: collection,
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      'assets/images/agiliti_logo.png',
+                      height: 60,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "AR Payment",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          collection.docNo.toString(),
+                          style: TextStyle(fontSize: 16, color: Colors.black38),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Approved",
+                          style: TextStyle(fontSize: 12, color: Colors.green),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Presoft (M) Sdn Bhd",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "98, Lorong 3/4, Jalan Kinara",
+                      style: TextStyle(fontSize: 14, color: Colors.black38),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "37100 Bandar Puteri Puchong",
+                      style: TextStyle(fontSize: 14, color: Colors.black38),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Selangor",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black38,
+                      ),
+                    ),
+                    Text(
+                      "",
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Malaysia",
+                      style: TextStyle(fontSize: 14, color: Colors.black38),
+                    ),
+                    Text(
+                      "TOTAL",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: GlobalColors.mainColor),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "",
+                    ),
+                    Text(
+                      collection.paymentTotal.toStringAsFixed(2),
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "BILL TO",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black38,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "",
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      (collection.customerCode ?? "") +
+                          " " +
+                          (collection.customerName ?? ""),
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "",
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      collection.customer?.address1?.toString() ?? "",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black38,
+                      ),
+                    ),
+                    Text(
+                      "Date: " +
+                          (collection.docDate != null &&
+                                  collection.docDate.toString().length >= 10
+                              ? collection.docDate.toString().substring(0, 10)
+                              : "N/A"),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      collection.customer?.address2?.toString() ?? "",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black38,
+                      ),
+                    ),
+                    Text(
+                      "Agent: " + (collection.salesAgent?.toString() ?? ""),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      collection.customer?.address3?.toString() ?? "",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      collection.customer?.address4?.toString() ?? "",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
-            ListingDetails(collection: collection),
+            Container(
+              width: double.infinity,
+              child: DataTable(
+                horizontalMargin: 10,
+                columnSpacing: 10,
+                headingRowHeight: 30,
+                headingTextStyle:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                headingRowColor:
+                    MaterialStateProperty.resolveWith((states) => Colors.black),
+                dataTextStyle: TextStyle(fontSize: 11, color: Colors.black),
+                columns: _createColumns(),
+                rows: _createRows(),
+              ),
+            ),
           ],
         )),
       ),
@@ -127,16 +371,43 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
   }
 
   Future<void> getCollectionDetail() async {
-    if (docid != null) {
-      final response =
-          await BaseClient().get('/Sales/GetSales?docid=' + docid.toString());
+    if (widget.docid != null) {
+      final response = await BaseClient()
+          .get('/Collection/GetCollection?docid=' + widget.docid.toString());
 
-      Sales _sales = Sales.fromJson2(jsonDecode(response));
+      Collection _collection = Collection.fromJson(jsonDecode(response));
 
       setState(() {
-        sales = _sales;
+        collection = _collection;
       });
     }
+  }
+
+  List<DataColumn> _createColumns() {
+    return [
+      DataColumn(label: Text('Invoice No')),
+      DataColumn(
+          label: Text(
+        'Total',
+      )),
+    ];
+  }
+
+  List<DataRow> _createRows() {
+    return collection?.collectMappings
+            ?.map((collectItem) => DataRow(cells: [
+                  // DataCell(Text(salesItem['#'].toString())),
+                  DataCell(Text(collectItem!.sales?.docNo.toString() ?? '')),
+                  DataCell(ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 4),
+                      child: Text(
+                        collectItem?.paymentAmt?.toString() ?? '',
+                        overflow: TextOverflow.ellipsis,
+                      ))),
+                ]))
+            ?.toList() ??
+        [];
   }
 }
 

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/Collection.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
@@ -30,8 +32,9 @@ class _CollectionAddState extends State<CollectionAdd> {
   String companyid = "", userid = "";
   final storage = new FlutterSecureStorage();
   Collection? collection;
+  XFile? _selectedImage;
 
-  List<CollectionDetails> collectionItems = [];
+  List<CollectMappings> collectionItems = [];
 
   @override
   void didChangeDependencies() {
@@ -39,13 +42,24 @@ class _CollectionAddState extends State<CollectionAdd> {
 
     // Access context and salesProvider here
     final collectProvider = CollectionProvider.of(context);
-    collectionItems = collectProvider?.collection.collectionDetails ?? [];
+    collectionItems = collectProvider?.collection.collectMappings ?? [];
   }
 
   @override
   void initState() {
     // TODO: implement initState
     getDocNo();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: source);
+
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
+    }
   }
 
   @override
@@ -123,7 +137,16 @@ class _CollectionAddState extends State<CollectionAdd> {
           docNo,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [],
+        actions: [
+          IconButton(
+            icon: Icon(Icons.camera_alt),
+            onPressed: () => _pickImage(ImageSource.camera),
+          ),
+          IconButton(
+            icon: Icon(Icons.photo_library),
+            onPressed: () => _pickImage(ImageSource.gallery),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
           child: Column(
@@ -153,6 +176,81 @@ class _CollectionAddState extends State<CollectionAdd> {
             child: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Image",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_selectedImage != null)
+            GestureDetector(
+              onTap: () {
+                // Show larger image in a dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      child: Container(
+                        width: 300, // Adjust the width as needed
+                        height: 300, // Adjust the height as needed
+                        child: Image.file(
+                          File(_selectedImage!.path),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: GlobalColors.mainColor,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Image.file(
+                        File(_selectedImage!.path),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedImage = null;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      child: Text('Delete Image'),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          Container(
+            color: GlobalColors.mainColor,
+            height: 50,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Invoice",
@@ -160,64 +258,52 @@ class _CollectionAddState extends State<CollectionAdd> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 17),
-                  )
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.add_box_outlined,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      if (collection!.customerID != null) {
+                        var collectionProvider = Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CollectionInvoiceList(
+                                  customerid: collection!.customerID!),
+                            )).then((returnedData) {
+                          setState(() {
+                            collectionItems = returnedData;
+                          });
+                        });
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "Please select a customer",
+                          toastLength:
+                              Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+                          gravity: ToastGravity
+                              .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+                          timeInSecForIosWeb:
+                              1, // Time in seconds before the toast disappears on iOS and web
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.all(20),
-              child: InkWell(
-                onTap: () {
-                  if (collection!.customerID != null) {
-                    var collectionProvider = Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CollectionInvoiceList(
-                              customerid: collection!.customerID!),
-                        )).then((returnedData) {
-                      setState(() {
-                        collectionItems = returnedData;
-                      });
-                    });
-                  } else {
-                    Fluttertoast.showToast(
-                      msg: "Please select a customer",
-                      toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
-                      gravity: ToastGravity
-                          .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
-                      timeInSecForIosWeb:
-                          1, // Time in seconds before the toast disappears on iOS and web
-                      backgroundColor: Colors.black,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                  }
-                },
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: Radius.circular(20),
-                  dashPattern: [10, 10],
-                  color: GlobalColors.mainColor.withOpacity(0.50),
-                  strokeWidth: 2,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Center(
-                        child: Icon(
-                          Icons.add,
-                          color: GlobalColors.mainColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )),
+          SizedBox(
+            height: 10,
+          ),
           InvoiceCollection(
             collectionItems: collectionItems,
+          ),
+          SizedBox(
+            height: 10,
           ),
           Container(
             color: GlobalColors.mainColor,
@@ -338,48 +424,20 @@ class _CollectionAddState extends State<CollectionAdd> {
           "customerCode": collection!.customerCode.toString(),
           "name": collection!.customerName.toString(),
           "lastModifiedDateTime": getCurrentDateTime(),
-          "lastModifiedUserID": 0,
+          "lastModifiedUserID": 1,
           "createdDateTime": getCurrentDateTime(),
-          "createdUserID": 0,
-          "customerTypeID": 0,
-          "customerType": {
-            "customerTypeID": 0,
-            "description": "string",
-            "desc2": "string",
-            "isActive": true,
-            "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
-            "lastModifiedUserID": 0,
-            "createdDateTime": "2024-03-07T03:59:07.897Z",
-            "createdUserID": 0,
-            "companyID": 0
-          },
-          "salesAgentID": 0,
-          "salesAgent": {
-            "salesAgentID": 0,
-            "salesAgent": "string",
-            "description": "string",
-            "email": "string",
-            "isActive": true,
-            "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
-            "lastModifiedUserID": 0,
-            "createdDateTime": "2024-03-07T03:59:07.897Z",
-            "createdUserID": 0,
-            "companyID": 0
-          },
-          "companyID": 0
+          "createdUserID": 1,
+          "companyID": 1
         },
-        "customerCode": "string",
-        "customerName": "string",
-        "salesAgent": "string",
-        "paymentType": "string",
-        "refNo": "string",
+        "customerCode": collection!.customerCode.toString(),
+        "customerName": collection!.customerName.toString(),
         "paymentTotal": 0,
-        "image": "string",
+        "image": "",
         "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
         "lastModifiedUserID": 0,
         "createdDateTime": "2024-03-07T03:59:07.897Z",
-        "createdUserID": 0,
-        "companyID": 0,
+        "createdUserID": 1,
+        "companyID": 1,
         "collectMappings": [
           {
             "collectMappingID": 0,

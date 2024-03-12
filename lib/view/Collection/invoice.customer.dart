@@ -93,7 +93,7 @@ class _CollectionInvoiceListState extends State<CollectionInvoiceList> {
                                 onPressed: () {
                                   print("CONFIRMED");
                                   Navigator.of(context).pop(collectionProvider!
-                                      .collection.collectionDetails);
+                                      .collection.collectMappings);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   primary: GlobalColors

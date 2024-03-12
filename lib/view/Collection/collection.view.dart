@@ -154,7 +154,7 @@ class _CollectionHomeScreen extends State<CollectionHomeScreen> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               CollectionListingScreen(
-                                            collection: collectionlist[i],
+                                            docid: collectionlist[i].docID!,
                                           ),
                                         ));
                                   },

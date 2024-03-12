@@ -20,7 +20,7 @@ class Collection {
   String? createdDateTime;
   int? createdUserID;
   int? companyID;
-  List<CollectionDetails> collectionDetails = [];
+  List<CollectMappings>? collectMappings;
 
   Collection({
     this.docID,
@@ -62,10 +62,10 @@ class Collection {
     createdDateTime = json['createdDateTime'];
     createdUserID = json['createdUserID'];
     companyID = json['companyID'];
-    if (json['CollectionDetails'] != null) {
-      collectionDetails = <CollectionDetails>[];
-      json['CollectionDetails'].forEach((v) {
-        collectionDetails!.add(new CollectionDetails.fromJson(v));
+    if (json['collectMappings'] != null) {
+      collectMappings = <CollectMappings>[];
+      json['collectMappings'].forEach((v) {
+        collectMappings!.add(new CollectMappings.fromJson(v));
       });
     }
   }
@@ -91,9 +91,9 @@ class Collection {
     data['createdDateTime'] = this.createdDateTime;
     data['createdUserID'] = this.createdUserID;
     data['companyID'] = this.companyID;
-    if (this.collectionDetails != null) {
-      data['CollectionDetails'] =
-          this.collectionDetails!.map((v) => v.toJson()).toList();
+    if (this.collectMappings != null) {
+      data['collectMappings'] =
+          this.collectMappings!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -104,22 +104,27 @@ class Collection {
     int? salesDocID,
     Sales? sales,
   }) {
-    var newItem = CollectionDetails(
-      collect: collect,
+    var newItem = CollectMappings(
       paymentAmt: paymentAmt,
       salesDocID: salesDocID,
       sales: sales,
     );
 
-    collectionDetails.add(newItem);
-    updateTotal(collectionDetails);
+    // Ensure collectMappings is not null before accessing its add method
+    collectMappings ??= []; // Initialize collectMappings if it is null
+    collectMappings!.add(newItem);
+
+    // Ensure collectMappings is not null before calling updateTotal
+    if (collectMappings != null) {
+      updateTotal(collectMappings!);
+    }
   }
 
   void removeItem(int salesID) {
-    collectionDetails.removeWhere((item) => item.salesDocID == salesID);
+    collectMappings!.removeWhere((item) => item.salesDocID == salesID);
   }
 
-  void updateTotal(List<CollectionDetails> _collectionDetails) {
+  void updateTotal(List<CollectMappings> _collectionDetails) {
     // Calculate the total paymentAmt
     double totalPaymentAmt = 0;
 
@@ -187,30 +192,27 @@ class SalesAgent {
   }
 }
 
-class CollectionDetails {
+class CollectMappings {
   int? collectMappingID;
   int? collectDocID;
-  String? collect;
   double? paymentAmt;
   int? salesDocID;
   Sales? sales;
-  int? editOutstanding;
-  int? editPaymentAmt;
+  double? editOutstanding;
+  double? editPaymentAmt;
 
-  CollectionDetails(
+  CollectMappings(
       {this.collectMappingID,
       this.collectDocID,
-      this.collect,
       this.paymentAmt,
       this.salesDocID,
       this.sales,
       this.editOutstanding,
       this.editPaymentAmt});
 
-  CollectionDetails.fromJson(Map<String, dynamic> json) {
+  CollectMappings.fromJson(Map<String, dynamic> json) {
     collectMappingID = json['collectMappingID'];
     collectDocID = json['collectDocID'];
-    collect = json['collect'];
     paymentAmt = json['paymentAmt'];
     salesDocID = json['salesDocID'];
     sales = json['sales'] != null ? new Sales.fromJson(json['sales']) : null;
@@ -222,7 +224,6 @@ class CollectionDetails {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['collectMappingID'] = this.collectMappingID;
     data['collectDocID'] = this.collectDocID;
-    data['collect'] = this.collect;
     data['paymentAmt'] = this.paymentAmt;
     data['salesDocID'] = this.salesDocID;
     if (this.sales != null) {

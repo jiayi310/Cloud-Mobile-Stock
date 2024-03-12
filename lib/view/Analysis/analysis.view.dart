@@ -68,7 +68,7 @@ class _StatsScreenState extends State<AnalysisScreen> {
   SliverToBoxAdapter _buildRegionTabBar() {
     return SliverToBoxAdapter(
       child: DefaultTabController(
-        length: 2,
+        length: 1,
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 20.0),
           height: 50.0,
@@ -87,7 +87,7 @@ class _StatsScreenState extends State<AnalysisScreen> {
             unselectedLabelColor: Colors.white,
             tabs: <Widget>[
               Text('Individual'),
-              Text('All'),
+              // Text('All'),
             ],
             onTap: (index) {
               print('Selected tab index: $index');
