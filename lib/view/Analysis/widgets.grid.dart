@@ -4,6 +4,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../api/base.client.dart';
 
 class StatsGrid extends StatefulWidget {
+  StatsGrid({required this.index});
+
+  int index;
+
   @override
   State<StatsGrid> createState() => _StatsGridState();
 }
@@ -19,9 +23,19 @@ class _StatsGridState extends State<StatsGrid> {
   @override
   void initState() {
     super.initState();
-    getTotalSales();
-    getTotalSalesCount();
+    getTotalSales(widget.index);
+    getTotalSalesCount(widget.index);
     getStockValue();
+  }
+
+  @override
+  void didUpdateWidget(covariant StatsGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.index != oldWidget.index) {
+      getTotalSales(widget.index);
+      getTotalSalesCount(widget.index);
+      getStockValue();
+    }
   }
 
   @override
@@ -100,12 +114,15 @@ class _StatsGridState extends State<StatsGrid> {
     );
   }
 
-  Future<void> getTotalSales() async {
+  Future<void> getTotalSales(int _case) async {
     try {
       companyid = (await storage.read(key: "companyid"))!;
       if (companyid != null) {
-        String response = await BaseClient()
-            .get('/Sales/GetTotalSales?companyid=' + companyid);
+        String response = await BaseClient().get(
+            '/Sales/GetSalesByCompanyIdAndDateRange?companyId=' +
+                companyid +
+                '&_case=' +
+                _case.toString());
 
         double parsedValue = double.tryParse(response) ?? 0;
 
@@ -118,14 +135,17 @@ class _StatsGridState extends State<StatsGrid> {
     }
   }
 
-  Future<void> getTotalSalesCount() async {
+  Future<void> getTotalSalesCount(int _case) async {
     try {
       companyid = (await storage.read(key: "companyid"))!;
       if (companyid != null) {
-        String response = await BaseClient()
-            .get('/Sales/GetTotalSalesCount?companyid=' + companyid);
+        String response = await BaseClient().get(
+            '/Sales/GetTotalSalesCount?companyId=' +
+                companyid +
+                '&_case=' +
+                _case.toString());
 
-        double parsedValue = double.tryParse(response) ?? 0;
+        int parsedValue = int.tryParse(response) ?? 0;
 
         setState(() {
           totalsalescount = parsedValue.toStringAsFixed(2);

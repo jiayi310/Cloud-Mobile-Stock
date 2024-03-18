@@ -65,17 +65,6 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          // Padding(
-          //   padding: EdgeInsets.only(right: 20),
-          //   child: InkWell(
-          //     onTap: () {},
-          //     child: Icon(
-          //       Icons.share,
-          //       size: 25,
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // ),
           PopupMenuButton<MenuItem>(
               onSelected: (value) async {
                 if (value == MenuItem.item1) {
