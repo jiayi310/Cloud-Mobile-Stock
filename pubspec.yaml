@@ -66,6 +66,8 @@ dependencies:
   image_picker: ^1.0.7
   collection: ^1.17.2
   barcode_scan2: ^4.3.0
+  mobx: ^2.3.0+1
+  flutter_modular: ^6.3.2
 
 
 dev_dependencies:

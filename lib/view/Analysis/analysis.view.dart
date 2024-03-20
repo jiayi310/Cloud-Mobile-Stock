@@ -4,8 +4,6 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mobilestock/view/Analysis/palette.dart';
-import 'package:mobilestock/view/Analysis/styles.dart';
 import 'package:mobilestock/view/Analysis/widgets.custom.dart';
 import 'package:mobilestock/view/Analysis/widgets.grid.dart';
 import 'package:pie_chart/pie_chart.dart' as Pie;
@@ -49,7 +47,7 @@ class _StatsScreenState extends State<AnalysisScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Palette.primaryColor,
+      backgroundColor: Color(0xFF1E319D),
       appBar: CustomAppBar(),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
@@ -223,7 +221,10 @@ class _StatsScreenState extends State<AnalysisScreen> {
               indicatorHeight: 40.0,
               indicatorColor: Colors.white,
             ),
-            labelStyle: Styles.tabTextStyle,
+            labelStyle: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+            ),
             labelColor: Colors.black,
             unselectedLabelColor: Colors.white,
             tabs: <Widget>[
@@ -247,7 +248,10 @@ class _StatsScreenState extends State<AnalysisScreen> {
           length: 4,
           child: TabBar(
             indicatorColor: Colors.transparent,
-            labelStyle: Styles.tabTextStyle,
+            labelStyle: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+            ),
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white60,
             tabs: <Widget>[

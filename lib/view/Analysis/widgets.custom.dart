@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/view/Analysis/palette.dart';
+import 'package:mobilestock/view/Analysis/Ranking/ranking.agent.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Palette.primaryColor,
+      backgroundColor: Color(0xFF1E319D),
       elevation: 0.0,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios_new),
@@ -18,7 +18,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.leaderboard),
           iconSize: 28.0,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Ranking_Agent()));
+          },
         ),
       ],
     );
