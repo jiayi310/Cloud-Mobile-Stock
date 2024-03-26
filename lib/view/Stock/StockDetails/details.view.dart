@@ -38,7 +38,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 3, vsync: this);
+    TabController _tabController = TabController(length: 2, vsync: this);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -169,9 +169,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                     Tab(
                       text: "Stock",
                     ),
-                    Tab(
-                      text: "Batch",
-                    ),
+                    // Tab(
+                    //   text: "Batch",
+                    // ),
                     // Tab(
                     //   text: "History Price",
                     // )
@@ -210,446 +210,106 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                             SizedBox(
                               height: 20,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            Table(
+                              columnWidths: {
+                                0: FlexColumnWidth(1),
+                                1: FlexColumnWidth(1)
+                              },
                               children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Price 1",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                TableRow(
+                                  children: [
+                                    _buildPriceCell(
+                                        "Price 1",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.price),
+                                    _buildPriceCell(
+                                        "Price 2",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.price2),
+                                  ],
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.price
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                TableRow(
+                                  children: [
+                                    _buildPriceCell(
+                                        "Price 3",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.price3),
+                                    _buildPriceCell(
+                                        "Price 4",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.price4),
+                                  ],
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Price 2",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                TableRow(
+                                  children: [
+                                    _buildPriceCell(
+                                        "Price 5",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.price5),
+                                    _buildPriceCell(
+                                        "Price 6",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.price6),
+                                  ],
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.price2
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                TableRow(
+                                  children: [
+                                    _buildPriceCell(
+                                        "Min Price",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.minSalePrice),
+                                    _buildPriceCell(
+                                        "Max Price",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.maxSalePrice),
+                                  ],
+                                ),
+                                TableRow(
+                                  children: [
+                                    _buildPriceCell(
+                                        "Min Qty",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.minQty),
+                                    _buildPriceCell(
+                                        "Max Qty",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.maxQty), // Empty cell to maintain alignment with other rows
+                                  ],
+                                ),
+                                TableRow(
+                                  children: [
+                                    _buildPriceCell(
+                                        "Cost",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.cost),
+                                    SizedBox(), // Empty cell to maintain alignment with other rows
+                                  ],
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Price 3",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
 
-                                      return selectedUOM != null
-                                          ? selectedUOM.price3
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Price 4",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.price4
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Price 5",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.price5
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Price 6",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.price6
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Min Price",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.minSalePrice
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Max Price",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.maxSalePrice
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Min Qty",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.minQty
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Max Qty",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.maxQty
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Cost",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    (() {
-                                      var uom = uomSelected;
-                                      var selectedUOM = productDetails
-                                          .stockUOMDtoList
-                                          ?.firstWhere(
-                                        (uomDto) => uomDto.uom == uom,
-                                      );
-
-                                      return selectedUOM != null
-                                          ? selectedUOM.cost
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
-                                    })(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
                             SizedBox(
                               height: 30,
                             ),
@@ -1010,22 +670,22 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    Container(
-                      height: 300,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [],
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   height: 300,
+                    //   margin:
+                    //       EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    //   padding: EdgeInsets.all(5),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white,
+                    //     borderRadius: BorderRadius.circular(20),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(20),
+                    //     child: Column(
+                    //       children: [],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -1152,3 +812,32 @@ Widget buildCircle({
         padding: EdgeInsets.all(all),
       ),
     );
+
+Widget _buildPriceCell(String label, double? price) {
+  return TableCell(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          ),
+          Text(
+            price?.toStringAsFixed(2) ?? "0.00",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ],
+      ),
+    ),
+  );
+}

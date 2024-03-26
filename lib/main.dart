@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
+import 'package:mobilestock/view/Collection/collection.view.dart';
 import 'package:mobilestock/view/Sales/SalesProvider.dart';
 import 'package:mobilestock/view/splash.view.dart';
 

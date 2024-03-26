@@ -33,7 +33,7 @@ class Customer {
       this.deliverAddr3,
       this.deliverAddr4,
       this.attention,
-      {required this.salesAgent});
+      this.salesAgent);
 
   Customer.fromJson(Map<String, dynamic> json) {
     customerID = json["customerID"];

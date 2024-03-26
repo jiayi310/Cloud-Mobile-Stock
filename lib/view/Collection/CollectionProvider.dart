@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobilestock/models/Collection.dart';
 
 class CollectionProviderData extends InheritedWidget {
-  final Collection collection;
+  Collection collection;
 
   CollectionProviderData({
     required this.collection,
@@ -20,6 +20,18 @@ class CollectionProviderData extends InheritedWidget {
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     return true; // Always notify listeners when there's a change
+  }
+
+  void clearCollection() {
+    if (collection.collectMappings != null) {
+      collection.collectMappings!.clear();
+    }
+    collection.image = null;
+    collection = Collection(paymentTotal: 0);
+  }
+
+  void setCollection(Collection newCollection) {
+    collection = newCollection;
   }
 }
 

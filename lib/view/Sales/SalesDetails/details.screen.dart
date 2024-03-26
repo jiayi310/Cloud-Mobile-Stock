@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/Sales.dart';
 import '../../../models/Stock.dart';
 import '../../../size.config.dart';
 import '../SalesProvider.dart';
@@ -23,6 +24,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   TextEditingController _controller = TextEditingController();
   int quantity = 1;
   String selectedUOM = "";
+  double pricePerUnit = 0.00;
 
   @override
   void initState() {
@@ -254,47 +256,171 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ),
                                           ),
                                           SizedBox(width: 30),
-                                          for (int i = 0; i < uom.length; i++)
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  // Toggle the current one to true and others to false
-                                                  for (int j = 0;
-                                                      j <
-                                                          selectedUOMList
-                                                              .length;
-                                                      j++) {
-                                                    selectedUOMList[j] =
-                                                        (j == i);
+                                          Expanded(
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  for (int i = 0;
+                                                      i < uom.length;
+                                                      i++)
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          // Toggle the current one to true and others to false
+                                                          for (int j = 0;
+                                                              j <
+                                                                  selectedUOMList
+                                                                      .length;
+                                                              j++) {
+                                                            selectedUOMList[j] =
+                                                                (j == i);
 
-                                                    selectedUOM = uom[i]["uom"]
-                                                        .toString();
-                                                  }
+                                                            selectedUOM = uom[i]
+                                                                    ["uom"]
+                                                                .toString();
+                                                          }
 
-                                                  updateTotalPrice();
-                                                });
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 8),
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  color: selectedUOMList[i]
-                                                      ? Colors.blue
-                                                      : Colors.grey.shade50,
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                ),
-                                                child: Text(
-                                                  uom[i]["uom"].toString(),
-                                                  style: TextStyle(
-                                                    color: selectedUOMList[i]
-                                                        ? Colors.grey.shade50
-                                                        : Colors.black,
-                                                  ),
-                                                ),
+                                                          updateTotalPrice();
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 8),
+                                                        padding:
+                                                            EdgeInsets.all(8),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              selectedUOMList[i]
+                                                                  ? Colors.blue
+                                                                  : Colors.grey
+                                                                      .shade50,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                        ),
+                                                        child: Text(
+                                                          uom[i]["uom"]
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            color:
+                                                                selectedUOMList[
+                                                                        i]
+                                                                    ? Colors
+                                                                        .grey
+                                                                        .shade50
+                                                                    : Colors
+                                                                        .black,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
                                               ),
                                             ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 30),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Unit Price:",
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                pricePerUnit
+                                                    .toString(), // Assuming getPriceBasedOnUOM returns a numeric value
+                                                style: TextStyle(
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  TextEditingController
+                                                      _priceController =
+                                                      TextEditingController();
+
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                            'Edit Unit Price'),
+                                                        content: TextField(
+                                                          controller:
+                                                              _priceController,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number, // Assuming price is numeric
+                                                          decoration:
+                                                              InputDecoration(
+                                                                  labelText:
+                                                                      'Enter new Unit Price'),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            child:
+                                                                Text('Cancel'),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                          TextButton(
+                                                            child: Text('Save'),
+                                                            onPressed: () {
+                                                              double newPrice =
+                                                                  double.tryParse(
+                                                                          _priceController
+                                                                              .text) ??
+                                                                      0.0;
+
+                                                              setState(() {
+                                                                pricePerUnit =
+                                                                    newPrice;
+                                                                double
+                                                                    totalPrice =
+                                                                    quantity *
+                                                                        pricePerUnit;
+                                                                widget.stock
+                                                                        .baseUOMPrice1 =
+                                                                    totalPrice;
+                                                              });
+
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: GlobalColors.mainColor,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       SizedBox(height: 20),
@@ -549,7 +675,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void updateTotalPrice() {
-    double pricePerUnit = getPriceBasedOnUOM(selectedUOM);
+    pricePerUnit = getPriceBasedOnUOM(selectedUOM);
     double totalPrice = quantity * pricePerUnit;
 
     setState(() {

@@ -69,7 +69,7 @@ class _StatsScreenState extends State<AnalysisScreen> {
             padding: const EdgeInsets.only(top: 20.0),
             sliver: SliverToBoxAdapter(
               child: Container(
-                height: 1000.0,
+                height: 800.0,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

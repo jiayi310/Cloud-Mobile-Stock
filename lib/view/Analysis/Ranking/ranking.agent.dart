@@ -26,7 +26,7 @@ class _Ranking_AgentState extends State<Ranking_Agent> {
   @override
   void initState() {
     // TODO: implement initState
-    getTop10Agent(4);
+    getTop10Agent(1);
   }
 
   @override
@@ -51,9 +51,46 @@ class _Ranking_AgentState extends State<Ranking_Agent> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              CustomChipWidget(label: "Today", selected: true),
-              CustomChipWidget(label: "Week", selected: false),
-              CustomChipWidget(label: "Month", selected: false),
+              CustomChipWidget(
+                label: "Today",
+                selected: indexvalue == 1,
+                onSelect: (selected) {
+                  setState(() {
+                    indexvalue = 1;
+                  });
+                  getTop10Agent(1);
+                },
+              ),
+              CustomChipWidget(
+                label: "Week",
+                selected: indexvalue == 2,
+                onSelect: (selected) {
+                  setState(() {
+                    indexvalue = 2;
+                  });
+                  getTop10Agent(2);
+                },
+              ),
+              CustomChipWidget(
+                label: "Month",
+                selected: indexvalue == 3,
+                onSelect: (selected) {
+                  setState(() {
+                    indexvalue = 3;
+                  });
+                  getTop10Agent(3);
+                },
+              ),
+              CustomChipWidget(
+                label: "Total",
+                selected: indexvalue == 4,
+                onSelect: (selected) {
+                  setState(() {
+                    indexvalue = 4;
+                  });
+                  getTop10Agent(4);
+                },
+              ),
             ],
           ),
         ),

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:image/image.dart' as img;
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +13,20 @@ import 'package:mobilestock/models/Collection.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
 import 'package:mobilestock/view/Collection/collection.invoice.dart';
 import 'package:mobilestock/view/Collection/customer.collection.dart';
-import 'package:mobilestock/view/Quotation/NewQuotation/quotation.customer.dart';
-import 'package:mobilestock/view/Quotation/NewQuotation/quotation.total.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../api/base.client.dart';
+import '../../models/Customer.dart';
 import '../../size.config.dart';
 import '../../utils/global.colors.dart';
-import '../Sales/CheckOut/checkout.view.dart';
+import 'HistoryListing/collection.listing.dart';
 import 'invoice.customer.dart';
 
 class CollectionAdd extends StatefulWidget {
-  const CollectionAdd({Key? key}) : super(key: key);
+  CollectionAdd({Key? key, required this.isEdit, required this.collection})
+      : super(key: key);
+  bool isEdit;
+  Collection collection;
 
   @override
   State<CollectionAdd> createState() => _CollectionAddState();
@@ -31,7 +36,6 @@ class _CollectionAddState extends State<CollectionAdd> {
   String docNo = "";
   String companyid = "", userid = "";
   final storage = new FlutterSecureStorage();
-  Collection? collection;
   XFile? _selectedImage;
 
   List<CollectMappings> collectionItems = [];
@@ -40,15 +44,53 @@ class _CollectionAddState extends State<CollectionAdd> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Access context and salesProvider here
-    final collectProvider = CollectionProvider.of(context);
-    collectionItems = collectProvider?.collection.collectMappings ?? [];
+    if (!widget.isEdit) {
+      final collectProvider = CollectionProvider.of(context);
+      collectionItems = collectProvider?.collection.collectMappings ?? [];
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    getDocNo();
+    if (widget.isEdit) {
+      docNo = widget.collection!.docNo!;
+      saveImageToTempDirectory(widget.collection!.image!.split(',').last);
+    } else {
+      getDocNo();
+    }
+  }
+
+  Future<void> saveImageToTempDirectory(String base64String) async {
+    // Decode the base64 string into bytes
+    Uint8List bytes = base64.decode(base64String.split(',').last);
+
+    // Decode the bytes into an image using the 'image' package
+    img.Image image = img.decodeImage(bytes)!;
+
+    // Get the temporary directory using path_provider package
+    Directory tempDir = await getTemporaryDirectory();
+
+    // Create a temporary folder path
+    String tempFolderPath = '${tempDir.path}/your_temp_folder';
+
+    // Check if the temporary folder exists, if not, create it
+    if (!(await Directory(tempFolderPath).exists())) {
+      await Directory(tempFolderPath).create(recursive: true);
+    }
+
+    // Create a temporary file name
+    String tempFileName = 'temp_image.png';
+
+    // Construct the temporary file path
+    String tempFilePath = '$tempFolderPath/$tempFileName';
+
+    // Write the image to the temporary file
+    File(tempFilePath).writeAsBytesSync(img.encodePng(image));
+
+    setState(() {
+      _selectedImage = XFile(tempFilePath);
+    });
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -58,18 +100,21 @@ class _CollectionAddState extends State<CollectionAdd> {
     if (image != null) {
       setState(() {
         _selectedImage = image;
+        widget.collection!.image = image.path;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    collection = CollectionProvider.of(context)?.collection;
-
-    if (collection == null) {
-      // Handle the case where Sales is not available
-      return Text('Collection data not available');
+    if (widget.isEdit) {
+      final collectionProvider = CollectionProvider.of(context);
+      if (collectionProvider != null) {
+        collectionProvider.setCollection(widget.collection);
+      }
+      collectionItems = widget.collection.collectMappings!;
     }
+    widget.collection = CollectionProvider.of(context)!.collection;
     return Scaffold(
       bottomNavigationBar: Container(
         height: 100,
@@ -96,7 +141,7 @@ class _CollectionAddState extends State<CollectionAdd> {
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
                 Text(
-                  "RM ${collection!.paymentTotal!.toStringAsFixed(2)}",
+                  "RM ${widget.collection!.paymentTotal!.toStringAsFixed(2)}",
                   style: TextStyle(
                       color: GlobalColors.mainColor,
                       fontWeight: FontWeight.bold,
@@ -107,7 +152,7 @@ class _CollectionAddState extends State<CollectionAdd> {
             SizedBox(width: 10),
             InkWell(
               onTap: () {
-                sendCollectionData();
+                widget.isEdit ? updateCollectionData() : sendCollectionData();
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -115,7 +160,7 @@ class _CollectionAddState extends State<CollectionAdd> {
                     color: GlobalColors.mainColor,
                     borderRadius: BorderRadius.circular(30)),
                 child: Text(
-                  "Confirm",
+                  widget.isEdit ? "Update" : "Confirm",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
@@ -137,16 +182,6 @@ class _CollectionAddState extends State<CollectionAdd> {
           docNo,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.camera_alt),
-            onPressed: () => _pickImage(ImageSource.camera),
-          ),
-          IconButton(
-            icon: Icon(Icons.photo_library),
-            onPressed: () => _pickImage(ImageSource.gallery),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
           child: Column(
@@ -185,9 +220,31 @@ class _CollectionAddState extends State<CollectionAdd> {
                         fontWeight: FontWeight.bold,
                         fontSize: 17),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => _pickImage(ImageSource.camera),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.photo_library,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => _pickImage(ImageSource.gallery),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            height: 20,
           ),
           if (_selectedImage != null)
             GestureDetector(
@@ -265,16 +322,26 @@ class _CollectionAddState extends State<CollectionAdd> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      if (collection!.customerID != null) {
+                      List<int> _customerIds = [];
+
+                      for (int i = 0; i < collectionItems.length; i++) {
+                        _customerIds.add(collectionItems[i].salesDocID!);
+                      }
+
+                      if (widget.collection!.customerID != null) {
                         var collectionProvider = Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CollectionInvoiceList(
-                                  customerid: collection!.customerID!),
+                                customerid: widget.collection!.customerID!,
+                                customerIds: _customerIds,
+                              ),
                             )).then((returnedData) {
-                          setState(() {
-                            collectionItems = returnedData;
-                          });
+                          if (returnedData != null) {
+                            setState(() {
+                              collectionItems = returnedData;
+                            });
+                          }
                         });
                       } else {
                         Fluttertoast.showToast(
@@ -346,7 +413,7 @@ class _CollectionAddState extends State<CollectionAdd> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      collection!.paymentTotal.toStringAsFixed(2),
+                      widget.collection!.paymentTotal.toStringAsFixed(2),
                     ),
                   ],
                 ),
@@ -382,7 +449,7 @@ class _CollectionAddState extends State<CollectionAdd> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      collection!.paymentTotal.toStringAsFixed(2),
+                      widget.collection!.paymentTotal.toStringAsFixed(2),
                     ),
                   ],
                 ),
@@ -413,109 +480,49 @@ class _CollectionAddState extends State<CollectionAdd> {
   }
 
   Future<void> sendCollectionData() async {
-    if (collection!.customerCode != null) {
+    if (widget.collection!.customerCode != null) {
+      String? base64Image;
+
+      // Encode image to base64 only if it's not null
+      if (widget.collection!.image != null) {
+        base64Image =
+            base64Encode(File(widget.collection!.image!).readAsBytesSync());
+      }
       Map<String, dynamic> jsonData = {
         "docID": 0,
         "docNo": docNo,
         "docDate": getCurrentDateTime(),
-        "customerID": collection!.customerID,
-        "customer": {
-          "customerID": collection!.customerID,
-          "customerCode": collection!.customerCode.toString(),
-          "name": collection!.customerName.toString(),
-          "lastModifiedDateTime": getCurrentDateTime(),
-          "lastModifiedUserID": 1,
-          "createdDateTime": getCurrentDateTime(),
-          "createdUserID": 1,
-          "companyID": 1
-        },
-        "customerCode": collection!.customerCode.toString(),
-        "customerName": collection!.customerName.toString(),
-        "paymentTotal": 0,
-        "image": "",
-        "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
-        "lastModifiedUserID": 0,
-        "createdDateTime": "2024-03-07T03:59:07.897Z",
-        "createdUserID": 1,
-        "companyID": 1,
-        "collectMappings": [
-          {
+        "customerID": widget.collection!.customerID,
+        "customerCode": widget.collection!.customerCode.toString(),
+        "customerName": widget.collection!.customerName.toString(),
+        "salesAgent": widget.collection!.salesAgent.toString(),
+        "paymentTotal": widget.collection!.paymentTotal.toString(),
+        "image": base64Image,
+        "lastModifiedDateTime": getCurrentDateTime(),
+        "lastModifiedUserID": userid,
+        "createdDateTime": getCurrentDateTime(),
+        "createdUserID": userid,
+        "companyID": companyid,
+        "collectMappings": collectionItems.map((collectItem) {
+          return {
             "collectMappingID": 0,
             "collectDocID": 0,
-            "collect": "string",
-            "paymentAmt": 0,
-            "salesDocID": 0,
-            "sales": {
-              "docID": 0,
-              "docNo": "string",
-              "docDate": "2024-03-07T03:59:07.897Z",
-              "customerID": 0,
-              "customerCode": "string",
-              "customerName": "string",
-              "address1": "string",
-              "address2": "string",
-              "address3": "string",
-              "address4": "string",
-              "deliverAddr1": "string",
-              "deliverAddr2": "string",
-              "deliverAddr3": "string",
-              "deliverAddr4": "string",
-              "salesAgent": "string",
-              "phone": "string",
-              "fax": "string",
-              "email": "string",
-              "attention": "string",
-              "subtotal": 0,
-              "taxableAmt": 0,
-              "taxAmt": 0,
-              "finalTotal": 0,
-              "paymentTotal": 0,
-              "outstanding": 0,
-              "description": "string",
-              "remark": "string",
-              "shippingMethodID": 0,
-              "shippingMethodDescription": "string",
-              "qtDocID": 0,
-              "qtDocNo": "string",
-              "isVoid": true,
-              "lastModifiedUserID": 0,
-              "lastModifiedDateTime": "2024-03-07T03:59:07.897Z",
-              "createdUserID": 0,
-              "createdDateTime": "2024-03-07T03:59:07.897Z",
-              "companyID": 0,
-              "salesDetails": [
-                {
-                  "dtlID": 0,
-                  "docID": 0,
-                  "stockID": 0,
-                  "stockCode": "string",
-                  "stockBatchID": 0,
-                  "batchNo": "string",
-                  "description": "string",
-                  "uom": "string",
-                  "qty": 0,
-                  "unitPrice": 0,
-                  "discount": 0,
-                  "total": 0,
-                  "taxTypeID": 0,
-                  "taxableAmt": 0,
-                  "taxRate": 0,
-                  "taxAmt": 0,
-                  "locationID": 0,
-                  "location": "string"
-                }
-              ]
-            },
+            "paymentAmt": collectItem.paymentAmt ?? 0,
+            "salesDocID": collectItem.salesDocID ?? 0,
+            "salesDocNo": collectItem.salesDocNo,
+            "salesDocDate": collectItem.salesDocDate!.toIso8601String(),
+            "salesAgent": collectItem.salesAgent.toString(),
+            "salesFinalTotal": collectItem.salesFinalTotal ?? 0,
+            "salesOutstanding": collectItem.salesOutstanding ?? 0,
             "editOutstanding": 0,
             "editPaymentAmt": 0
-          }
-        ]
+          };
+        }).toList(),
       };
 
       // Encode the JSON data
       String jsonString = jsonEncode(jsonData);
 
-      // Make the API request
       try {
         final response = await BaseClient().post(
           '/Collection/CreateCollection',
@@ -528,13 +535,19 @@ class _CollectionAddState extends State<CollectionAdd> {
           String docID = responseBody['docID'].toString();
 
           print('API request successful');
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) =>
-          //         HistoryListingScreen(docid: int.parse(docID)),
-          //   ),
-          // );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  CollectionListingScreen(docid: int.parse(docID)),
+            ),
+          );
+          CollectionProviderData? providerData =
+              CollectionProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearCollection();
+          }
         }
       } catch (e) {
         // Handle exceptions
@@ -560,5 +573,97 @@ class _CollectionAddState extends State<CollectionAdd> {
     String formattedDate =
         DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(now.toUtc());
     return formattedDate;
+  }
+
+  String? getImageBase64(XFile? imageFile) {
+    if (imageFile != null) {
+      Uint8List bytes = File(imageFile.path).readAsBytesSync();
+      return base64Encode(bytes);
+    }
+    return null;
+  }
+
+  updateCollectionData() async {
+    companyid = (await storage.read(key: "companyid"))!;
+    userid = (await storage.read(key: "userid"))!;
+    if (widget.collection!.customerCode != null) {
+      String? base64Image;
+
+      Map<String, dynamic> jsonData = {
+        "docID": widget.collection.docID,
+        "docNo": docNo,
+        "docDate": widget.collection.docDate,
+        "customerID": widget.collection!.customerID,
+        "customerCode": widget.collection!.customerCode.toString(),
+        "customerName": widget.collection!.customerName.toString(),
+        "salesAgent": widget.collection!.salesAgent.toString(),
+        "paymentTotal": widget.collection!.paymentTotal.toString(),
+        "image": getImageBase64(_selectedImage),
+        "lastModifiedDateTime": getCurrentDateTime(),
+        "lastModifiedUserID": userid,
+        "createdDateTime": widget.collection.createdDateTime,
+        "createdUserID": widget.collection.createdUserID,
+        "companyID": companyid,
+        "collectMappings": collectionItems.map((collectItem) {
+          return {
+            "collectMappingID": collectItem.collectMappingID,
+            "collectDocID": collectItem.collectDocID,
+            "paymentAmt": collectItem.paymentAmt ?? 0,
+            "salesDocID": collectItem.salesDocID ?? 0,
+            "salesDocNo": collectItem.salesDocNo,
+            "salesDocDate": collectItem.salesDocDate!.toIso8601String(),
+            "salesAgent": collectItem.salesAgent.toString(),
+            "salesFinalTotal": collectItem.salesFinalTotal ?? 0,
+            "salesOutstanding": collectItem.salesOutstanding ?? 0,
+            "editOutstanding": collectItem.editOutstanding ?? 0,
+            "editPaymentAmt": collectItem.editPaymentAmt ?? 0
+          };
+        }).toList(),
+      };
+
+      // Encode the JSON data
+      String jsonString = jsonEncode(jsonData);
+
+      try {
+        final response = await BaseClient().post(
+          '/Collection/UpdateCollection?collectId=' +
+              widget.collection.docID.toString(),
+          jsonString,
+        );
+
+        // Check the status code of the response
+        if (response == "true") {
+          print('API request successful');
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CollectionListingScreen(
+                  docid: int.parse(widget.collection.docID.toString())),
+            ),
+          );
+          CollectionProviderData? providerData =
+              CollectionProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearCollection();
+          }
+        }
+      } catch (e) {
+        // Handle exceptions
+        print('Exception during API request: $e');
+      }
+    } else {
+      Fluttertoast.showToast(
+        msg: "Please select a customer",
+        toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+        gravity: ToastGravity
+            .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+        timeInSecForIosWeb:
+            1, // Time in seconds before the toast disappears on iOS and web
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
   }
 }

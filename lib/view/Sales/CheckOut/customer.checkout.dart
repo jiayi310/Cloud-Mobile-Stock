@@ -29,6 +29,7 @@ class _CusCheckOutState extends State<CusCheckOut> {
             Builder(builder: (context) {
               salesProvider!.sales.customerCode =
                   customer!.customerCode.toString();
+              salesProvider.sales.customerID = customer!.customerID!;
               salesProvider!.sales.customerName = customer!.name.toString();
               salesProvider!.sales.address1 = customer!.address1.toString();
               salesProvider!.sales.address2 = customer!.address2.toString();

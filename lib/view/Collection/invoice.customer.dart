@@ -11,8 +11,11 @@ import 'package:mobilestock/view/Collection/CollectionProvider.dart';
 import '../../api/base.client.dart';
 
 class CollectionInvoiceList extends StatefulWidget {
-  CollectionInvoiceList({Key? key, required this.customerid}) : super(key: key);
+  CollectionInvoiceList(
+      {Key? key, required this.customerid, required this.customerIds})
+      : super(key: key);
   int customerid;
+  List<int> customerIds;
 
   @override
   State<CollectionInvoiceList> createState() => _CollectionInvoiceListState();
@@ -166,9 +169,13 @@ class _CollectionInvoiceListState extends State<CollectionInvoiceList> {
 
             if (collectionProvider != null) {
               collectionProvider.collection.addItem(
-                  salesDocID: sales[index].docID,
-                  paymentAmt: sales[index].outstanding,
-                  sales: sales[index]);
+                salesDocID: sales[index].docID,
+                salesDocNo: sales[index].docNo,
+                salesDocDate: sales[index].docDate,
+                salesAgent: sales[index].salesAgent,
+                salesFinalTotal: sales[index].outstanding,
+                paymentAmt: sales[index].outstanding,
+              );
             }
           } else {
             selectedSales
@@ -187,7 +194,7 @@ class _CollectionInvoiceListState extends State<CollectionInvoiceList> {
   void getCollectionList() async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
-      var body = json.encode([2025]);
+      var body = json.encode(widget.customerIds);
 
       try {
         final response = await BaseClient().post(

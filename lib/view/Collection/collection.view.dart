@@ -7,6 +7,7 @@ import 'package:mobilestock/models/Collection.dart';
 import '../../api/base.client.dart';
 import '../../utils/global.colors.dart';
 import '../../utils/loading.dart';
+import 'CollectionProvider.dart';
 import 'collection.add.dart';
 import 'HistoryListing/collection.listing.dart';
 
@@ -38,8 +39,18 @@ class _CollectionHomeScreen extends State<CollectionHomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CollectionAdd()));
+          CollectionProviderData? providerData =
+              CollectionProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearCollection();
+          }
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CollectionAdd(
+                        isEdit: false,
+                        collection: new Collection(paymentTotal: 0),
+                      ))).then((value) => getData());
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,
@@ -124,29 +135,37 @@ class _CollectionHomeScreen extends State<CollectionHomeScreen> {
                                 InkWell(
                                   onLongPress: () {
                                     Get.defaultDialog(
-                                        cancelTextColor: GlobalColors.mainColor,
-                                        confirmTextColor: Colors.white,
-                                        buttonColor: GlobalColors.mainColor,
-                                        titlePadding: EdgeInsets.only(top: 20),
-                                        title: "Warning",
-                                        content: Container(
-                                          padding: EdgeInsets.all(20.0),
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child: Text(
-                                                  "Are you sure want to delete " +
-                                                      collectionlist[i]
-                                                          .docNo
-                                                          .toString(),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                      cancelTextColor: GlobalColors.mainColor,
+                                      confirmTextColor: Colors.white,
+                                      buttonColor: GlobalColors.mainColor,
+                                      titlePadding: EdgeInsets.only(top: 20),
+                                      title: "Warning",
+                                      content: Container(
+                                        padding: EdgeInsets.all(20.0),
+                                        child: Column(
+                                          children: [
+                                            Center(
+                                              child: Text(
+                                                "Are you sure want to delete " +
+                                                    collectionlist[i]
+                                                        .docNo
+                                                        .toString(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                        textConfirm: "Confirm",
-                                        textCancel: "Cancel");
+                                      ),
+                                      textConfirm: "Confirm",
+                                      textCancel: "Cancel",
+                                      onConfirm: () {
+                                        removeCollection(
+                                            collectionlist[i].docID);
+
+                                        // Close the dialog
+                                        Get.back();
+                                      },
+                                    );
                                   },
                                   onTap: () {
                                     Navigator.push(
@@ -330,6 +349,12 @@ class _CollectionHomeScreen extends State<CollectionHomeScreen> {
           .get('/Collection/GetCollectListByCompany?companyid=' + companyid);
       List<Collection> _collectionlist = collectionFromJson(response);
 
+      // Sort the collection list by docDate in descending order
+      _collectionlist.sort((a, b) => b.docDate!.compareTo(a.docDate!));
+
+      // If docDate is the same, sort by docNo in descending order
+      _collectionlist.sort((a, b) => b.docNo!.compareTo(a.docNo!));
+
       setState(() {
         collectionlist = _collectionlist;
         collectionlist_search = _collectionlist;
@@ -355,5 +380,20 @@ class _CollectionHomeScreen extends State<CollectionHomeScreen> {
     setState(() {
       collectionlist = suggestions;
     });
+  }
+
+  Future<void> removeCollection(int? docID) async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get(
+          '/Collection/RemoveCollection?docId=' +
+              docID.toString() +
+              '&companyId=' +
+              companyid);
+
+      if (response != 0) {
+        getData();
+      }
+    }
   }
 }

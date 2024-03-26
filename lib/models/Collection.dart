@@ -98,17 +98,23 @@ class Collection {
     return data;
   }
 
-  void addItem({
-    String? collect,
-    double? paymentAmt,
-    int? salesDocID,
-    Sales? sales,
-  }) {
+  void addItem(
+      {String? collect,
+      double? paymentAmt,
+      int? salesDocID,
+      String? salesDocNo,
+      DateTime? salesDocDate,
+      String? salesAgent,
+      double? salesFinalTotal,
+      double? salesOutstanding}) {
     var newItem = CollectMappings(
-      paymentAmt: paymentAmt,
-      salesDocID: salesDocID,
-      sales: sales,
-    );
+        paymentAmt: paymentAmt,
+        salesDocID: salesDocID,
+        salesDocNo: salesDocNo,
+        salesDocDate: salesDocDate,
+        salesAgent: salesAgent,
+        salesFinalTotal: salesFinalTotal,
+        salesOutstanding: salesOutstanding);
 
     // Ensure collectMappings is not null before accessing its add method
     collectMappings ??= []; // Initialize collectMappings if it is null
@@ -197,6 +203,11 @@ class CollectMappings {
   int? collectDocID;
   double? paymentAmt;
   int? salesDocID;
+  String? salesDocNo;
+  DateTime? salesDocDate;
+  String? salesAgent;
+  double? salesFinalTotal;
+  double? salesOutstanding;
   Sales? sales;
   double? editOutstanding;
   double? editPaymentAmt;
@@ -206,7 +217,12 @@ class CollectMappings {
       this.collectDocID,
       this.paymentAmt,
       this.salesDocID,
+      this.salesDocNo,
+      this.salesDocDate,
+      this.salesAgent,
       this.sales,
+      this.salesFinalTotal,
+      this.salesOutstanding,
       this.editOutstanding,
       this.editPaymentAmt});
 
@@ -215,7 +231,14 @@ class CollectMappings {
     collectDocID = json['collectDocID'];
     paymentAmt = json['paymentAmt'];
     salesDocID = json['salesDocID'];
+    salesDocNo = json['salesDocNo'];
+    salesDocDate = json['salesDocDate'] != null
+        ? DateTime.parse(json['salesDocDate'])
+        : null;
+    salesAgent = json['salesAgent'];
     sales = json['sales'] != null ? new Sales.fromJson(json['sales']) : null;
+    salesFinalTotal = json['salesFinalTotal'];
+    salesOutstanding = json['salesOutstanding'];
     editOutstanding = json['editOutstanding'];
     editPaymentAmt = json['editPaymentAmt'];
   }
@@ -226,9 +249,14 @@ class CollectMappings {
     data['collectDocID'] = this.collectDocID;
     data['paymentAmt'] = this.paymentAmt;
     data['salesDocID'] = this.salesDocID;
+    data['salesDocNo'] = this.salesDocNo;
+    data['salesDocDate'] = this.salesDocDate;
+    data['salesAgent'] = this.salesAgent;
     if (this.sales != null) {
       data['sales'] = this.sales!.toJson();
     }
+    data['salesFinalTotal'] = this.salesFinalTotal;
+    data['salesOutstanding'] = this.salesOutstanding;
     data['editOutstanding'] = this.editOutstanding;
     data['editPaymentAmt'] = this.editPaymentAmt;
     return data;

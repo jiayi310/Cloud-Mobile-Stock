@@ -43,6 +43,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
   Sales sales = new Sales();
   int _currentSortColumn = 0;
   bool _isSortAsc = true;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -85,281 +86,294 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                   ]),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-            child: Column(
-          children: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      'assets/images/agiliti_logo.png',
-                      height: 60,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Sales",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          sales.docNo.toString(),
-                          style: TextStyle(fontSize: 16, color: Colors.black38),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Approved",
-                          style: TextStyle(fontSize: 12, color: Colors.green),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Presoft (M) Sdn Bhd",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "98, Lorong 3/4, Jalan Kinara",
-                      style: TextStyle(fontSize: 14, color: Colors.black38),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "37100 Bandar Puteri Puchong",
-                      style: TextStyle(fontSize: 14, color: Colors.black38),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Selangor",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      "",
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Malaysia",
-                      style: TextStyle(fontSize: 14, color: Colors.black38),
-                    ),
-                    Text(
-                      "TOTAL",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: GlobalColors.mainColor),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "",
-                    ),
-                    Text(
-                      "RM " + (sales.finalTotal?.toStringAsFixed(2) ?? "0.00"),
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "BILL TO",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black38,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "",
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      sales.customerCode.toString() +
-                          " " +
-                          sales.customerName.toString(),
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "",
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      sales.address1 ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      "Date:   " +
-                          (sales.docDate != null &&
-                                  sales.docDate.toString().length >= 10
-                              ? sales.docDate.toString().substring(0, 10)
-                              : "N/A"),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      sales.address2 ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      "Agent:   " + sales.salesAgent.toString(),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      sales.address3 ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      sales.address4 ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: double.infinity,
-              child: DataTable(
-                horizontalMargin: 10,
-                columnSpacing: 10,
-                headingRowHeight: 30,
-                headingTextStyle:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                headingRowColor:
-                    MaterialStateProperty.resolveWith((states) => Colors.black),
-                dataTextStyle: TextStyle(fontSize: 11, color: Colors.black),
-                columns: _createColumns(),
-                rows: _createRows(),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Column(
-              children: [
-                Text("Authorised Signature:"),
-                Image.asset(
-                  'assets/images/agiliti_logo.png',
-                  height: 100,
-                ),
-              ],
+      body: _isLoading
+          ? Center(
+              child:
+                  CircularProgressIndicator(), // Show CircularProgressIndicator while loading
             )
-          ],
-        )),
-      ),
+          : Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SingleChildScrollView(
+                  child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset(
+                            'assets/images/agiliti_logo.png',
+                            height: 60,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "Sales",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                sales.docNo.toString(),
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black38),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Approved",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.green),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Presoft (M) Sdn Bhd",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "98, Lorong 3/4, Jalan Kinara",
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black38),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "37100 Bandar Puteri Puchong",
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black38),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Selangor",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                          Text(
+                            "",
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Malaysia",
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black38),
+                          ),
+                          Text(
+                            "TOTAL",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: GlobalColors.mainColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "",
+                          ),
+                          Text(
+                            "RM " +
+                                (sales.finalTotal?.toStringAsFixed(2) ??
+                                    "0.00"),
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "BILL TO",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black38,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "",
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            sales.customerCode.toString() +
+                                " " +
+                                sales.customerName.toString(),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "",
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            sales.address1 ?? "",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                          Text(
+                            "Date:   " +
+                                (sales.docDate != null &&
+                                        sales.docDate.toString().length >= 10
+                                    ? sales.docDate.toString().substring(0, 10)
+                                    : "N/A"),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            sales.address2 ?? "",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                          Text(
+                            "Agent:   " + sales.salesAgent.toString(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            sales.address3 ?? "",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            sales.address4 ?? "",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: DataTable(
+                      horizontalMargin: 10,
+                      columnSpacing: 10,
+                      headingRowHeight: 30,
+                      headingTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                      headingRowColor: MaterialStateProperty.resolveWith(
+                          (states) => Colors.black),
+                      dataTextStyle:
+                          TextStyle(fontSize: 11, color: Colors.black),
+                      columns: _createColumns(),
+                      rows: _createRows(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      Text("Authorised Signature:"),
+                      Image.asset(
+                        'assets/images/agiliti_logo.png',
+                        height: 100,
+                      ),
+                    ],
+                  )
+                ],
+              )),
+            ),
     );
   }
 
@@ -402,34 +416,24 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
   }
 
   Future<void> getSalesDetail() async {
+    await Future.delayed(Duration(seconds: 2));
     if (docid != null) {
       final response =
           await BaseClient().get('/Sales/GetSales?docid=' + docid.toString());
 
       Sales _sales = Sales.fromJson2(jsonDecode(response));
 
-      setState(() {
-        sales = _sales;
-      });
+      if (mounted) {
+        setState(() {
+          sales = _sales;
+          _isLoading = false;
+        });
+      }
     }
   }
 
   List<DataColumn> _createColumns() {
     return [
-      // DataColumn(
-      //   label: Text('#'),
-      //   onSort: (columnIndex, _) {
-      //     setState(() {
-      //       _currentSortColumn = columnIndex;
-      //       // if (_isSortAsc) {
-      //       //   sales.items.sort((a, b) => b.stockID.compareTo(a.stockID));
-      //       // } else {
-      //       //   _salesItems.sort((a, b) => a['#'].compareTo(b['#']));
-      //       // }
-      //       _isSortAsc = !_isSortAsc;
-      //     });
-      //   },
-      // ),
       DataColumn(label: Text('ItemCode')),
       DataColumn(
           label: Text(

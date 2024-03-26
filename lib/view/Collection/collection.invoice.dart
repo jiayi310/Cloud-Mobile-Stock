@@ -69,7 +69,7 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.collectionItems[i].sales!.docNo.toString(),
+                              widget.collectionItems[i].salesDocNo.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,

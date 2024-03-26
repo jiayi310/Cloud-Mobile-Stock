@@ -12,6 +12,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../../api/base.client.dart';
 import '../../../utils/global.colors.dart';
 import '../../Sales/OrderHistory/history.listing.dart';
+import '../collection.add.dart';
+import '../collection.view.dart';
 
 class CollectionListingScreen extends StatefulWidget {
   CollectionListingScreen({Key? key, required this.docid}) : super(key: key);
@@ -34,300 +36,359 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: GlobalColors.mainColor,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          collection.docNo.toString(),
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          PopupMenuButton<MenuItem>(
-              onSelected: (value) async {
-                if (value == MenuItem.item1) {
-                  //Clicked
-                } else if (value == MenuItem.item2) {
-                  final storage = new FlutterSecureStorage();
-                  String? _userid = await storage.read(key: "userid");
-                  String? _companyid = await storage.read(key: "companyid");
-                  final userSessionDto = UserSessionDto(
-                      int.parse(_userid!), int.parse(_companyid!));
+    return MaterialApp(
+      routes: {
+        '/collectionHome': (context) => CollectionHomeScreen(),
+      },
+      home: WillPopScope(
+        onWillPop: () async {
+          Navigator.popUntil(context, ModalRoute.withName('/collectionHome'));
 
-                  await getCollectionReport(userSessionDto, collection.docID!);
-                }
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            foregroundColor: Colors.white,
+            backgroundColor: GlobalColors.mainColor,
+            elevation: 0,
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
               },
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                        value: MenuItem.item2, child: Text('Download Receipt'))
-                  ]),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-            child: Column(
-          children: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      'assets/images/agiliti_logo.png',
-                      height: 60,
+            ),
+            title: Text(
+              collection.docNo.toString(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CollectionAdd(
+                        isEdit: true,
+                        collection: collection,
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                  );
+                },
+              ),
+              if (collection!.image != "")
+                IconButton(
+                  icon: Icon(Icons.attach_file),
+                  onPressed: () {
+                    // Show larger image in a dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          child: Container(
+                            width: 300, // Adjust the width as needed
+                            height: 300, // Adjust the height as needed
+                            child: Image.memory(
+                              base64Decode(collection!
+                                  .image!), // Decode the Base64 string to bytes
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              PopupMenuButton<MenuItem>(
+                  onSelected: (value) async {
+                    if (value == MenuItem.item1) {
+                      //Clicked
+                    } else if (value == MenuItem.item2) {
+                      final storage = new FlutterSecureStorage();
+                      String? _userid = await storage.read(key: "userid");
+                      String? _companyid = await storage.read(key: "companyid");
+                      final userSessionDto = UserSessionDto(
+                          int.parse(_userid!), int.parse(_companyid!));
+
+                      await getCollectionReport(
+                          userSessionDto, collection.docID!);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                            value: MenuItem.item2,
+                            child: Text('Download Receipt'))
+                      ]),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+                child: Column(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "AR Payment",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        Image.asset(
+                          'assets/images/agiliti_logo.png',
+                          height: 60,
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          collection.docNo.toString(),
-                          style: TextStyle(fontSize: 16, color: Colors.black38),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Approved",
-                          style: TextStyle(fontSize: 12, color: Colors.green),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "AR Payment",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              collection.docNo.toString(),
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black38),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Approved",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.green),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Presoft (M) Sdn Bhd",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "98, Lorong 3/4, Jalan Kinara",
+                          style: TextStyle(fontSize: 14, color: Colors.black38),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "37100 Bandar Puteri Puchong",
+                          style: TextStyle(fontSize: 14, color: Colors.black38),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Selangor",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black38,
+                          ),
+                        ),
+                        Text(
+                          "",
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Malaysia",
+                          style: TextStyle(fontSize: 14, color: Colors.black38),
+                        ),
+                        Text(
+                          "TOTAL",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: GlobalColors.mainColor),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "",
+                        ),
+                        Text(
+                          collection.paymentTotal.toStringAsFixed(2),
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "CUSTOMER",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "",
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          (collection.customerCode ?? "") +
+                              " " +
+                              (collection.customerName ?? ""),
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Date: " +
+                              (collection.docDate != null &&
+                                      collection.docDate.toString().length >= 10
+                                  ? collection.docDate
+                                      .toString()
+                                      .substring(0, 10)
+                                  : "N/A"),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          collection.customer?.address1?.toString() ?? "",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black38,
+                          ),
+                        ),
+                        Text(
+                          "Agent: " + (collection.salesAgent?.toString() ?? ""),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          collection.customer?.address2?.toString() ?? "",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black38,
+                          ),
+                        ),
+                        Text(""),
+                      ],
+                    ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       collection.customer?.address3?.toString() ?? "",
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //         color: Colors.black38,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       collection.customer?.address4?.toString() ?? "",
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //         color: Colors.black38,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Presoft (M) Sdn Bhd",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "98, Lorong 3/4, Jalan Kinara",
-                      style: TextStyle(fontSize: 14, color: Colors.black38),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "37100 Bandar Puteri Puchong",
-                      style: TextStyle(fontSize: 14, color: Colors.black38),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Selangor",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      "",
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Malaysia",
-                      style: TextStyle(fontSize: 14, color: Colors.black38),
-                    ),
-                    Text(
-                      "TOTAL",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: GlobalColors.mainColor),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "",
-                    ),
-                    Text(
-                      collection.paymentTotal.toStringAsFixed(2),
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "BILL TO",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black38,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "",
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      (collection.customerCode ?? "") +
-                          " " +
-                          (collection.customerName ?? ""),
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "",
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      collection.customer?.address1?.toString() ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      "Date: " +
-                          (collection.docDate != null &&
-                                  collection.docDate.toString().length >= 10
-                              ? collection.docDate.toString().substring(0, 10)
-                              : "N/A"),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      collection.customer?.address2?.toString() ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      "Agent: " + (collection.salesAgent?.toString() ?? ""),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      collection.customer?.address3?.toString() ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      collection.customer?.address4?.toString() ?? "",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ],
+                Container(
+                  width: double.infinity,
+                  child: DataTable(
+                    horizontalMargin: 10,
+                    columnSpacing: 10,
+                    headingRowHeight: 30,
+                    headingTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                    headingRowColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.black),
+                    dataTextStyle: TextStyle(fontSize: 11, color: Colors.black),
+                    columns: _createColumns(),
+                    rows: _createRows(),
+                  ),
                 ),
               ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: double.infinity,
-              child: DataTable(
-                horizontalMargin: 10,
-                columnSpacing: 10,
-                headingRowHeight: 30,
-                headingTextStyle:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                headingRowColor:
-                    MaterialStateProperty.resolveWith((states) => Colors.black),
-                dataTextStyle: TextStyle(fontSize: 11, color: Colors.black),
-                columns: _createColumns(),
-                rows: _createRows(),
-              ),
-            ),
-          ],
-        )),
+            )),
+          ),
+        ),
       ),
     );
   }
@@ -397,7 +458,7 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
     return collection?.collectMappings
             ?.map((collectItem) => DataRow(cells: [
                   // DataCell(Text(salesItem['#'].toString())),
-                  DataCell(Text(collectItem!.sales?.docNo.toString() ?? '')),
+                  DataCell(Text(collectItem?.salesDocNo.toString() ?? '')),
                   DataCell(ConstrainedBox(
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width / 4),
