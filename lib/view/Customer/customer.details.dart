@@ -1,22 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobilestock/models/Customer.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../api/base.client.dart';
 import '../../utils/global.colors.dart';
+import 'customer.add.dart';
 
 class CustomerDetails extends StatefulWidget {
-  const CustomerDetails({Key? key, required this.customer}) : super(key: key);
-  final Customer customer;
+  const CustomerDetails({Key? key, required this.customerid}) : super(key: key);
+  final int customerid;
 
   @override
   State<CustomerDetails> createState() =>
-      _CustomerDetailsState(customer: customer);
+      _CustomerDetailsState(customerid: customerid);
 }
 
 class _CustomerDetailsState extends State<CustomerDetails> {
-  final Customer customer;
-  _CustomerDetailsState({Key? key, required this.customer});
+  final int customerid;
+  _CustomerDetailsState({Key? key, required this.customerid});
+  String companyid = "";
+  final storage = new FlutterSecureStorage();
+  Customer customer = new Customer();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getCustomerData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +49,15 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           Padding(
             padding: EdgeInsets.only(right: 20),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NewCustomer(
+                              isEdit: true,
+                              customer: customer,
+                            ))).then((value) => getCustomerData());
+              },
               child: Icon(
                 Icons.edit,
                 size: 25,
@@ -536,6 +558,19 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           ),
         ),
       );
+
+  Future<void> getCustomerData() async {
+    String response = await BaseClient()
+        .get('/Customer/GetCustomer?customerid=' + customerid.toString());
+
+    if (response != null) {
+      Customer _customer = Customer.fromJson(jsonDecode(response));
+
+      setState(() {
+        customer = _customer;
+      });
+    }
+  }
 }
 
 Widget buildCircle({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilestock/models/Sales.dart';
 import 'package:mobilestock/view/Analysis/analysis.view.dart';
 import 'package:mobilestock/view/ClockIn/clockin.view.dart';
 import 'package:mobilestock/view/Collection/collection.view.dart';
@@ -33,8 +34,14 @@ final List<Menu> menu_list = [
   //     (context) => ClockInHomeScreen()),
   Menu("Quotation", "assets/images/quotation.png", "FFFFFF",
       (context) => QuotationHomeScreen()),
-  Menu("Sales", "assets/images/sales.png", "FFFFFF",
-      (context) => HomeSalesScreen()),
+  Menu(
+      "Sales",
+      "assets/images/sales.png",
+      "FFFFFF",
+      (context) => HomeSalesScreen(
+            isEdit: false,
+            sales: new Sales(),
+          )),
   Menu("Collection", "assets/images/collection.png", "FFFFFF",
       (context) => CollectionHomeScreen()),
   Menu("Analysis", "assets/images/analysis.png", "FFFFFF",
@@ -52,8 +59,14 @@ final List<Menu> warehouse_menu_list = [
       (context) => ClockInHomeScreen()),
   Menu("Picking", "assets/images/picking.png", "FFFFFF",
       (context) => QuotationHomeScreen()),
-  Menu("Shipping", "assets/images/shipping.png", "FFFFFF",
-      (context) => HomeSalesScreen()),
+  Menu(
+      "Shipping",
+      "assets/images/shipping.png",
+      "FFFFFF",
+      (context) => HomeSalesScreen(
+            isEdit: false,
+            sales: new Sales(),
+          )),
   Menu("Stock Take", "assets/images/stocktake.png", "FFFFFF",
       (context) => CollectionHomeScreen()),
   Menu("Transfer", "assets/images/transfer.png", "FFFFFF",

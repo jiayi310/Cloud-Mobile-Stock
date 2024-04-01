@@ -50,8 +50,15 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
         visible: shouldShowFB,
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NewCustomer()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewCustomer(
+                          isEdit: false,
+                          customer: Customer(),
+                        ))).then((value) {
+              if (value == "Done") getCustomerData();
+            });
           },
           child: Icon(Icons.add),
           backgroundColor: Colors.pinkAccent,
@@ -138,7 +145,7 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
                                     titlePadding: EdgeInsets.only(top: 20),
                                     title: "Warning",
                                     onConfirm: () {
-                                      deleteCustomer();
+                                      deleteCustomer(customerlist[i]);
                                     },
                                     content: Container(
                                       padding: EdgeInsets.all(20.0),
@@ -167,7 +174,8 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => CustomerDetails(
-                                            customer: customerlist[i]),
+                                            customerid:
+                                                customerlist[i].customerID!),
                                       ));
                                 }
                               },
@@ -382,9 +390,8 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
       List<Customer> _customerlist = userFromJson(response);
 
       setState(() {
-        // customerlist = _customerlist;
         customerlist_search = _customerlist;
-        if (customerlist.length == 0) customerlist = _customerlist;
+        customerlist = _customerlist;
       });
     }
     return customerlist;
@@ -413,7 +420,22 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
     });
   }
 
-  Future<List<Customer>> deleteCustomer() async {
-    return customerlist;
+  Future<void> deleteCustomer(Customer customer) async {
+    String response = await BaseClient().post(
+        '/Customer/DeleteCustomer',
+        jsonEncode({
+          "customerID": customer.customerID.toString(),
+          "customerCode": customer.customerCode.toString(),
+          "name": customer.name.toString(),
+          "companyID": companyid
+        }));
+
+    if (response != null) {
+      await getCustomerData();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Customer deleted successfully')),
+      );
+    } else {}
   }
 }

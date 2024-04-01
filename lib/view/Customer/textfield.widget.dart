@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 
 class TextFieldWidget extends StatefulWidget {
@@ -6,14 +7,16 @@ class TextFieldWidget extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final TextEditingController controller;
   final Icon icon;
+  List<TextInputFormatter> inputFormatters;
 
-  const TextFieldWidget(
-      {Key? key,
-      required this.label,
-      required this.icon,
-      required this.controller,
-      required this.onChanged})
-      : super(key: key);
+  TextFieldWidget({
+    Key? key,
+    required this.label,
+    required this.icon,
+    required this.controller,
+    required this.onChanged,
+    this.inputFormatters = const [],
+  }) : super(key: key);
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -40,6 +43,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         children: [
           TextFormField(
             onChanged: (val) {},
+            inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
                 labelText: widget.label,
                 enabledBorder: OutlineInputBorder(
@@ -67,12 +71,24 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
 
               if (widget.label == "Email") {
                 if (value!.isNotEmpty) {
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.])+[\w]{2,4}')
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                       .hasMatch(value!))
                     return "Enter correct email: example@gmail.com";
                   else
                     return null;
                 }
+              }
+              if (widget.label == "Phone 1" ||
+                  widget.label == "Phone 2" ||
+                  widget.label == "Fax 1" ||
+                  widget.label == "Fax 2") {
+                if (value!.isNotEmpty) {
+                  if (!RegExp(r'^[0-9\-+]*$').hasMatch(value))
+                    return "Enter a valid phone number";
+                  else
+                    return null;
+                }
+                return null;
               }
             },
           )

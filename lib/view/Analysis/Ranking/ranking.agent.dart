@@ -126,7 +126,11 @@ class _Ranking_AgentState extends State<Ranking_Agent> {
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/customer.png"),
+                      backgroundImage:
+                          // list[index].profileImage != null
+                          //     ? MemoryImage(base64Decode(list[index].profileImage!)):
+                          AssetImage("assets/images/customer.png")
+                              as ImageProvider,
                     ),
                     SizedBox(
                       width: 10,

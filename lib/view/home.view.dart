@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -33,7 +32,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 3, vsync: this);
+    TabController _tabController = TabController(length: 2, vsync: this);
     containerheight = ((MediaQuery.of(context).size.width - 90) / 2) + 20;
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -69,374 +68,285 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
           ],
         ),
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              children: [
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Welcome back,',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  username.toString(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  DateFormat('dd MMM, yyyy')
-                                      .format(DateTime.now()),
-                                ),
-                              ],
-                            ),
-                            //Logout
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                                updateMobileRemember();
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(12),
-                                child: Icon(
-                                  Icons.logout,
-                                  color: GlobalColors.mainColor,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Welcome back,',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 20),
+                              SizedBox(height: 8),
+                              Text(
+                                username.toString(),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                DateFormat('dd MMM, yyyy')
+                                    .format(DateTime.now()),
+                              ),
+                            ],
+                          ),
+                          //Logout
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              updateMobileRemember();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              child: Icon(
+                                Icons.logout,
+                                color: GlobalColors.mainColor,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20),
 
-                        //searchbar
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    blurRadius: 15,
-                                    spreadRadius: 2,
-                                    offset: Offset(5, 5))
-                              ]),
-                          padding: EdgeInsets.only(top: 5),
-                          child: TypeAheadField<Menu>(
-                              hideSuggestionsOnKeyboardHide: true,
-                              textFieldConfiguration: TextFieldConfiguration(
-                                  decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.search),
-                                      border: InputBorder.none,
-                                      fillColor: Colors.white,
-                                      hintText: 'Search')),
-                              suggestionsCallback: getMenuSuggestions,
-                              itemBuilder: (context, Menu suggestion) {
-                                final menu = suggestion;
+                      //searchbar
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  blurRadius: 15,
+                                  spreadRadius: 2,
+                                  offset: Offset(5, 5))
+                            ]),
+                        padding: EdgeInsets.only(top: 5),
+                        child: TypeAheadField<Menu>(
+                            hideSuggestionsOnKeyboardHide: true,
+                            textFieldConfiguration: TextFieldConfiguration(
+                                decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.search),
+                                    border: InputBorder.none,
+                                    fillColor: Colors.white,
+                                    hintText: 'Search')),
+                            suggestionsCallback: getMenuSuggestions,
+                            itemBuilder: (context, Menu suggestion) {
+                              final menu = suggestion;
 
-                                return ListTile(
-                                  leading: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                      menu.img.toString(),
-                                      height: 70,
-                                      width: 70,
-                                    ),
+                              return ListTile(
+                                leading: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    menu.img.toString(),
+                                    height: 70,
+                                    width: 70,
                                   ),
-                                  title: Text(menu.title.toString()),
-                                );
-                              },
-                              onSuggestionSelected: (Menu suggestions) {
-                                final _menu = suggestions;
+                                ),
+                                title: Text(menu.title.toString()),
+                              );
+                            },
+                            onSuggestionSelected: (Menu suggestions) {
+                              final _menu = suggestions;
 
-                                if (_menu.title != "ClockIn")
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: _menu.nav!));
-                                else
-                                  Fluttertoast.showToast(
-                                    msg: "Coming Soon.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 2,
-                                  );
-                              }),
-                        ),
-                      ],
-                    ),
+                              if (_menu.title != "ClockIn")
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: _menu.nav!));
+                              else
+                                Fluttertoast.showToast(
+                                  msg: "Coming Soon.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 2,
+                                );
+                            }),
+                      ),
+                    ],
                   ),
                 ),
-                Column(
+              ),
+              Expanded(
+                child: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TabBar(
-                          controller: _tabController,
-                          labelColor: Colors.black,
-                          isScrollable: true,
-                          unselectedLabelColor: Colors.grey,
-                          indicator: CircleTabIndicator(
-                              color: GlobalColors.mainColor, radius: 4),
-                          tabs: [
-                            Tab(
-                              text: "Sales Ordering",
-                            ),
-                            Tab(
-                              text: "Warehouse Management",
-                            ),
-                            Tab(text: "Others")
-                          ]),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      width: double.maxFinite,
-                      height:
-                          MediaQuery.of(context).size.height + containerheight,
+                    TabBar(
+                        controller: _tabController,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        indicator: CircleTabIndicator(
+                            color: GlobalColors.mainColor, radius: 4),
+                        tabs: [
+                          Tab(
+                            text: "Sales Ordering",
+                          ),
+                          Tab(
+                            text: "Warehouse Management",
+                          ),
+                        ]),
+                    Expanded(
                       child: TabBarView(
-                          controller: _tabController,
-                          children: <Widget>[
-                            _tabController1(),
-                            _tabController2(),
-                            Container(
-                              width: double.maxFinite,
-                              height: 300,
-                            ),
-                          ]),
+                        controller: _tabController,
+                        children: [_tabController1(), _tabController2()],
+                      ),
                     ),
+
+                    // Container(
+                    //   padding: EdgeInsets.all(10),
+                    //   width: double.maxFinite,
+                    //   height:
+                    //       MediaQuery.of(context).size.height + containerheight,
+                    //   child: TabBarView(
+                    //       controller: _tabController,
+                    //       children: <Widget>[
+                    //         _tabController1(),
+                    //         _tabController2(),
+                    //         Container(
+                    //           width: double.maxFinite,
+                    //           height: 300,
+                    //         ),
+                    //       ]),
+                    // ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ));
   }
 
   _tabController1() {
-    // return Column(
-    //   children: [
-    //     //JobList
-    //     // Align(
-    //     //   alignment: Alignment.centerLeft,
-    //     //   child: Padding(
-    //     //     padding: const EdgeInsets.only(left: 10),
-    //     //     child: Text(
-    //     //       "Today task",
-    //     //       style: TextStyle(
-    //     //           color: Colors.black,
-    //     //           fontWeight: FontWeight.bold,
-    //     //           fontSize: 18),
-    //     //     ),
-    //     //   ),
-    //     // ),
-    //     // SizedBox(
-    //     //   height: 10,
-    //     // ),
-    //     // InkWell(
-    //     //   onTap: () {},
-    //     //   child: Container(
-    //     //     height: 110,
-    //     //     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-    //     //     padding: EdgeInsets.all(5),
-    //     //     decoration: BoxDecoration(
-    //     //       color: CupertinoColors.activeBlue,
-    //     //       borderRadius: BorderRadius.circular(20),
-    //     //     ),
-    //     //     child: Padding(
-    //     //       padding: const EdgeInsets.only(left: 10.0, right: 10),
-    //     //       child: Column(
-    //     //         mainAxisAlignment: MainAxisAlignment.center,
-    //     //         children: [
-    //     //           Row(
-    //     //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     //             children: [
-    //     //               Flexible(
-    //     //                 flex: 1,
-    //     //                 child: Text(
-    //     //                   "Job Task 1",
-    //     //                   style: TextStyle(
-    //     //                     overflow: TextOverflow.ellipsis,
-    //     //                     fontWeight: FontWeight.bold,
-    //     //                     fontSize: 16,
-    //     //                     color: Colors.white,
-    //     //                   ),
-    //     //                 ),
-    //     //               ),
-    //     //             ],
-    //     //           ),
-    //     //           SizedBox(height: 10),
-    //     //           Row(
-    //     //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     //             children: [
-    //     //               Flexible(
-    //     //                 flex: 1,
-    //     //                 child: Text(
-    //     //                   "6:00PM - 10:00PM",
-    //     //                   style: TextStyle(
-    //     //                     overflow: TextOverflow.ellipsis,
-    //     //                     fontWeight: FontWeight.bold,
-    //     //                     fontSize: 15,
-    //     //                     color: Colors.white,
-    //     //                   ),
-    //     //                 ),
-    //     //               ),
-    //     //             ],
-    //     //           ),
-    //     //           SizedBox(height: 5),
-    //     //           Row(
-    //     //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     //             children: [
-    //     //               Flexible(
-    //     //                 flex: 1,
-    //     //                 child: Text(
-    //     //                   "Job Description 123........",
-    //     //                   style: TextStyle(
-    //     //                     overflow: TextOverflow.ellipsis,
-    //     //                     fontSize: 15,
-    //     //                     color: Colors.white,
-    //     //                   ),
-    //     //                 ),
-    //     //               ),
-    //     //             ],
-    //     //           ),
-    //     //         ],
-    //     //       ),
-    //     //     ),
-    //     //   ),
-    //     // ),
-    //     // SizedBox(
-    //     //   height: 10,
-    //     // ),
-    //     if (deviceType == "Phone") PhoneView(),
-    //     if (deviceType == "Tablet") TabletView()
-    //   ],
-    // );
-
-    return GridView.extent(
-      maxCrossAxisExtent: 200,
-      crossAxisSpacing: 11,
-      mainAxisSpacing: 11,
-      childAspectRatio: (1 / 1),
-      controller: new ScrollController(keepScrollOffset: false),
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      children: [
-        for (int i = 0; i < menu_list.length; i++)
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: menu_list[i].nav!));
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
-              decoration: BoxDecoration(
-                  color: HexColor(menu_list[i].color!),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(5.0, 5.0),
-                        blurRadius: 10.0,
-                        spreadRadius: 2.0),
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0)
-                  ]),
-              child: Column(
-                children: [
-                  Image.asset(menu_list[i].img!),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    menu_list[i].title!,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                ],
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GridView.extent(
+        maxCrossAxisExtent: 300,
+        crossAxisSpacing: 11,
+        mainAxisSpacing: 11,
+        childAspectRatio: (1 / 1),
+        controller: new ScrollController(keepScrollOffset: false),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        children: [
+          for (int i = 0; i < menu_list.length; i++)
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: menu_list[i].nav!));
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                decoration: BoxDecoration(
+                    color: HexColor(menu_list[i].color!),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(5.0, 5.0),
+                          blurRadius: 10.0,
+                          spreadRadius: 2.0),
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0)
+                    ]),
+                child: Column(
+                  children: [
+                    Image.asset(menu_list[i].img!),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      menu_list[i].title!,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
   _tabController2() {
-    return GridView.extent(
-      maxCrossAxisExtent: 200,
-      crossAxisSpacing: 11,
-      mainAxisSpacing: 11,
-      childAspectRatio: (1 / 1),
-      controller: new ScrollController(keepScrollOffset: false),
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      children: [
-        for (int i = 0; i < warehouse_menu_list.length; i++)
-          InkWell(
-            onTap: () {
-              Fluttertoast.showToast(
-                msg: "Coming Soon.",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 2,
-              );
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
-              decoration: BoxDecoration(
-                  color: HexColor(warehouse_menu_list[i].color!),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(5.0, 5.0),
-                        blurRadius: 10.0,
-                        spreadRadius: 2.0),
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0)
-                  ]),
-              child: Column(
-                children: [
-                  Image.asset(
-                    warehouse_menu_list[i].img!,
-                    width: 110,
-                    height: 110,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    warehouse_menu_list[i].title!,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                ],
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GridView.extent(
+        maxCrossAxisExtent: 300,
+        crossAxisSpacing: 11,
+        mainAxisSpacing: 11,
+        childAspectRatio: (1 / 1),
+        controller: new ScrollController(keepScrollOffset: false),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        children: [
+          for (int i = 0; i < warehouse_menu_list.length; i++)
+            InkWell(
+              onTap: () {
+                Fluttertoast.showToast(
+                  msg: "Coming Soon.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 2,
+                );
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                decoration: BoxDecoration(
+                    color: HexColor(warehouse_menu_list[i].color!),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(5.0, 5.0),
+                          blurRadius: 10.0,
+                          spreadRadius: 2.0),
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0)
+                    ]),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      warehouse_menu_list[i].img!,
+                      width: 110,
+                      height: 110,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      warehouse_menu_list[i].title!,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 

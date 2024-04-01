@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -157,7 +159,10 @@ class CustomCircleAvatar extends StatelessWidget {
                     ],
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage("assets/images/customer.png"),
+                image:
+                    // salesAgent.profileImage != null
+                    //     ? MemoryImage(base64Decode(salesAgent.profileImage!)):
+                    AssetImage("assets/images/customer.png") as ImageProvider,
               )),
         ),
         SizedBox(

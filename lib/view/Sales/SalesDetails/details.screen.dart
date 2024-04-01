@@ -22,9 +22,10 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   List<Map<String, String>> uom = [];
   TextEditingController _controller = TextEditingController();
-  int quantity = 1;
+  double quantity = 1;
   String selectedUOM = "";
   double pricePerUnit = 0.00;
+  num totalBaseUOMBalanceQty = 0;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     getData();
     _controller.text = quantity.toString();
     selectedUOM = widget.stock.baseUOM.toString();
+    getStockBalance(selectedUOM);
   }
 
   @override
@@ -125,43 +127,107 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     ),
                                   ),
                                 const SizedBox(width: defaultPadding),
-                                Text(widget.stock.baseUOM.toString(),
+                                Text(
+                                    (selectedUOM != "null")
+                                        ? selectedUOM
+                                        : widget.stock.baseUOM.toString(),
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 20)),
                               ],
                             ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             if (widget.stock.desc2.toString() != "null")
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: defaultPadding),
-                                child: Text(
-                                  widget.stock.desc2.toString(),
-                                ),
+                              Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Description 2',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      widget.stock.desc2.toString(),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
                               ),
+                            Text(
+                              'Specification',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             if (widget.stock != null &&
                                 widget.stock.stockGroup != null &&
                                 widget.stock.stockGroup!.description != null)
-                              Text(
-                                "Group: " +
-                                    widget.stock.stockGroup!.description!
-                                        .toString(),
+                              Column(
+                                children: [
+                                  Text(
+                                    "Group: " +
+                                        widget.stock.stockGroup!.description!
+                                            .toString(),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
                             if (widget.stock != null &&
                                 widget.stock.stockType != null &&
                                 widget.stock.stockType!.description != null)
-                              Text(
-                                "Type: " +
-                                    widget.stock.stockType!.description!
-                                        .toString(),
+                              Column(
+                                children: [
+                                  Text(
+                                    "Type: " +
+                                        widget.stock.stockType!.description!
+                                            .toString(),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
                             if (widget.stock != null &&
                                 widget.stock.stockCategory != null &&
                                 widget.stock.stockCategory!.description != null)
-                              Text(
-                                "Category: " +
-                                    widget.stock.stockCategory!.description!
-                                        .toString(),
+                              Column(
+                                children: [
+                                  Text(
+                                    "Category: " +
+                                        widget.stock.stockCategory!.description!
+                                            .toString(),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Total Base UOM Stock Balance',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              totalBaseUOMBalanceQty.toString(),
+                            ),
                             const SizedBox(height: defaultPadding / 2),
                           ],
                         ),
@@ -531,7 +597,47 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 80),
+                                      SizedBox(height: 10),
+                                      StatefulBuilder(
+                                        builder: (BuildContext context,
+                                            StateSetter setState_) {
+                                          return FutureBuilder(
+                                            future:
+                                                getStockBalance(selectedUOM),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                // Return a loading indicator while waiting for the future to complete
+                                                return CircularProgressIndicator(); // Or any other loading widget
+                                              } else if (snapshot.hasError) {
+                                                // Handle error
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else {
+                                                // If the future completes successfully, use the retrieved balance
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Stock Balance:',
+                                                      style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                    Text(totalBaseUOMBalanceQty
+                                                        .toString()),
+                                                  ],
+                                                );
+                                              }
+                                            },
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(height: 60),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -564,8 +670,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 await decodeImage(
                                                     widget.stock.image);
                                             salesProvider.sales.addItem(
-                                              stockID: widget.stock.stockID
-                                                  .toString(),
+                                              stockID: widget.stock.stockID!,
                                               stockCode: widget.stock.stockCode
                                                   .toString(),
                                               description: widget
@@ -575,7 +680,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               quantity: quantity,
                                               discount: 0,
                                               taxrate: 0,
-                                              total: 0,
+                                              total:
+                                                  widget.stock.baseUOMPrice1! *
+                                                      quantity,
                                               taxAmt: 0,
                                               taxableAmount: 0,
                                               price:
@@ -670,6 +777,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
             uom.add({"uom": item.uom!, "price": item.price!.toString()});
           }
         }
+      });
+    }
+  }
+
+  Future<void> getStockBalance(String uom) async {
+    if (widget.stockid != null) {
+      final response = await BaseClient().get(
+          '/Stock/GetStockBalance?stockId=' +
+              widget.stockid.toString() +
+              '&stockUom=' +
+              uom);
+
+      List<Map<String, dynamic>> stockData =
+          jsonDecode(response).cast<Map<String, dynamic>>();
+      num totalQty = 0;
+      for (var stock in stockData) {
+        totalQty += (stock['qty'] ?? 0) as num;
+      }
+
+      setState(() {
+        totalBaseUOMBalanceQty = totalQty;
       });
     }
   }

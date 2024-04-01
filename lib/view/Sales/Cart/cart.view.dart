@@ -19,7 +19,7 @@ class CartList extends StatefulWidget {
 
 class _CartListState extends State<CartList> {
   bool deleteButton = false;
-  List<SalesItem> salesItems = [];
+  List<SalesDetails> salesItems = [];
   double totalPrice = 0;
   int totalQuantity = 0;
   Set<int> selectedIndexes = {}; // Keep track of selected item indexes
@@ -30,7 +30,7 @@ class _CartListState extends State<CartList> {
 
     // Access context and salesProvider here
     final salesProvider = SalesProvider.of(context);
-    salesItems = salesProvider?.sales.items ?? [];
+    salesItems = salesProvider?.sales.salesDetails ?? [];
 
     // Initialize selectedIndexes with all item indexes
     selectedIndexes = Set<int>.from(Iterable<int>.generate(salesItems.length));
@@ -44,7 +44,7 @@ class _CartListState extends State<CartList> {
 
     for (var i in selectedIndexes) {
       totalQuantity++;
-      totalPrice += salesItems[i].unitprice * salesItems[i].quantity;
+      totalPrice += (salesItems[i].unitPrice ?? 0) * (salesItems[i].qty ?? 0);
     }
   }
 
@@ -261,7 +261,8 @@ class _CartListState extends State<CartList> {
                                         });
                                       },
                                     ),
-                                    if (salesItems[i].image!.length > 0)
+                                    if (salesItems[i].image != null &&
+                                        salesItems[i].image!.length > 0)
                                       Container(
                                         height: 70,
                                         width: 70,
@@ -276,7 +277,8 @@ class _CartListState extends State<CartList> {
                                             salesItems[i].image ??
                                                 Uint8List(0)),
                                       ),
-                                    if (salesItems[i].image!.length <= 0)
+                                    if (salesItems[i].image != null &&
+                                        salesItems[i].image!.length <= 0)
                                       Container(
                                         height: 70,
                                         width: 70,
@@ -337,7 +339,7 @@ class _CartListState extends State<CartList> {
                                             Text(
                                               "RM " +
                                                   salesItems[i]
-                                                      .unitprice
+                                                      .unitPrice
                                                       .toString(),
                                               style: TextStyle(
                                                 overflow: TextOverflow.ellipsis,
@@ -380,8 +382,7 @@ class _CartListState extends State<CartList> {
                                                       final salesProvider =
                                                           SalesProvider.of(
                                                               context);
-                                                      if (salesItems[i]
-                                                              .quantity ==
+                                                      if (salesItems[i].qty ==
                                                           1) {
                                                         // Prompt confirmation dialog before decrementing or deleting
                                                         _confirmDecrementOrDelete(
@@ -392,10 +393,11 @@ class _CartListState extends State<CartList> {
                                                           salesProvider.sales
                                                               .updateItemQuantity(
                                                             salesItems[i]
-                                                                .stockCode,
-                                                            salesItems[i]
-                                                                    .quantity -
-                                                                1,
+                                                                .stockCode!,
+                                                            (salesItems[i]
+                                                                        .qty ??
+                                                                    0.0) -
+                                                                1.0,
                                                           );
                                                         }
                                                       }
@@ -404,9 +406,7 @@ class _CartListState extends State<CartList> {
                                                   },
                                                 ),
                                                 Text(
-                                                  salesItems[i]
-                                                      .quantity
-                                                      .toString(),
+                                                  salesItems[i].qty.toString(),
                                                   style: TextStyle(
                                                       color: GlobalColors
                                                           .mainColor),
@@ -426,11 +426,17 @@ class _CartListState extends State<CartList> {
                                                         salesProvider.sales
                                                             .updateItemQuantity(
                                                                 salesItems[i]
-                                                                    .stockCode,
+                                                                    .stockCode!,
                                                                 salesItems[i]
-                                                                    .quantity++);
+                                                                        .qty =
+                                                                    (salesItems[i].qty ??
+                                                                            0) +
+                                                                        1);
                                                       }
-                                                      salesItems[i].quantity++;
+                                                      salesItems[i].qty =
+                                                          (salesItems[i].qty ??
+                                                                  0) +
+                                                              1;
                                                       recalculateTotal();
                                                     });
                                                   },

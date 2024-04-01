@@ -17,7 +17,7 @@ class ItemCheckout extends StatefulWidget {
 }
 
 class _ItemCheckoutState extends State<ItemCheckout> {
-  List<SalesItem> salesItems = [];
+  List<SalesDetails> salesItems = [];
 
   @override
   void didChangeDependencies() {
@@ -25,7 +25,7 @@ class _ItemCheckoutState extends State<ItemCheckout> {
 
     // Access context and salesProvider here
     final salesProvider = SalesProvider.of(context);
-    salesItems = salesProvider?.sales.items ?? [];
+    salesItems = salesProvider?.sales.salesDetails ?? [];
   }
 
   @override
@@ -113,7 +113,8 @@ class _ItemCheckoutState extends State<ItemCheckout> {
                     children: [
                       Text(
                         "RM " +
-                            (salesItems[i].unitprice! * salesItems[i].quantity)
+                            (salesItems[i].unitPrice! *
+                                    (salesItems[i].qty ?? 0))
                                 .toStringAsFixed(2),
                         style: TextStyle(
                           overflow: TextOverflow.ellipsis,

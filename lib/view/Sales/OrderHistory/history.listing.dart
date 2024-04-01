@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../api/base.client.dart';
 import '../../../models/Sales.dart';
 import '../../../utils/global.colors.dart';
+import '../home.sales.dart';
 import 'listingsales.details.dart';
 
 class HistoryListingScreen extends StatefulWidget {
@@ -66,6 +67,20 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeSalesScreen(
+                    isEdit: true,
+                    sales: sales,
+                  ),
+                ),
+              );
+            },
+          ),
           PopupMenuButton<MenuItem>(
               onSelected: (value) async {
                 if (value == MenuItem.item1) {

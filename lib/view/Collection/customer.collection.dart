@@ -21,27 +21,12 @@ class _CusCollection extends State<CusCollection> {
     final collectProvider = CollectionProvider.of(context);
     if (collectProvider != null &&
         collectProvider.collection.customerID != null) {
-      customer = new Customer(
-          collectProvider.collection.customerID,
-          collectProvider.collection.customerCode,
-          collectProvider.collection.customerName,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          new SalesAgent(
-              salesAgent: collectProvider.collection.salesAgent.toString()));
+      customer = new Customer();
+      customer!.customerID = collectProvider.collection.customerID!;
+      customer!.customerCode = collectProvider.collection.customerCode!;
+      customer!.name = collectProvider.collection.customerName!;
+      customer!.salesAgent = new SalesAgent(
+          salesAgent: collectProvider.collection.salesAgent.toString());
     }
 
     return InkWell(

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-const String baseUrl = "http://192.168.0.108:5210/api";
+const String baseUrl = "http://192.168.0.100:5210/api";
 
 class BaseClient {
   var client = http.Client();
@@ -15,7 +15,7 @@ class BaseClient {
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      return 0;
+      return null;
     }
   }
 

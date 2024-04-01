@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/Sales.dart';
 
 class SalesProviderData extends InheritedWidget {
-  final Sales sales;
+  Sales sales;
 
   SalesProviderData({
     required this.sales,
@@ -22,11 +22,15 @@ class SalesProviderData extends InheritedWidget {
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     return true; // Always notify listeners when there's a change
   }
+
+  void setSales(Sales newSales) {
+    sales = newSales;
+  }
 }
 
 class SalesProvider extends StatefulWidget {
   final Widget child;
-  final Sales sales;
+  Sales sales;
 
   SalesProvider({
     required this.sales,

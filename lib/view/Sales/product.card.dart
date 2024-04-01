@@ -6,7 +6,7 @@ import 'SalesDetails/add.cartbutton.dart';
 import 'SalesProvider.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard({
+  ProductCard({
     Key? key,
     required this.image,
     required this.title,
@@ -19,7 +19,8 @@ class ProductCard extends StatefulWidget {
     required this.sales,
   }) : super(key: key);
 
-  final String title, stockcode, uom, stockid;
+  final String title, stockcode, uom;
+  int stockid;
   final Uint8List image;
   final VoidCallback press;
   final double price;
@@ -85,7 +86,7 @@ class _ProductCardState extends State<ProductCard> {
                               quantity: 1,
                               discount: 0,
                               taxrate: 0,
-                              total: 0,
+                              total: widget.price,
                               taxAmt: 0,
                               taxableAmount: 0,
                               price: widget.price,

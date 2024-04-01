@@ -57,7 +57,7 @@ class _AddStockState extends State<AddStock> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               _image != null
@@ -95,6 +95,20 @@ class _AddStockState extends State<AddStock> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   labelText: 'Description',
+                  labelStyle: TextStyle(color: GlobalColors.mainColor),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                thickness: 2,
+              ),
+              TextField(
+                style: TextStyle(fontSize: 17),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  labelText: 'Description 2',
                   labelStyle: TextStyle(color: GlobalColors.mainColor),
                 ),
               ),
@@ -170,6 +184,72 @@ class _AddStockState extends State<AddStock> {
                   ),
                 ],
               ),
+              Row(
+                children: [
+                  Text(
+                    "Item Category",
+                    style:
+                        TextStyle(fontSize: 17, color: GlobalColors.mainColor),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: selectedType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedType = newValue!;
+                        });
+                      },
+                      isExpanded: true,
+                      items: itemTypes
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Tax Type",
+                    style:
+                        TextStyle(fontSize: 17, color: GlobalColors.mainColor),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: selectedType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedType = newValue!;
+                        });
+                      },
+                      isExpanded: true,
+                      items: itemTypes
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
               Divider(
                 thickness: 2,
               ),
@@ -205,59 +285,59 @@ class _AddStockState extends State<AddStock> {
               Divider(
                 thickness: 2,
               ),
-              Row(
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Icon(
-                      Icons.money,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    "Add Price",
-                    style: const TextStyle(fontSize: 17, color: Colors.black54),
-                  ),
-                  const Spacer(),
-                  Icon(
-                    CupertinoIcons.chevron_forward,
-                    color: Colors.black54,
-                  ),
-                ],
-              ),
-              Divider(
-                thickness: 2,
-              ),
-              Row(
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Icon(
-                      CupertinoIcons.cube_box_fill,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    "Inventory",
-                    style: const TextStyle(fontSize: 17, color: Colors.black54),
-                  ),
-                  const Spacer(),
-                  Icon(
-                    CupertinoIcons.chevron_forward,
-                    color: Colors.black54,
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Container(
+              //       height: 50,
+              //       width: 50,
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(15),
+              //       ),
+              //       child: Icon(
+              //         Icons.money,
+              //         color: Colors.black54,
+              //       ),
+              //     ),
+              //     const SizedBox(width: 20),
+              //     Text(
+              //       "Add Price",
+              //       style: const TextStyle(fontSize: 17, color: Colors.black54),
+              //     ),
+              //     const Spacer(),
+              //     Icon(
+              //       CupertinoIcons.chevron_forward,
+              //       color: Colors.black54,
+              //     ),
+              //   ],
+              // ),
+              // Divider(
+              //   thickness: 2,
+              // ),
+              // Row(
+              //   children: [
+              //     Container(
+              //       height: 50,
+              //       width: 50,
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(15),
+              //       ),
+              //       child: Icon(
+              //         CupertinoIcons.cube_box_fill,
+              //         color: Colors.black54,
+              //       ),
+              //     ),
+              //     const SizedBox(width: 20),
+              //     Text(
+              //       "Inventory",
+              //       style: const TextStyle(fontSize: 17, color: Colors.black54),
+              //     ),
+              //     const Spacer(),
+              //     Icon(
+              //       CupertinoIcons.chevron_forward,
+              //       color: Colors.black54,
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),

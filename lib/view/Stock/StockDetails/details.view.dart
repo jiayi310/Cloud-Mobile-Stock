@@ -155,28 +155,25 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
             ),
             Container(
               color: Colors.green.withOpacity(0.1),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TabBar(
-                  controller: _tabController,
-                  labelColor: Colors.green,
-                  unselectedLabelColor: Colors.grey,
-                  indicator: CircleTabIndicator(color: Colors.green, radius: 4),
-                  tabs: [
-                    Tab(
-                      text: "General",
-                    ),
-                    Tab(
-                      text: "Stock",
-                    ),
-                    // Tab(
-                    //   text: "Batch",
-                    // ),
-                    // Tab(
-                    //   text: "History Price",
-                    // )
-                  ],
-                ),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: Colors.green,
+                unselectedLabelColor: Colors.grey,
+                indicator: CircleTabIndicator(color: Colors.green, radius: 4),
+                tabs: [
+                  Tab(
+                    text: "General",
+                  ),
+                  Tab(
+                    text: "Stock",
+                  ),
+                  // Tab(
+                  //   text: "Batch",
+                  // ),
+                  // Tab(
+                  //   text: "History Price",
+                  // )
+                ],
               ),
             ),
             Padding(
@@ -203,7 +200,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                               "Price",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 18,
                                 color: Colors.green,
                               ),
                             ),
@@ -213,7 +210,8 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                             Table(
                               columnWidths: {
                                 0: FlexColumnWidth(1),
-                                1: FlexColumnWidth(1)
+                                1: FlexColumnWidth(0.2),
+                                2: FlexColumnWidth(1)
                               },
                               children: [
                                 TableRow(
@@ -224,6 +222,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                             ?.firstWhere((uomDto) =>
                                                 uomDto.uom == uomSelected)
                                             ?.price),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
                                     _buildPriceCell(
                                         "Price 2",
                                         productDetails.stockUOMDtoList
@@ -240,6 +241,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                             ?.firstWhere((uomDto) =>
                                                 uomDto.uom == uomSelected)
                                             ?.price3),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
                                     _buildPriceCell(
                                         "Price 4",
                                         productDetails.stockUOMDtoList
@@ -256,6 +260,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                             ?.firstWhere((uomDto) =>
                                                 uomDto.uom == uomSelected)
                                             ?.price5),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
                                     _buildPriceCell(
                                         "Price 6",
                                         productDetails.stockUOMDtoList
@@ -272,6 +279,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                             ?.firstWhere((uomDto) =>
                                                 uomDto.uom == uomSelected)
                                             ?.minSalePrice),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
                                     _buildPriceCell(
                                         "Max Price",
                                         productDetails.stockUOMDtoList
@@ -288,6 +298,9 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                             ?.firstWhere((uomDto) =>
                                                 uomDto.uom == uomSelected)
                                             ?.minQty),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
                                     _buildPriceCell(
                                         "Max Qty",
                                         productDetails.stockUOMDtoList
@@ -304,7 +317,15 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                             ?.firstWhere((uomDto) =>
                                                 uomDto.uom == uomSelected)
                                             ?.cost),
-                                    SizedBox(), // Empty cell to maintain alignment with other rows
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    _buildPriceCell(
+                                        "Rate",
+                                        productDetails.stockUOMDtoList
+                                            ?.firstWhere((uomDto) =>
+                                                uomDto.uom == uomSelected)
+                                            ?.rate),
                                   ],
                                 ),
                               ],
@@ -317,7 +338,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                               "Info",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 18,
                                 color: Colors.green,
                               ),
                             ),
@@ -325,7 +346,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                               height: 10,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
@@ -355,7 +376,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                               height: 20,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   flex: 1,
@@ -453,7 +474,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                 Expanded(
                                   flex: 1,
                                   child: Text(
-                                    "Rate",
+                                    "Barcode",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
@@ -472,11 +493,19 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                                         (uomDto) => uomDto.uom == uom,
                                       );
 
-                                      return selectedUOM != null
-                                          ? selectedUOM.rate
-                                                  ?.toStringAsFixed(2) ??
-                                              "0.00"
-                                          : "0.00";
+                                      String barcode = ""; // Default value
+
+                                      if (selectedUOM != null &&
+                                          selectedUOM.stockBarcodeDtoList !=
+                                              null &&
+                                          selectedUOM.stockBarcodeDtoList!
+                                              .isNotEmpty) {
+                                        barcode = selectedUOM
+                                            .stockBarcodeDtoList!.first.barcode
+                                            .toString();
+                                      }
+
+                                      return barcode;
                                     })(),
                                     style: TextStyle(
                                       fontSize: 14,
@@ -613,7 +642,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
                             ),
                             Container(
                               height:
-                                  300, // Set a fixed height or adjust as needed
+                                  400, // Set a fixed height or adjust as needed
                               child: ListView.builder(
                                 itemCount: stockbalancelist.length,
                                 itemBuilder: (context, index) {

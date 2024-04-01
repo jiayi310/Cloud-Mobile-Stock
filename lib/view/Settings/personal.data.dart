@@ -29,6 +29,14 @@ class _PersonalDataState extends State<PersonalData> {
   User user = new User();
   Uint8List? bytes;
 
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,107 +52,77 @@ class _PersonalDataState extends State<PersonalData> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              FutureBuilder(
-                  future: getData(),
-                  builder: (context, snapshort) {
-                    if (snapshort.hasData) {
-                      return Center(
-                        child: Column(
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: _isLoading
+                ? LoadingPage()
+                : Column(
+                    children: [
+                      if (bytes !=
+                          null) // Only display the image if bytes is not null
+                        Stack(
                           children: [
-                            Stack(
-                              children: [
-                                if (user.profileImage == null ||
-                                    user.profileImage == "")
-                                  SizedBox(
-                                    width: 120,
-                                    height: 120,
-                                    child: ClipOval(
-                                      child: Image.asset(
-                                        "assets/images/avatar.png",
-                                      ),
-                                    ),
-                                  ),
-                                if (user.profileImage != null &&
-                                    user.profileImage != "")
-                                  SizedBox(
-                                    width: 120,
-                                    height: 120,
-                                    child: ClipOval(
-                                      child: Image.memory(
-                                        bytes!,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
                             SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              user.name ?? "",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              user.email ?? "",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              company.companyName.toString() ?? "",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              user.phone ?? "",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: GlobalColors.mainColor,
-                                  side: BorderSide.none,
-                                  shape: StadiumBorder(),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Edit Profile",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                              width: 120,
+                              height: 120,
+                              child: ClipOval(
+                                child: Image.memory(
+                                  bytes!,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
-                      );
-                    } else
-                      return const LoadingPage();
-                  }),
-            ],
+                      SizedBox(height: 10),
+                      Text(
+                        user.name ?? "",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        user.email ?? "",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        company.companyName.toString() ?? "",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        user.phone ?? "",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: GlobalColors.mainColor,
+                            side: BorderSide.none,
+                            shape: StadiumBorder(),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Edit Profile",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
           ),
         ),
       ),
     );
   }
 
-  Future<User> getData() async {
+  Future<void> getData() async {
     String? _company2 = await storage.read(key: "company");
     String? _username2 = await storage.read(key: "username");
     String? _userid = await storage.read(key: "userid");
@@ -161,8 +139,7 @@ class _PersonalDataState extends State<PersonalData> {
       bytes = Base64Decoder().convert(user.profileImage.toString());
       company = _company;
       username = _username2;
+      _isLoading = false; // Set isLoading to false once data is loaded
     });
-
-    return user;
   }
 }

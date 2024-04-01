@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobilestock/models/Sales.dart';
 import 'package:mobilestock/view/Analysis/analysis.view.dart';
 import 'package:mobilestock/view/ClockIn/clockin.view.dart';
 import 'package:mobilestock/view/Sales/home.sales.dart';
@@ -36,8 +37,13 @@ class SalesCardLeft extends StatelessWidget {
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => ClockInHomeScreen()));
             else if (route == "sales")
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeSalesScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomeSalesScreen(
+                            isEdit: false,
+                            sales: new Sales(),
+                          )));
             else if (route == "analysis")
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AnalysisScreen()));

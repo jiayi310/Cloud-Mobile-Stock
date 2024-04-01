@@ -33,7 +33,7 @@ class CheckOutPage extends StatefulWidget {
 class _CheckOutPageState extends State<CheckOutPage> {
   GlobalKey<SfSignaturePadState> _signaturePadState = GlobalKey();
 
-  List<SalesItem> salesItems = [];
+  List<SalesDetails> salesItems = [];
   String docNo = "";
   String companyid = "", userid = "";
   final storage = new FlutterSecureStorage();
@@ -53,7 +53,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
     // Access context and salesProvider here
     final salesProvider = SalesProvider.of(context);
-    salesItems = salesProvider?.sales.items ?? [];
+    salesItems = salesProvider?.sales.salesDetails ?? [];
   }
 
   @override
@@ -276,8 +276,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                   children: [
                                     Text(
                                       "RM " +
-                                          (salesItems[i].unitprice! *
-                                                  salesItems[i].quantity)
+                                          (salesItems[i].unitPrice! *
+                                                  (salesItems[i].qty ?? 0))
                                               .toStringAsFixed(2),
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
@@ -446,10 +446,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
             "stockCode": salesItem.stockCode.toString(),
             "description": salesItem.description.toString(),
             "uom": salesItem.uom.toString(),
-            "qty": salesItem.quantity ?? 0,
-            "unitPrice": salesItem.unitprice ?? 0,
+            "qty": salesItem.qty ?? 0,
+            "unitPrice": salesItem.unitPrice ?? 0,
             "discount": salesItem.discount ?? 0,
-            "total": 0,
+            "total": salesItem.total,
             "taxableAmt": 0,
             "taxRate": 0,
             "taxAmt": salesItem.taxAmt ?? 0,

@@ -40,8 +40,7 @@ class Sales {
   DateTime? createdDateTime;
   int? companyID;
   bool isSelected = false;
-  List<SalesItem> items = [];
-  List<SalesDetails>? salesDetails;
+  List<SalesDetails> salesDetails = [];
 
   Sales();
 
@@ -178,11 +177,11 @@ class Sales {
   }
 
   void addItem({
-    required String stockID,
+    required int stockID,
     required String stockCode,
     required String description,
     required String uom,
-    required int quantity,
+    required double quantity,
     required double price,
     required double discount,
     required double total,
@@ -192,52 +191,58 @@ class Sales {
     required Uint8List image,
   }) {
     // Check if an item with the same code already exists in the list
-    var existingItem = items.firstWhereOrNull(
+    var existingItem = salesDetails.firstWhereOrNull(
         (item) => item.stockCode == stockCode && item.uom == uom);
 
     if (existingItem != null) {
       // If the item exists, update its quantity
-      existingItem.quantity += quantity;
+      existingItem.qty = (existingItem.qty ?? 0) + quantity;
     } else {
       // If the item doesn't exist, add a new item to the list
-      items.add(SalesItem(
+      salesDetails.add(SalesDetails(
         stockID: stockID,
         stockCode: stockCode,
         description: description,
         uom: uom ?? "",
-        quantity: quantity,
-        unitprice: price,
+        qty: quantity,
+        unitPrice: price,
         total: total,
         discount: discount,
         taxableAmt: taxableAmount,
         taxAmt: taxAmt,
-        taxrate: taxrate,
+        taxRate: taxrate,
         image: image,
       ));
     }
   }
 
   double calculateTotalPrice() {
-    double totalPrice = 0;
-    for (var item in items) {
-      totalPrice += item.unitprice * item.quantity;
+    double totalPrice = 0, tax = 0;
+    for (var item in salesDetails) {
+      double subtotal = (item.unitPrice ?? 0) * (item.qty ?? 0);
+      item.total = subtotal;
+
+      totalPrice += subtotal;
+
+      tax += item.taxAmt ?? 0;
     }
 
     finalTotal = totalPrice;
+    taxAmt = tax;
     return totalPrice;
   }
 
-  void updateItemQuantity(String stockCode, int newQuantity) {
+  void updateItemQuantity(String stockCode, double newQuantity) {
     var existingItem =
-        items.firstWhereOrNull((item) => item.stockCode == stockCode);
+        salesDetails.firstWhereOrNull((item) => item.stockCode == stockCode);
 
     if (existingItem != null) {
-      existingItem.quantity = newQuantity;
+      existingItem.qty = newQuantity;
     }
   }
 
   void removeItem(String stockCode) {
-    items.removeWhere((item) => item.stockCode == stockCode);
+    salesDetails.removeWhere((item) => item.stockCode == stockCode);
   }
 }
 
@@ -291,6 +296,7 @@ class SalesDetails {
   double? taxAmt;
   int? locationID;
   String? location;
+  Uint8List? image;
 
   SalesDetails(
       {this.dtlID,
@@ -310,7 +316,8 @@ class SalesDetails {
       this.taxRate,
       this.taxAmt,
       this.locationID,
-      this.location});
+      this.location,
+      this.image});
 
   SalesDetails.fromJson(Map<String, dynamic> json) {
     dtlID = json['dtlID'];
@@ -331,6 +338,7 @@ class SalesDetails {
     taxAmt = json['taxAmt'];
     locationID = json['locationID'];
     location = json['location'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -353,6 +361,7 @@ class SalesDetails {
     data['taxAmt'] = this.taxAmt;
     data['locationID'] = this.locationID;
     data['location'] = this.location;
+    data['image'] = this.image;
     return data;
   }
 }

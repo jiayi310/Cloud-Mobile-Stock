@@ -13,27 +13,11 @@ class Customer {
       deliverAddr4,
       deliverPostCode;
   String? attention;
+  int? priceCategory;
+  int? salesAgentID;
+  int? customerTypeID;
 
-  Customer(
-      this.customerID,
-      this.customerCode,
-      this.name,
-      this.name2,
-      this.phone1,
-      this.email,
-      this.address1,
-      this.address2,
-      this.address3,
-      this.address4,
-      this.phone2,
-      this.fax1,
-      this.fax2,
-      this.deliverAddr1,
-      this.deliverAddr2,
-      this.deliverAddr3,
-      this.deliverAddr4,
-      this.attention,
-      this.salesAgent);
+  Customer();
 
   Customer.fromJson(Map<String, dynamic> json) {
     customerID = json["customerID"];
@@ -59,6 +43,9 @@ class Customer {
     attention = json["attention"];
     deliverPostCode = json["deliverPostCode"];
     attention = json["attention"];
+    priceCategory = json["priceCategory"];
+    salesAgentID = json["salesAgentID"];
+    customerTypeID = json["customerTypeID"];
   }
 
   Map<String, dynamic> toJson() {

@@ -20,7 +20,10 @@ import 'SalesDetails/details.screen.dart';
 import 'SalesProvider.dart';
 
 class HomeSalesScreen extends StatefulWidget {
-  HomeSalesScreen({Key? key}) : super(key: key);
+  HomeSalesScreen({Key? key, required this.isEdit, required this.sales})
+      : super(key: key);
+  bool isEdit;
+  Sales sales;
 
   @override
   _HomeSalesScreenState createState() => _HomeSalesScreenState();
@@ -53,9 +56,16 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
       return products;
     } else {
       return filteredProducts.where((product) {
-        return product.stockCode!.toLowerCase().contains(query.toLowerCase()) ||
-            product.description!.toLowerCase().contains(query.toLowerCase()) ||
-            product.baseUOM!.toLowerCase().contains(query.toLowerCase());
+        return (product.stockCode != null &&
+                product.stockCode!
+                    .toLowerCase()
+                    .contains(query.toLowerCase())) ||
+            (product.description != null &&
+                product.description!
+                    .toLowerCase()
+                    .contains(query.toLowerCase())) ||
+            (product.baseUOM != null &&
+                product.baseUOM!.toLowerCase().contains(query.toLowerCase()));
       }).toList();
     }
   }
@@ -64,13 +74,21 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Access context and salesProvider here
     final salesProvider = SalesProvider.of(context);
-    numOfitem = salesProvider!.sales.items.length;
+    numOfitem = salesProvider!.sales.salesDetails.length;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isEdit) {
+      final salesProvider = SalesProvider.of(context);
+      if (salesProvider != null) {
+        salesProvider.setSales(widget.sales);
+        numOfitem = salesProvider!.sales.salesDetails!.length;
+      }
+    }
+    widget.sales = SalesProvider.of(context)!.sales;
+
     RangeValues _priceRange = RangeValues(0, 100);
     return Scaffold(
       body: SingleChildScrollView(
@@ -147,7 +165,10 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
                                 await Get.to<List<Stock>>(() => SalesFilters(
                                       initialPriceRange: _priceRange,
                                       productlist: productlist,
-                                      onApplyFilters: (priceRange, categories,
+                                      onApplyFilters: (priceRange,
+                                          groups,
+                                          types,
+                                          categories,
                                           filteredProducts) {},
                                     ));
 
@@ -289,7 +310,7 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
                                   final stock = entry.value;
 
                                   return ProductCard(
-                                    stockid: stock.stockID.toString(),
+                                    stockid: stock.stockID!,
                                     stockcode: stock.stockCode.toString(),
                                     title: stock.description.toString(),
                                     uom: stock.baseUOM.toString(),

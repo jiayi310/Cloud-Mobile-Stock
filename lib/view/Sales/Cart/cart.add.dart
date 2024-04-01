@@ -96,7 +96,8 @@ class _MyWidgetState extends State<AddCartButtonCart> {
                 final salesProvider = SalesProvider.of(context);
                 if (salesProvider != null) {
                   salesProvider.sales.updateItemQuantity(
-                      widget.salesItem.stockCode, widget.salesItem.quantity++);
+                      widget.salesItem.stockCode,
+                      (widget.salesItem.quantity ?? 0.0) + 1.0);
                 }
                 if (widget.salesItem.quantity > 0) widget.salesItem.quantity--;
               });
@@ -116,7 +117,8 @@ class _MyWidgetState extends State<AddCartButtonCart> {
                 final salesProvider = SalesProvider.of(context);
                 if (salesProvider != null) {
                   salesProvider.sales.updateItemQuantity(
-                      widget.salesItem.stockCode, widget.salesItem.quantity++);
+                      widget.salesItem.stockCode,
+                      (widget.salesItem.quantity ?? 0.0) + 1.0);
                 }
                 widget.salesItem.quantity++;
               });

@@ -494,7 +494,7 @@ class StockUOMDtoList {
   int? createdUserID;
   int? stockID;
   int? companyID;
-//  StockBarcodeDtoList? stockBarcodeDtoList;
+  List<StockBarcodeDtoList>? stockBarcodeDtoList;
   int? barcodeCount;
   // Null? stockBarcodeDtoDeletedList;
 
@@ -520,7 +520,7 @@ class StockUOMDtoList {
     this.createdUserID,
     this.stockID,
     this.companyID,
-    //this.stockBarcodeDtoList,
+    this.stockBarcodeDtoList,
     this.barcodeCount,
     //  this.stockBarcodeDtoDeletedList
   });
@@ -547,7 +547,12 @@ class StockUOMDtoList {
     createdUserID = json['createdUserID'];
     stockID = json['stockID'];
     companyID = json['companyID'];
-    // stockBarcodeDtoList = json['stockBarcodeDtoList'];
+    if (json['stockBarcodeDtoList'] != null) {
+      stockBarcodeDtoList = <StockBarcodeDtoList>[];
+      json['stockBarcodeDtoList'].forEach((v) {
+        stockBarcodeDtoList!.add(new StockBarcodeDtoList.fromJson(v));
+      });
+    }
     barcodeCount = json['barcodeCount'];
     //  stockBarcodeDtoDeletedList = json['stockBarcodeDtoDeletedList'];
   }
@@ -575,9 +580,65 @@ class StockUOMDtoList {
     data['createdUserID'] = this.createdUserID;
     data['stockID'] = this.stockID;
     data['companyID'] = this.companyID;
-    //data['stockBarcodeDtoList'] = this.stockBarcodeDtoList;
+    if (this.stockBarcodeDtoList != null) {
+      data['stockBarcodeDtoList'] =
+          this.stockBarcodeDtoList!.map((v) => v.toJson()).toList();
+    }
     data['barcodeCount'] = this.barcodeCount;
     //data['stockBarcodeDtoDeletedList'] = this.stockBarcodeDtoDeletedList;
+    return data;
+  }
+}
+
+class StockBarcodeDtoList {
+  int? stockBarcodeID;
+  String? barcode;
+  String? description;
+  String? lastModifiedDateTime;
+  int? lastModifiedUserID;
+  String? createdDateTime;
+  int? createdUserID;
+  int? stockUOMID;
+  String? stockUOM;
+  int? companyID;
+
+  StockBarcodeDtoList(
+      {this.stockBarcodeID,
+      this.barcode,
+      this.description,
+      this.lastModifiedDateTime,
+      this.lastModifiedUserID,
+      this.createdDateTime,
+      this.createdUserID,
+      this.stockUOMID,
+      this.stockUOM,
+      this.companyID});
+
+  StockBarcodeDtoList.fromJson(Map<String, dynamic> json) {
+    stockBarcodeID = json['stockBarcodeID'];
+    barcode = json['barcode'];
+    description = json['description'];
+    lastModifiedDateTime = json['lastModifiedDateTime'];
+    lastModifiedUserID = json['lastModifiedUserID'];
+    createdDateTime = json['createdDateTime'];
+    createdUserID = json['createdUserID'];
+    stockUOMID = json['stockUOMID'];
+    stockUOM = json['stockUOM'];
+    companyID = json['companyID'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['stockBarcodeID'] = this.stockBarcodeID;
+    data['barcode'] = this.barcode;
+    data['description'] = this.description;
+    data['lastModifiedDateTime'] = this.lastModifiedDateTime;
+    data['lastModifiedUserID'] = this.lastModifiedUserID;
+    data['createdDateTime'] = this.createdDateTime;
+    data['createdUserID'] = this.createdUserID;
+    data['stockUOMID'] = this.stockUOMID;
+    data['stockUOM'] = this.stockUOM;
+    data['companyID'] = this.companyID;
     return data;
   }
 }

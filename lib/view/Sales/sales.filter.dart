@@ -5,7 +5,9 @@ import '../../models/Stock.dart';
 
 class SalesFilters extends StatefulWidget {
   final RangeValues initialPriceRange;
-  final Function(RangeValues, Set<String>, List<Stock>) onApplyFilters;
+  final Function(
+          RangeValues, Set<String>, Set<String>, Set<String>, List<Stock>)
+      onApplyFilters;
   final List<Stock> productlist;
 
   const SalesFilters({
@@ -21,6 +23,8 @@ class SalesFilters extends StatefulWidget {
 
 class _SalesFiltersState extends State<SalesFilters> {
   RangeValues _priceRange = RangeValues(0, 100);
+  Set<String> selectedGroups = Set();
+  Set<String> selectedTypes = Set();
   Set<String> selectedCategories = Set();
   List<Stock> filteredProducts = [];
   Set<String> allCategories = Set();
@@ -31,7 +35,9 @@ class _SalesFiltersState extends State<SalesFilters> {
   void initState() {
     super.initState();
     _priceRange = widget.initialPriceRange;
-    filteredProducts = applyFilters(_priceRange, selectedCategories);
+
+    filteredProducts = applyFilters(
+        _priceRange, selectedGroups, selectedTypes, selectedCategories);
 
     // Calculate unique categories from the product list
     allCategories = widget.productlist
@@ -86,7 +92,7 @@ class _SalesFiltersState extends State<SalesFilters> {
               shrinkWrap: true,
               itemCount: allGroup.length,
               itemBuilder: (context, index) {
-                String category = allGroup.elementAt(index);
+                String group = allGroup.elementAt(index);
                 return Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 10),
@@ -100,20 +106,20 @@ class _SalesFiltersState extends State<SalesFilters> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        category,
+                        group,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 25,
                         child: Checkbox(
-                          value: selectedCategories.contains(category),
+                          value: selectedGroups.contains(group),
                           onChanged: (bool? newValue) {
                             setState(() {
                               if (newValue != null) {
                                 if (newValue) {
-                                  selectedCategories.add(category);
+                                  selectedGroups.add(group);
                                 } else {
-                                  selectedCategories.remove(category);
+                                  selectedGroups.remove(group);
                                 }
                               }
                             });
@@ -134,7 +140,7 @@ class _SalesFiltersState extends State<SalesFilters> {
               shrinkWrap: true,
               itemCount: allType.length,
               itemBuilder: (context, index) {
-                String category = allType.elementAt(index);
+                String type = allType.elementAt(index);
                 return Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 10),
@@ -148,20 +154,20 @@ class _SalesFiltersState extends State<SalesFilters> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        category,
+                        type,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 25,
                         child: Checkbox(
-                          value: selectedCategories.contains(category),
+                          value: selectedTypes.contains(type),
                           onChanged: (bool? newValue) {
                             setState(() {
                               if (newValue != null) {
                                 if (newValue) {
-                                  selectedCategories.add(category);
+                                  selectedTypes.add(type);
                                 } else {
-                                  selectedCategories.remove(category);
+                                  selectedTypes.remove(type);
                                 }
                               }
                             });
@@ -229,10 +235,12 @@ class _SalesFiltersState extends State<SalesFilters> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      filteredProducts =
-                          applyFilters(_priceRange, selectedCategories);
+                      filteredProducts = applyFilters(_priceRange,
+                          selectedGroups, selectedTypes, selectedCategories);
                       widget.onApplyFilters(
                         _priceRange,
+                        selectedGroups,
+                        selectedTypes,
                         selectedCategories,
                         filteredProducts,
                       );
@@ -254,15 +262,23 @@ class _SalesFiltersState extends State<SalesFilters> {
     );
   }
 
-  List<Stock> applyFilters(RangeValues priceRange, Set<String> categories) {
-    // Apply your filters and return the filtered product list
-    // You can use the selected filters to filter the 'demo_product' list
-    // For example, filter by price and category
-    List<Stock> filteredProducts = widget.productlist
-        .where((stock) =>
-            stock.baseUOMPrice1! >= priceRange.start &&
-            stock.baseUOMPrice1! <= priceRange.end)
-        .toList();
+  List<Stock> applyFilters(RangeValues priceRange, Set<String> groups,
+      Set<String> types, Set<String> categories) {
+    List<Stock> filteredProducts = widget.productlist.where((stock) {
+      return ((stock.baseUOMPrice1! >= priceRange.start) &&
+              (stock.baseUOMPrice1! <= priceRange.end) &&
+              (groups != null &&
+                  groups.contains(stock.stockGroupDescription.toString()))) ||
+          ((stock.baseUOMPrice1! >= priceRange.start) &&
+              (stock.baseUOMPrice1! <= priceRange.end) &&
+              (types != null &&
+                  types.contains(stock.stockTypeDescription.toString()))) ||
+          ((stock.baseUOMPrice1! >= priceRange.start) &&
+              (stock.baseUOMPrice1! <= priceRange.end) &&
+              (categories != null &&
+                  categories
+                      .contains(stock.stockCategoryDescription.toString())));
+    }).toList();
 
     return filteredProducts;
   }
