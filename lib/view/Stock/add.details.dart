@@ -17,6 +17,7 @@ class AddStockDetails extends StatefulWidget {
 class _AddStockDetailsState extends State<AddStockDetails>
     with TickerProviderStateMixin {
   List<StockUOMDtoList> uomList = [];
+  List<StockBatchDtoList> batchList = [];
   late TabController _tabController;
   TextEditingController descriptionController = TextEditingController();
   TextEditingController shelfController = TextEditingController();
@@ -108,7 +109,27 @@ class _AddStockDetailsState extends State<AddStockDetails>
                   child: ListView.builder(
                     itemCount: uomList.length,
                     itemBuilder: (context, index) {
-                      return _buildListItem(context, index);
+                      return ListTile(
+                        title: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            columns: [
+                              DataColumn(label: Text('UOM')),
+                              DataColumn(label: Text('Rate')),
+                              DataColumn(label: Text('Shelf')),
+                              DataColumn(label: Text('Price 1')),
+                            ],
+                            rows: [
+                              DataRow(cells: [
+                                DataCell(Text(uomList[index].uom!)),
+                                DataCell(Text(uomList[index].rate.toString())),
+                                DataCell(Text(uomList[index].shelf.toString())),
+                                DataCell(Text(uomList[index].price.toString())),
+                              ]),
+                            ],
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -116,36 +137,64 @@ class _AddStockDetailsState extends State<AddStockDetails>
             ),
           ),
           // Content for Batch tab
-          Center(
-            child: Text('Batch Tab Content'),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Batch List',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: GlobalColors.mainColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _showBatchDialog();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: GlobalColors.mainColor),
+                      child: Text('+ NEW'),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                    height: 20), // Add some space between the Row and ListView
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: batchList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            columns: [
+                              DataColumn(label: Text('Batch No')),
+                              DataColumn(label: Text('Expiry Date')),
+                              DataColumn(label: Text('Manufactured Date')),
+                            ],
+                            rows: [
+                              DataRow(cells: [
+                                DataCell(Text(batchList[index].batchNo!)),
+                                DataCell(Text(
+                                    batchList[index].expiryDate.toString())),
+                                DataCell(Text(batchList[index]
+                                    .manufacturedDate
+                                    .toString())),
+                              ]),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, int index) {
-    // Replace this with your actual data
-    String uom = "UOM $index";
-    String rate = "Rate $index";
-    String shelf = "Shelf $index";
-    String price1 = "Price 1 $index";
-
-    return ListTile(
-      title: DataTable(
-        columns: [
-          DataColumn(label: Text('UOM')),
-          DataColumn(label: Text('Rate')),
-          DataColumn(label: Text('Shelf')),
-          DataColumn(label: Text('Price 1')),
-        ],
-        rows: [
-          DataRow(cells: [
-            DataCell(Text(uom)),
-            DataCell(Text(rate)),
-            DataCell(Text(shelf)),
-            DataCell(Text(price1)),
-          ]),
         ],
       ),
     );
@@ -382,35 +431,6 @@ class _AddStockDetailsState extends State<AddStockDetails>
                     SizedBox(
                       height: 10,
                     ),
-                    TextFieldWidget(
-                      label: 'Rate',
-                      controller: rateController,
-                      icon: Icon(
-                        Icons.code,
-                        color: GlobalColors.mainColor,
-                      ),
-                      onChanged: (name) {},
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(
-                            r'^\d*\.?\d{0,2}')), // Allow only decimal input
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFieldWidget(
-                      label: 'Price 1',
-                      controller: price1Controller,
-                      icon: Icon(
-                        Icons.code,
-                        color: GlobalColors.mainColor,
-                      ),
-                      onChanged: (name) {},
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(
-                            r'^\d*\.?\d{0,2}')), // Allow only decimal input
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -418,13 +438,29 @@ class _AddStockDetailsState extends State<AddStockDetails>
           ),
           actions: [
             ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                style: ElevatedButton.styleFrom(primary: Colors.grey),
+                child: Text("Cancel")),
+            ElevatedButton(
               onPressed: () {
                 // Add the entered data to the uomList
                 uomList.add(StockUOMDtoList(
                   uom: descriptionController.text,
-                  rate: double.parse(rateController.text),
                   shelf: shelfController.text,
-                  price: double.parse(price1Controller.text),
+                  cost: parseDoubleValue(costController.text),
+                  rate: parseDoubleValue(rateController.text),
+                  price: parseDoubleValue(price1Controller.text),
+                  price2: parseDoubleValue(price2Controller.text),
+                  price3: parseDoubleValue(price3Controller.text),
+                  price4: parseDoubleValue(price4Controller.text),
+                  price5: parseDoubleValue(price5Controller.text),
+                  price6: parseDoubleValue(price6Controller.text),
+                  minSalePrice: parseDoubleValue(minSalePriceController.text),
+                  maxSalePrice: parseDoubleValue(maxQuantityController.text),
+                  minQty: parseDoubleValue(minQuantityController.text),
+                  maxQty: parseDoubleValue(maxQuantityController.text),
                 ));
                 // Clear the controllers
                 descriptionController.clear();
@@ -432,6 +468,15 @@ class _AddStockDetailsState extends State<AddStockDetails>
                 costController.clear();
                 rateController.clear();
                 price1Controller.clear();
+                price2Controller.clear();
+                price3Controller.clear();
+                price4Controller.clear();
+                price5Controller.clear();
+                price6Controller.clear();
+                minSalePriceController.clear();
+                maxSalePriceController.clear();
+                minQuantityController.clear();
+                maxQuantityController.clear();
                 // Close the dialog
                 Navigator.of(context).pop(true);
               },
@@ -448,4 +493,14 @@ class _AddStockDetailsState extends State<AddStockDetails>
       setState(() {});
     }
   }
+
+  double parseDoubleValue(String text) {
+    try {
+      return double.parse(text);
+    } catch (e) {
+      return 0.0; // Default value or handle the error as per your requirement
+    }
+  }
+
+  void _showBatchDialog() {}
 }

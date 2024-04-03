@@ -62,13 +62,16 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 prefixIcon: widget.icon),
             controller: widget.controller,
             validator: (value) {
-              if (widget.label == "Customer Code" || widget.label == "Name") {
+              if (widget.label == "Customer Code" ||
+                  widget.label == "Name" ||
+                  widget.label == "UOM Description" ||
+                  widget.label == "Rate" ||
+                  widget.label == "Price 1") {
                 if (value!.isEmpty)
                   return "Cannot be empty";
                 else
                   return null;
               }
-
               if (widget.label == "Email") {
                 if (value!.isNotEmpty) {
                   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')

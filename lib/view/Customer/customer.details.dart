@@ -72,22 +72,22 @@ class _CustomerDetailsState extends State<CustomerDetails> {
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
-              Center(
-                child: Stack(children: [
-                  ClipOval(
-                    child: Image.asset(
-                      "assets/images/agiliti_logo_blue.png",
-                      width: 120,
-                      height: 120,
-                    ),
-                  ),
-                  Positioned(
-                      bottom: 0, right: 0, child: buildEditIcon(Colors.blue)),
-                ]),
-              ),
-              SizedBox(
-                height: 20,
-              ),
+              // Center(
+              //   child: Stack(children: [
+              //     ClipOval(
+              //       child: Image.asset(
+              //         "assets/images/agiliti_logo_blue.png",
+              //         width: 120,
+              //         height: 120,
+              //       ),
+              //     ),
+              //     Positioned(
+              //         bottom: 0, right: 0, child: buildEditIcon(Colors.blue)),
+              //   ]),
+              // ),
+              // SizedBox(
+              //   height: 20,
+              // ),
               Center(
                 child: Align(
                   alignment: Alignment.center,
