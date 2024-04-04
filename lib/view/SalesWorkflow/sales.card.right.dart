@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobilestock/view/Quotation/quotation.view.dart';
+import 'package:mobilestock/view/Quotation/HistoryListing/quotation.view.dart';
 
-import '../Collection/collection.view.dart';
+import '../Collection/HistoryListing/collection.view.dart';
 
 class SalesCardRight extends StatelessWidget {
   SalesCardRight(

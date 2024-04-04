@@ -368,6 +368,7 @@ class _CollectionAddState extends State<CollectionAdd> {
           ),
           InvoiceCollection(
             collectionItems: collectionItems,
+            refreshMainPage: refreshMainPage,
           ),
           SizedBox(
             height: 10,
@@ -665,5 +666,11 @@ class _CollectionAddState extends State<CollectionAdd> {
         fontSize: 16.0,
       );
     }
+  }
+
+  refreshMainPage() {
+    setState(() {
+      collectionItems = collectionItems;
+    });
   }
 }

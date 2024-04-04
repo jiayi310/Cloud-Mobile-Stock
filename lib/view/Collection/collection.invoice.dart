@@ -8,9 +8,11 @@ import '../../models/Collection.dart';
 import 'CollectionProvider.dart';
 
 class InvoiceCollection extends StatefulWidget {
-  InvoiceCollection({Key? key, required this.collectionItems})
+  InvoiceCollection(
+      {Key? key, required this.collectionItems, required this.refreshMainPage})
       : super(key: key);
   List<CollectMappings> collectionItems;
+  final Function refreshMainPage;
 
   @override
   State<InvoiceCollection> createState() => _InvoiceCollectionState();
@@ -41,6 +43,7 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                               CollectionProvider.of(context);
                           if (collectionProvider != null) {
                             collectionProvider.collection.removeItem(item!);
+                            widget.refreshMainPage();
                           }
                         });
                       },

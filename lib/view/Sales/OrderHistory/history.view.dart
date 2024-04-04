@@ -138,6 +138,12 @@ class _OrderHistoryScreen extends State<OrderHistoryScreen> {
                                             ],
                                           ),
                                         ),
+                                        onConfirm: () {
+                                          removeSales(saleslist[i].docID);
+
+                                          // Close the dialog
+                                          Get.back();
+                                        },
                                         textConfirm: "Confirm",
                                         textCancel: "Cancel");
                                   },
@@ -347,5 +353,19 @@ class _OrderHistoryScreen extends State<OrderHistoryScreen> {
     setState(() {
       saleslist = suggestions;
     });
+  }
+
+  Future<void> removeSales(int? docID) async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get('/Sales/RemoveSales?docId=' +
+          docID.toString() +
+          '&companyId=' +
+          companyid);
+
+      if (response != 0) {
+        getData();
+      }
+    }
   }
 }

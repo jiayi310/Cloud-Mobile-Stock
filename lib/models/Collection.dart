@@ -128,10 +128,12 @@ class Collection {
 
   void removeItem(int salesID) {
     collectMappings!.removeWhere((item) => item.salesDocID == salesID);
+    if (collectMappings != null) {
+      updateTotal(collectMappings!);
+    }
   }
 
   void updateTotal(List<CollectMappings> _collectionDetails) {
-    // Calculate the total paymentAmt
     double totalPaymentAmt = 0;
 
     for (var detail in _collectionDetails) {
@@ -140,7 +142,6 @@ class Collection {
       }
     }
 
-    // Update the paymentTotal field
     paymentTotal = totalPaymentAmt;
   }
 }

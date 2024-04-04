@@ -13,7 +13,7 @@ import '../../../api/base.client.dart';
 import '../../../utils/global.colors.dart';
 import '../../Sales/OrderHistory/history.listing.dart';
 import '../collection.add.dart';
-import '../collection.view.dart';
+import 'collection.view.dart';
 
 class CollectionListingScreen extends StatefulWidget {
   CollectionListingScreen({Key? key, required this.docid}) : super(key: key);

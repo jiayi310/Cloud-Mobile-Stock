@@ -502,5 +502,93 @@ class _AddStockDetailsState extends State<AddStockDetails>
     }
   }
 
-  void _showBatchDialog() {}
+  Future<void> _showBatchDialog() async {
+    final result = await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Enter Batch Details"),
+          content: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFieldWidget(
+                      label: 'UOM Description',
+                      controller: descriptionController,
+                      icon: Icon(
+                        Icons.code,
+                        color: GlobalColors.mainColor,
+                      ),
+                      onChanged: (name) {},
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                style: ElevatedButton.styleFrom(primary: Colors.grey),
+                child: Text("Cancel")),
+            ElevatedButton(
+              onPressed: () {
+                // Add the entered data to the uomList
+                uomList.add(StockUOMDtoList(
+                  uom: descriptionController.text,
+                  shelf: shelfController.text,
+                  cost: parseDoubleValue(costController.text),
+                  rate: parseDoubleValue(rateController.text),
+                  price: parseDoubleValue(price1Controller.text),
+                  price2: parseDoubleValue(price2Controller.text),
+                  price3: parseDoubleValue(price3Controller.text),
+                  price4: parseDoubleValue(price4Controller.text),
+                  price5: parseDoubleValue(price5Controller.text),
+                  price6: parseDoubleValue(price6Controller.text),
+                  minSalePrice: parseDoubleValue(minSalePriceController.text),
+                  maxSalePrice: parseDoubleValue(maxQuantityController.text),
+                  minQty: parseDoubleValue(minQuantityController.text),
+                  maxQty: parseDoubleValue(maxQuantityController.text),
+                ));
+                // Clear the controllers
+                descriptionController.clear();
+                shelfController.clear();
+                costController.clear();
+                rateController.clear();
+                price1Controller.clear();
+                price2Controller.clear();
+                price3Controller.clear();
+                price4Controller.clear();
+                price5Controller.clear();
+                price6Controller.clear();
+                minSalePriceController.clear();
+                maxSalePriceController.clear();
+                minQuantityController.clear();
+                maxQuantityController.clear();
+                // Close the dialog
+                Navigator.of(context).pop(true);
+              },
+              style: ElevatedButton.styleFrom(primary: GlobalColors.mainColor),
+              child: Text('Save'),
+            ),
+          ],
+          elevation: 0,
+        );
+      },
+    );
+    // If the dialog is closed with Save, rebuild the ListView
+    if (result != null && result) {
+      setState(() {});
+    }
+  }
 }
