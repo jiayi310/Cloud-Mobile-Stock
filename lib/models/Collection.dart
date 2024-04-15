@@ -133,6 +133,17 @@ class Collection {
     }
   }
 
+  void updateAmount(int collectID, double newAmount) {
+    var collectMapping =
+        collectMappings!.firstWhere((item) => item.salesDocID == collectID);
+
+    if (collectMapping != null) {
+      collectMapping.paymentAmt = newAmount;
+      updateTotal(
+          collectMappings!); // Assuming collectMappings is a List or similar
+    }
+  }
+
   void updateTotal(List<CollectMappings> _collectionDetails) {
     double totalPaymentAmt = 0;
 

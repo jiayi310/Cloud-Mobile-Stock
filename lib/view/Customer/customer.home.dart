@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Customer/customer.add.dart';
@@ -431,6 +432,15 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
         }));
 
     if (response != null) {
+      Fluttertoast.showToast(
+        msg: 'Deleted successfully',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       await getCustomerData();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(

@@ -175,7 +175,7 @@ class CustomCircleAvatar extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
         Text(
-          salesAgent.amt.toString(),
+          salesAgent.amt!.toStringAsFixed(2),
           style: TextStyle(
               color: Color(0xff43A783),
               fontWeight: FontWeight.bold,

@@ -19,6 +19,20 @@ class _CusCheckOutState extends State<CusCheckOut> {
   @override
   Widget build(BuildContext context) {
     final salesProvider = SalesProvider.of(context);
+    if (salesProvider != null && salesProvider.sales.customerID != null) {
+      customer = new Customer();
+      customer!.customerID = salesProvider.sales.customerID!;
+      customer!.customerCode = salesProvider.sales.customerCode!;
+      customer!.name = salesProvider.sales.customerName!;
+      customer!.address1 = salesProvider.sales.address1!;
+      customer!.address2 = salesProvider.sales.address2!;
+      customer!.address3 = salesProvider.sales.address3!;
+      customer!.address4 = salesProvider.sales.address4!;
+      customer!.phone1 = salesProvider.sales.phone!;
+      customer!.email = salesProvider.sales.email!;
+      customer!.salesAgent =
+          new SalesAgent(salesAgent: salesProvider.sales.salesAgent.toString());
+    }
     return InkWell(
       onTap: () {
         _navigateToCustomerScreen(context);

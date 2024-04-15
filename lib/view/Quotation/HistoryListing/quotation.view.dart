@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -72,6 +73,41 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            Visibility(
+              visible: _visible,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10, left: 10),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: GlobalColors.mainColor.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width - 110,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none, hintText: "Search"),
+                          onChanged: searchQuery,
+                        ),
+                      ),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          margin: EdgeInsets.only(right: 20),
+                          child: Icon(
+                            Icons.filter_list_alt,
+                            color: GlobalColors.mainColor,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             Column(
               children: [
                 for (int i = 0; i < quotationList.length; i++)
@@ -97,6 +133,9 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
                               ],
                             ),
                           ),
+                          onConfirm: () {
+                            removeQuotation(quotationList[i].docID);
+                          },
                           textConfirm: "Confirm",
                           textCancel: "Cancel");
                     },
@@ -105,7 +144,7 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => DetailsListingScreen(
-                              docid: quotationList[i].docID!,
+                              docid: quotationList[i].docID ?? 0,
                             ),
                           ));
                     },
@@ -140,7 +179,19 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
                                 ),
                                 SizedBox(width: 20),
                                 Text(
-                                  quotationList[i].docDate.toString(),
+                                  quotationList[i].docDate != null &&
+                                          quotationList[i].docDate!.isNotEmpty
+                                      ? quotationList[i]
+                                          .docDate!
+                                          .toString()
+                                          .substring(
+                                              0,
+                                              min(
+                                                  quotationList[i]
+                                                      .docDate!
+                                                      .length,
+                                                  10))
+                                      : 'No Date Available',
                                   style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     fontSize: 15,
@@ -233,6 +284,25 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
     );
   }
 
+  void searchQuery(String query) {
+    final suggestions = quotationList_search.where((sales) {
+      final docNo = sales.docNo.toString().toLowerCase();
+      final cusCode = sales.customerCode.toString().toLowerCase() ?? "";
+      final cusName = sales.customerName.toString().toLowerCase() ?? "";
+      final salesAgent = sales.salesAgent.toString().toLowerCase();
+      final input = query.toLowerCase();
+
+      return docNo.contains(input) ||
+          cusName.contains(input) ||
+          cusCode.contains(input) ||
+          salesAgent.contains(input);
+    }).toList();
+
+    setState(() {
+      quotationList = suggestions;
+    });
+  }
+
   void _toggle() {
     setState(() {
       _visible = !_visible;
@@ -256,5 +326,20 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
       });
     }
     return quotationList;
+  }
+
+  Future<void> removeQuotation(int? docID) async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get(
+          '/Quotation/RemoveQuotation?docId=' +
+              docID.toString() +
+              '&companyId=' +
+              companyid);
+
+      if (response != 0) {
+        getData();
+      }
+    }
   }
 }

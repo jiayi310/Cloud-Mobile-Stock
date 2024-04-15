@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/Company.dart';
 import '../../../models/Sales.dart';
 import '../../../utils/global.colors.dart';
 import '../home.sales.dart';
@@ -45,12 +46,14 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
   int _currentSortColumn = 0;
   bool _isSortAsc = true;
   bool _isLoading = true;
+  Company company = new Company();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSalesDetail();
+    getCompanyDetail();
   }
 
   @override
@@ -155,7 +158,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Presoft (M) Sdn Bhd",
+                            company.companyName.toString(),
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
@@ -168,7 +171,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "98, Lorong 3/4, Jalan Kinara",
+                            company.address1?.toString() ?? "",
                             style:
                                 TextStyle(fontSize: 14, color: Colors.black38),
                           ),
@@ -181,7 +184,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "37100 Bandar Puteri Puchong",
+                            company.address2?.toString() ?? "",
                             style:
                                 TextStyle(fontSize: 14, color: Colors.black38),
                           ),
@@ -194,7 +197,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Selangor",
+                            company.address3?.toString() ?? "",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black38,
@@ -212,7 +215,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Malaysia",
+                            company.address4?.toString() ?? "",
                             style:
                                 TextStyle(fontSize: 14, color: Colors.black38),
                           ),
@@ -290,7 +293,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            sales.address1 ?? "",
+                            sales.address1?.toString() ?? "",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black38,
@@ -312,7 +315,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            sales.address2 ?? "",
+                            sales.address2?.toString() ?? "",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black38,
@@ -330,7 +333,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            sales.address3 ?? "",
+                            sales.address3?.toString() ?? "",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black38,
@@ -345,7 +348,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            sales.address4 ?? "",
+                            sales.address4?.toString() ?? "",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black38,
@@ -379,11 +382,11 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                   ),
                   Column(
                     children: [
-                      Text("Authorised Signature:"),
-                      Image.asset(
-                        'assets/images/agiliti_logo.png',
-                        height: 100,
-                      ),
+                      // Text("Authorised Signature:"),
+                      // Image.asset(
+                      //   'assets/images/agiliti_logo.png',
+                      //   height: 100,
+                      // ),
                     ],
                   )
                 ],
@@ -447,6 +450,24 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
     }
   }
 
+  Future<void> getCompanyDetail() async {
+    await Future.delayed(Duration(seconds: 2));
+    final storage = new FlutterSecureStorage();
+    String? _companyid = await storage.read(key: "companyid");
+    if (_companyid != null) {
+      final response = await BaseClient()
+          .get('/Company/GetCompany?companyid=' + _companyid.toString());
+
+      Company _company = Company.fromJson(jsonDecode(response));
+
+      if (mounted) {
+        setState(() {
+          company = _company;
+        });
+      }
+    }
+  }
+
   List<DataColumn> _createColumns() {
     return [
       DataColumn(label: Text('ItemCode')),
@@ -495,7 +516,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                       Center(child: Text(salesItem?.qty?.toString() ?? ''))),
                   DataCell(Align(
                       alignment: Alignment.centerRight,
-                      child: Text(salesItem?.total?.toString() ?? ''))),
+                      child: Text(salesItem?.total?.toStringAsFixed(2) ?? ''))),
                 ]))
             ?.toList() ??
         [];

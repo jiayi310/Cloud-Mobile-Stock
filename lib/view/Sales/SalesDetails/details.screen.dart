@@ -226,7 +226,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               height: 10,
                             ),
                             Text(
-                              totalBaseUOMBalanceQty.toString(),
+                              totalBaseUOMBalanceQty.toStringAsFixed(2),
                             ),
                             const SizedBox(height: defaultPadding / 2),
                           ],
@@ -259,7 +259,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "RM " + widget.stock.baseUOMPrice1.toString(),
+              "RM " + (widget.stock.baseUOMPrice1 ?? 0.00).toStringAsFixed(2),
               style: TextStyle(
                   color: GlobalColors.mainColor,
                   fontWeight: FontWeight.bold,
@@ -406,8 +406,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 MainAxisAlignment.end,
                                             children: [
                                               Text(
-                                                pricePerUnit
-                                                    .toString(), // Assuming getPriceBasedOnUOM returns a numeric value
+                                                pricePerUnit.toStringAsFixed(
+                                                    2), // Assuming getPriceBasedOnUOM returns a numeric value
                                                 style: TextStyle(
                                                   fontSize: 17,
                                                 ),
@@ -519,7 +519,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                       if (quantity > 1)
                                                         quantity--;
                                                       _controller.text =
-                                                          quantity.toString();
+                                                          quantity
+                                                              .toStringAsFixed(
+                                                                  2);
                                                     });
                                                     updateTotalPrice();
                                                   },
@@ -629,7 +631,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                       ),
                                                     ),
                                                     Text(totalBaseUOMBalanceQty
-                                                        .toString()),
+                                                        .toStringAsFixed(2)),
                                                   ],
                                                 );
                                               }
@@ -651,8 +653,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                           Text(
                                             "RM" +
-                                                widget.stock.baseUOMPrice1
-                                                    .toString(),
+                                                (widget.stock.baseUOMPrice1 ??
+                                                        0.00)
+                                                    .toStringAsFixed(2),
                                             style: TextStyle(
                                                 color: GlobalColors.mainColor,
                                                 fontSize: 20,

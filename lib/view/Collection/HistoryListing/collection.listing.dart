@@ -10,6 +10,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/Company.dart';
 import '../../../utils/global.colors.dart';
 import '../../Sales/OrderHistory/history.listing.dart';
 import '../collection.add.dart';
@@ -26,12 +27,15 @@ class CollectionListingScreen extends StatefulWidget {
 class _CollectionListingScreen extends State<CollectionListingScreen> {
   _CollectionListingScreen();
   Collection collection = new Collection(paymentTotal: 0);
+  Company company = new Company();
+  bool _isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCollectionDetail();
+    getCompanyDetail();
   }
 
   @override
@@ -123,271 +127,286 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
                       ]),
             ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-                child: Column(
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset(
-                          'assets/images/agiliti_logo.png',
-                          height: 60,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              "AR Payment",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              collection.docNo.toString(),
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.black38),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Approved",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.green),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Presoft (M) Sdn Bhd",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "98, Lorong 3/4, Jalan Kinara",
-                          style: TextStyle(fontSize: 14, color: Colors.black38),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "37100 Bandar Puteri Puchong",
-                          style: TextStyle(fontSize: 14, color: Colors.black38),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Selangor",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black38,
+          body: _isLoading
+              ? Center(
+                  child:
+                      CircularProgressIndicator(), // Show CircularProgressIndicator while loading
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SingleChildScrollView(
+                      child: Column(
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                'assets/images/agiliti_logo.png',
+                                height: 60,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "AR Payment",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    collection.docNo.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black38),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Approved",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.green),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          "",
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Malaysia",
-                          style: TextStyle(fontSize: 14, color: Colors.black38),
-                        ),
-                        Text(
-                          "TOTAL",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: GlobalColors.mainColor),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "",
-                        ),
-                        Text(
-                          collection.paymentTotal.toStringAsFixed(2),
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "CUSTOMER",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "",
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          (collection.customerCode ?? "") +
-                              " " +
-                              (collection.customerName ?? ""),
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "Date: " +
-                              (collection.docDate != null &&
-                                      collection.docDate.toString().length >= 10
-                                  ? collection.docDate
-                                      .toString()
-                                      .substring(0, 10)
-                                  : "N/A"),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          collection.customer?.address1?.toString() ?? "",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black38,
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        Text(
-                          "Agent: " + (collection.salesAgent?.toString() ?? ""),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          collection.customer?.address2?.toString() ?? "",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black38,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                company.companyName.toString(),
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                company.address1?.toString() ?? "",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.black38),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                company.address2?.toString() ?? "",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.black38),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                company.address3?.toString() ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              Text(
+                                "",
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                company.address4?.toString() ?? "",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.black38),
+                              ),
+                              Text(
+                                "TOTAL",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: GlobalColors.mainColor),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "",
+                              ),
+                              Text(
+                                "RM " +
+                                    collection.paymentTotal.toStringAsFixed(2),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "CUSTOMER",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "",
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                (collection.customerCode ?? "") +
+                                    " " +
+                                    (collection.customerName ?? ""),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "Date: " +
+                                    (collection.docDate != null &&
+                                            collection.docDate
+                                                    .toString()
+                                                    .length >=
+                                                10
+                                        ? collection.docDate
+                                            .toString()
+                                            .substring(0, 10)
+                                        : "N/A"),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                collection.customer?.address1?.toString() ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              Text(
+                                "Agent: " +
+                                    (collection.salesAgent?.toString() ?? ""),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                collection.customer?.address2?.toString() ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              Text(""),
+                            ],
+                          ),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text(
+                          //       collection.customer?.address3?.toString() ?? "",
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //         color: Colors.black38,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text(
+                          //       collection.customer?.address4?.toString() ?? "",
+                          //       style: TextStyle(
+                          //         fontSize: 14,
+                          //         color: Colors.black38,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: DataTable(
+                          horizontalMargin: 10,
+                          columnSpacing: 10,
+                          headingRowHeight: 30,
+                          headingTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                          headingRowColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.black),
+                          dataTextStyle:
+                              TextStyle(fontSize: 11, color: Colors.black),
+                          columns: _createColumns(),
+                          rows: _createRows(),
                         ),
-                        Text(""),
-                      ],
-                    ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text(
-                    //       collection.customer?.address3?.toString() ?? "",
-                    //       style: TextStyle(
-                    //         fontSize: 14,
-                    //         color: Colors.black38,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text(
-                    //       collection.customer?.address4?.toString() ?? "",
-                    //       style: TextStyle(
-                    //         fontSize: 14,
-                    //         color: Colors.black38,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
+                      ),
+                    ],
+                  )),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  child: DataTable(
-                    horizontalMargin: 10,
-                    columnSpacing: 10,
-                    headingRowHeight: 30,
-                    headingTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                    headingRowColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.black),
-                    dataTextStyle: TextStyle(fontSize: 11, color: Colors.black),
-                    columns: _createColumns(),
-                    rows: _createRows(),
-                  ),
-                ),
-              ],
-            )),
-          ),
         ),
       ),
     );
@@ -432,15 +451,37 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
   }
 
   Future<void> getCollectionDetail() async {
+    await Future.delayed(Duration(seconds: 2));
     if (widget.docid != null) {
       final response = await BaseClient()
           .get('/Collection/GetCollection?docid=' + widget.docid.toString());
 
       Collection _collection = Collection.fromJson(jsonDecode(response));
 
-      setState(() {
-        collection = _collection;
-      });
+      if (mounted) {
+        setState(() {
+          collection = _collection;
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> getCompanyDetail() async {
+    await Future.delayed(Duration(seconds: 2));
+    final storage = new FlutterSecureStorage();
+    String? _companyid = await storage.read(key: "companyid");
+    if (_companyid != null) {
+      final response = await BaseClient()
+          .get('/Company/GetCompany?companyid=' + _companyid.toString());
+
+      Company _company = Company.fromJson(jsonDecode(response));
+
+      if (mounted) {
+        setState(() {
+          company = _company;
+        });
+      }
     }
   }
 
@@ -448,9 +489,12 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
     return [
       DataColumn(label: Text('Invoice No')),
       DataColumn(
-          label: Text(
-        'Total',
-      )),
+        label: Text(
+          'Total',
+          textAlign: TextAlign.right, // Align text to the right
+        ),
+        numeric: true, // Set numeric to true to align content to the right
+      ),
     ];
   }
 
@@ -463,8 +507,9 @@ class _CollectionListingScreen extends State<CollectionListingScreen> {
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width / 4),
                       child: Text(
-                        collectItem?.paymentAmt?.toString() ?? '',
+                        collectItem?.paymentAmt?.toStringAsFixed(2) ?? '',
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
                       ))),
                 ]))
             ?.toList() ??

@@ -11,7 +11,8 @@ import '../CheckOut/checkout.view.dart';
 import '../SalesProvider.dart';
 
 class CartList extends StatefulWidget {
-  const CartList({Key? key}) : super(key: key);
+  CartList({Key? key, required this.isEdit}) : super(key: key);
+  bool isEdit;
 
   @override
   State<CartList> createState() => _CartListState();
@@ -122,7 +123,10 @@ class _CartListState extends State<CartList> {
                     if (salesItems.length > 0) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CheckOutPage()),
+                        MaterialPageRoute(
+                            builder: (context) => CheckOutPage(
+                                  isEdit: widget.isEdit,
+                                )),
                       );
                     } else {
                       Fluttertoast.showToast(
@@ -433,10 +437,7 @@ class _CartListState extends State<CartList> {
                                                                             0) +
                                                                         1);
                                                       }
-                                                      salesItems[i].qty =
-                                                          (salesItems[i].qty ??
-                                                                  0) +
-                                                              1;
+
                                                       recalculateTotal();
                                                     });
                                                   },

@@ -420,7 +420,7 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    SocialLogin()
+                    // SocialLogin()
                   ],
                 )),
           ),
@@ -445,7 +445,24 @@ class _LoginViewState extends State<LoginView> {
               passwordController.text! +
               '');
 
-      int i = int.parse(resp.toString());
+      if (resp != null)
+        int i = int.parse(resp.toString());
+      else {
+        showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return _LoginUserModal();
+            });
+        Fluttertoast.showToast(
+          msg: "Incorrect email and password.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+        );
+        storeTokenAndData(emailController.text, passwordController.text, value,
+            0, 0, company, _username);
+      }
       if (i > 0) {
         storeTokenAndData(emailController.text, passwordController.text, value,
             userid, companyid, company, _username);
@@ -460,6 +477,9 @@ class _LoginViewState extends State<LoginView> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2,
         );
+        passwordController.clear();
+        storeTokenAndData(emailController.text, passwordController.text, value,
+            0, 0, company, _username);
       }
     }
   }
@@ -473,7 +493,19 @@ class _LoginViewState extends State<LoginView> {
           '');
 
       setState(() {
-        i = int.parse(resp.toString());
+        if (resp != null)
+          i = int.parse(resp.toString());
+        else {
+          Fluttertoast.showToast(
+            msg: "Incorrect email and password.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 2,
+          );
+          passwordController.clear();
+          storeTokenAndData(emailController.text, passwordController.text,
+              value, 0, 0, company, _username);
+        }
       });
 
       if (i > 0) {
@@ -507,6 +539,8 @@ class _LoginViewState extends State<LoginView> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2,
         );
+        storeTokenAndData(emailController.text, passwordController.text, value,
+            0, 0, company, _username);
       }
     } else {
       Fluttertoast.showToast(
@@ -579,10 +613,14 @@ class _LoginViewState extends State<LoginView> {
         pass! +
         '');
 
-    if (value == false)
+    if (resp != null) {
+      if (value == false)
+        return 0;
+      else
+        return int.parse(resp.toString());
+    } else {
       return 0;
-    else
-      return int.parse(resp.toString());
+    }
   }
 
   Future<void> getCompanyList() async {

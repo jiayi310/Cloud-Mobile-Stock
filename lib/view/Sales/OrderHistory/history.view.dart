@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../api/base.client.dart';
@@ -280,8 +281,9 @@ class _OrderHistoryScreen extends State<OrderHistoryScreen> {
                                               Text(
                                                 "RM" +
                                                         saleslist[i]
-                                                            .finalTotal
-                                                            .toString() ??
+                                                            .finalTotal!
+                                                            .toStringAsFixed(
+                                                                2) ??
                                                     "0.00",
                                                 style: TextStyle(
                                                   overflow:
@@ -358,13 +360,34 @@ class _OrderHistoryScreen extends State<OrderHistoryScreen> {
   Future<void> removeSales(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
-      String response = await BaseClient().get('/Sales/RemoveSales?docId=' +
+      String response = await BaseClient().get2('/Sales/RemoveSales?docId=' +
           docID.toString() +
           '&companyId=' +
           companyid);
 
-      if (response != 0) {
-        getData();
+      if (response != "null") {
+        if (response != 0) {
+          Fluttertoast.showToast(
+            msg: 'Deleted successfully',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.grey,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          getData();
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Cannot delete Sales which payment is collected',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
     }
   }

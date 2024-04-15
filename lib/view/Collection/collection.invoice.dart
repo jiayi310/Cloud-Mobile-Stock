@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobilestock/view/Sales/Cart/cart.add.dart';
 
 import '../../../models/Stock.dart';
@@ -38,6 +39,85 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                 children: [
                   ElevatedButton(
                       onPressed: () {
+                        TextEditingController _amountController =
+                            TextEditingController();
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Change Payment Amount'),
+                            content: TextField(
+                              // You can customize this text field according to your needs
+                              decoration: InputDecoration(
+                                hintText: 'Enter new amount',
+                              ),
+                              keyboardType: TextInputType.number,
+                              controller:
+                                  _amountController, // Assign the controller
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    double newAmount = double.tryParse(
+                                            _amountController.text) ??
+                                        0.0;
+                                    if (newAmount != null &&
+                                        newAmount <=
+                                            (widget.collectionItems[i]
+                                                    .salesFinalTotal ??
+                                                0.0)) {
+                                      final collectionProvider =
+                                          CollectionProvider.of(context);
+                                      if (collectionProvider != null) {
+                                        collectionProvider.collection
+                                            .updateAmount(
+                                                widget.collectionItems[i]
+                                                    .salesDocID!,
+                                                newAmount);
+                                        widget.refreshMainPage();
+                                      }
+                                      Fluttertoast.showToast(
+                                        msg: "Changed",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "Payment Amount > Sales Amount",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
+                                    }
+                                  });
+                                },
+                                child: Text('Save'),
+                              ),
+                            ],
+                          ),
+                        );
+                        widget.refreshMainPage();
+                      },
+                      style: ElevatedButton.styleFrom(primary: Colors.blue),
+                      child: Icon(
+                        Icons.edit,
+                      )),
+                  ElevatedButton(
+                      onPressed: () {
                         setState(() {
                           final collectionProvider =
                               CollectionProvider.of(context);
@@ -50,7 +130,7 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       child: Icon(
                         Icons.delete,
-                      ))
+                      )),
                 ],
               ),
               child: Container(
@@ -100,7 +180,8 @@ class _InvoiceCollectionState extends State<InvoiceCollection> {
                         children: [
                           Text(
                             "RM " +
-                                widget.collectionItems[i].paymentAmt.toString(),
+                                (widget.collectionItems[i].paymentAmt ?? 0.00)
+                                    .toStringAsFixed(2),
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,

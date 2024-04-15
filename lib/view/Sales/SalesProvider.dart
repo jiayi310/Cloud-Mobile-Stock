@@ -15,7 +15,14 @@ class SalesProviderData extends InheritedWidget {
   }
 
   void updateTotalPrice(double totalPrice) {
+    sales.subtotal = totalPrice;
     sales.finalTotal = totalPrice;
+  }
+
+  void clearSales() {
+    if (sales.salesDetails != null) {
+      sales.salesDetails!.clear();
+    }
   }
 
   @override

@@ -141,7 +141,7 @@ class _Ranking_AgentState extends State<Ranking_Agent> {
                     ),
                     Spacer(),
                     Text(
-                      list[index].amt.toString(),
+                      list[index].amt!.toStringAsFixed(2),
                       style: TextStyle(color: Color(0xff45C9A1), fontSize: 15),
                     )
                   ],

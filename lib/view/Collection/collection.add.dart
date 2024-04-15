@@ -476,7 +476,7 @@ class _CollectionAddState extends State<CollectionAdd> {
       }
     } catch (error) {
       print('Error fetching data: $error');
-      throw error; // Rethrow the error to be caught by the FutureBuilder
+      throw error;
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -85,6 +86,9 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
       if (salesProvider != null) {
         salesProvider.setSales(widget.sales);
         numOfitem = salesProvider!.sales.salesDetails!.length;
+      }
+      if (widget.isEdit && salesProvider!.sales.salesDetails.isNotEmpty) {
+        updateSalesItemsWithImages(salesProvider.sales.salesDetails);
       }
     }
     widget.sales = SalesProvider.of(context)!.sales;
@@ -203,7 +207,9 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CartList()),
+                                  builder: (context) => CartList(
+                                        isEdit: widget.isEdit,
+                                      )),
                             );
                           },
                           borderRadius: BorderRadius.circular(20),
@@ -328,6 +334,7 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
                                         ),
                                       );
                                     },
+                                    onAddToCart: updateNoOfItem,
                                   );
                                 }).toList(),
                               );
@@ -364,5 +371,24 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
       print('Error fetching data: $error');
       throw error; // Rethrow the error to be caught by the FutureBuilder
     }
+  }
+
+  updateNoOfItem() {
+    setState(() {
+      final salesProvider = SalesProvider.of(context);
+      numOfitem = salesProvider!.sales.salesDetails.length;
+    });
+  }
+
+  void updateSalesItemsWithImages(List<SalesDetails> salesDetailsList) {
+    salesDetailsList.forEach((salesItem) {
+      Stock product = productlist.firstWhere(
+          (product) => product.stockID == salesItem.stockID,
+          orElse: () => Stock());
+
+      setState(() {
+        salesItem.image = Base64Decoder().convert(product.image.toString());
+      });
+    });
   }
 }

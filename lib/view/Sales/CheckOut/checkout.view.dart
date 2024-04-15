@@ -24,7 +24,8 @@ import '../OrderHistory/history.listing.dart';
 import '../SalesProvider.dart';
 
 class CheckOutPage extends StatefulWidget {
-  const CheckOutPage({Key? key}) : super(key: key);
+  CheckOutPage({Key? key, required this.isEdit}) : super(key: key);
+  bool isEdit;
 
   @override
   State<CheckOutPage> createState() => _CheckOutPageState();
@@ -38,22 +39,30 @@ class _CheckOutPageState extends State<CheckOutPage> {
   String companyid = "", userid = "";
   final storage = new FlutterSecureStorage();
   Sales? sales;
+  late final Future<String> myFuture;
 
   @override
   void initState() {
     super.initState();
-    myfuture = getDocNo();
   }
-
-  late final Future<String> myfuture;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Access context and salesProvider here
+    // Move the initialization code that depends on SalesProvider to didChangeDependencies()
     final salesProvider = SalesProvider.of(context);
     salesItems = salesProvider?.sales.salesDetails ?? [];
+
+    if (salesProvider != null && salesProvider.sales != null) {
+      if (salesProvider.sales!.docNo == null) {
+        myFuture = getDocNo();
+      } else {
+        docNo = salesProvider.sales!.docNo ?? '';
+      }
+    } else {
+      // Handle case when salesProvider or salesProvider.sales is null
+    }
   }
 
   @override
@@ -102,7 +111,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
             SizedBox(width: 10),
             InkWell(
               onTap: () {
-                sendSalesData();
+                if (widget.isEdit) {
+                  updateSalesData();
+                } else {
+                  sendSalesData();
+                }
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -483,11 +496,105 @@ class _CheckOutPageState extends State<CheckOutPage> {
             ),
           );
         }
-        // else {
-        //   // Handle errors
-        //   print('Error: ${response.statusCode}');
-        //   print('Response: ${response.body}');
-        // }
+        SalesProviderData? providerData = SalesProviderData.of(context);
+        if (providerData != null) {
+          providerData.clearSales();
+        }
+      } catch (e) {
+        // Handle exceptions
+        print('Exception during API request: $e');
+      }
+    } else {
+      Fluttertoast.showToast(
+        msg: "Please select a customer",
+        toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+        gravity: ToastGravity
+            .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+        timeInSecForIosWeb:
+            1, // Time in seconds before the toast disappears on iOS and web
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
+
+  updateSalesData() async {
+    companyid = (await storage.read(key: "companyid"))!;
+    userid = (await storage.read(key: "userid"))!;
+    if (sales!.customerCode != null) {
+      // Your JSON data
+      Map<String, dynamic> jsonData = {
+        "docID": sales!.docID,
+        "docNo": docNo,
+        "docDate": sales!.docDate!.toIso8601String(),
+        "customerID": sales!.customerID,
+        "customerCode": sales!.customerCode.toString(),
+        "customerName": sales!.customerName.toString(),
+        "address1": sales!.address1.toString(),
+        "address2": sales!.address2.toString(),
+        "address3": sales!.address3.toString(),
+        "address4": sales!.address4.toString(),
+        "salesAgent": sales!.salesAgent ?? null,
+        "phone": sales!.phone.toString(),
+        "email": sales!.email.toString(),
+        "subtotal": sales!.subtotal ?? 0.00,
+        "taxableAmt": sales!.taxableAmt ?? 0.00,
+        "taxAmt": sales!.taxAmt ?? 0.00,
+        "finalTotal": sales!.finalTotal ?? 0.00,
+        "paymentTotal": sales!.paymentTotal ?? 0.00,
+        "outstanding": sales!.outstanding ?? 0.00,
+        "isVoid": false,
+        "lastModifiedUserID": userid,
+        "lastModifiedDateTime": getCurrentDateTime(),
+        "createdUserID": userid,
+        "createdDateTime": sales!.createdDateTime!.toIso8601String(),
+        "companyID": companyid,
+        "salesDetails": salesItems.map((salesItem) {
+          return {
+            "dtlID": salesItem.dtlID,
+            "docID": salesItem.docID,
+            "stockID": salesItem.stockID,
+            "stockCode": salesItem.stockCode.toString(),
+            "description": salesItem.description.toString(),
+            "uom": salesItem.uom.toString(),
+            "qty": salesItem.qty ?? 0,
+            "unitPrice": salesItem.unitPrice ?? 0,
+            "discount": salesItem.discount ?? 0,
+            "total": salesItem.total,
+            "taxableAmt": salesItem.taxableAmt ?? 0,
+            "taxRate": salesItem.taxRate ?? 0,
+            "taxAmt": salesItem.taxAmt ?? 0,
+            "locationID": 1,
+            "location": "HQ",
+          };
+        }).toList(),
+      };
+
+      // Encode the JSON data
+      String jsonString = jsonEncode(jsonData);
+
+      try {
+        final response = await BaseClient().post(
+          '/Sales/UpdateSales?salesId=' + sales!.docID.toString(),
+          jsonString,
+        );
+
+        // Check the status code of the response
+        if (response == "true") {
+          print('API request successful');
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HistoryListingScreen(docid: sales!.docID!),
+            ),
+          );
+          SalesProviderData? providerData = SalesProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearSales();
+          }
+        }
       } catch (e) {
         // Handle exceptions
         print('Exception during API request: $e');

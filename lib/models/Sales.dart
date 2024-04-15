@@ -220,6 +220,7 @@ class Sales {
     double totalPrice = 0, tax = 0;
     for (var item in salesDetails) {
       double subtotal = (item.unitPrice ?? 0) * (item.qty ?? 0);
+
       item.total = subtotal;
 
       totalPrice += subtotal;
@@ -227,6 +228,7 @@ class Sales {
       tax += item.taxAmt ?? 0;
     }
 
+    subtotal = totalPrice;
     finalTotal = totalPrice;
     taxAmt = tax;
     return totalPrice;

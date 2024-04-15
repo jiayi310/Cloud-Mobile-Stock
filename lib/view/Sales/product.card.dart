@@ -17,6 +17,7 @@ class ProductCard extends StatefulWidget {
     required this.press,
     required this.bgColor,
     required this.sales,
+    this.onAddToCart,
   }) : super(key: key);
 
   final String title, stockcode, uom;
@@ -26,6 +27,7 @@ class ProductCard extends StatefulWidget {
   final double price;
   final Color bgColor;
   final Sales sales;
+  final Function()? onAddToCart;
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -74,6 +76,9 @@ class _ProductCardState extends State<ProductCard> {
                     right: -5,
                     child: AddCartButton(
                       onQuantityChanged: (newQuantity) {
+                        if (widget.onAddToCart != null) {
+                          widget.onAddToCart!();
+                        }
                         setState(() {
                           // Add the item to the sales object
                           final salesProvider = SalesProvider.of(context);
@@ -135,7 +140,7 @@ class _ProductCardState extends State<ProductCard> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              "RM " + widget.price.toString(),
+                              "RM " + widget.price.toStringAsFixed(2),
                               style: TextStyle(
                                 color: GlobalColors.mainColor,
                                 fontWeight: FontWeight.bold,

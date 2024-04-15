@@ -56,7 +56,7 @@ class _QuotationAddState extends State<QuotationAdd> {
             SizedBox(width: 10),
             InkWell(
               onTap: () {
-                MaterialPageRoute(builder: (context) => CheckOutPage());
+                //  MaterialPageRoute(builder: (context) => CheckOutPage());
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
