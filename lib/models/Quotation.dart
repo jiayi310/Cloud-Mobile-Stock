@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:get/get.dart';
+
 class Quotation {
   int? docID;
   String? docNo;
@@ -32,43 +36,9 @@ class Quotation {
   int? createdUserID;
   String? createdDateTime;
   int? companyID;
-  List<QuotationDetails>? quotationDetails;
+  List<QuotationDetails> quotationDetails = [];
 
-  Quotation(
-      {this.docID,
-      this.docNo,
-      this.docDate,
-      this.customerID,
-      this.customerCode,
-      this.customerName,
-      this.address1,
-      this.address2,
-      this.address3,
-      this.address4,
-      this.deliverAddr1,
-      this.deliverAddr2,
-      this.deliverAddr3,
-      this.deliverAddr4,
-      this.salesAgent,
-      this.phone,
-      this.fax,
-      this.email,
-      this.attention,
-      this.subtotal,
-      this.taxableAmt,
-      this.taxAmt,
-      this.finalTotal,
-      this.description,
-      this.remark,
-      this.shippingMethodID,
-      this.shippingMethodDescription,
-      this.isVoid,
-      this.lastModifiedUserID,
-      this.lastModifiedDateTime,
-      this.createdUserID,
-      this.createdDateTime,
-      this.companyID,
-      this.quotationDetails});
+  Quotation();
 
   Quotation.fromJson(Map<String, dynamic> json) {
     docID = json['docID'];
@@ -153,6 +123,68 @@ class Quotation {
     }
     return data;
   }
+
+  void removeItem(String stockcode) {
+    quotationDetails!.removeWhere((item) => item.stockCode == stockcode);
+  }
+
+  void addItem({
+    required int stockID,
+    required String stockCode,
+    required String description,
+    required String uom,
+    required double quantity,
+    required double price,
+    required double discount,
+    required double total,
+    required double taxAmt,
+    required double taxableAmount,
+    required double taxrate,
+    required Uint8List image,
+  }) {
+    var existingItem = quotationDetails.firstWhereOrNull(
+      (item) => item.stockCode == stockCode && item.uom == uom,
+    );
+
+    if (existingItem != null) {
+      // If the item exists, update its quantity
+      existingItem.qty = (existingItem.qty ?? 0) + quantity;
+    } else {
+      // If the item doesn't exist, add a new item to the list
+      quotationDetails.add(QuotationDetails(
+        stockID: stockID,
+        stockCode: stockCode,
+        description: description,
+        uom: uom ?? "",
+        qty: quantity,
+        unitPrice: price,
+        total: total,
+        discount: discount,
+        taxableAmt: taxableAmount,
+        taxAmt: taxAmt,
+        taxRate: taxrate,
+        image: image,
+      ));
+    }
+  }
+
+  double calculateTotalPrice() {
+    double totalPrice = 0, tax = 0;
+    for (var item in quotationDetails) {
+      double subtotal = (item.unitPrice ?? 0) * (item.qty ?? 0);
+
+      item.total = subtotal;
+
+      totalPrice += subtotal;
+
+      tax += item.taxAmt ?? 0;
+    }
+
+    subtotal = totalPrice;
+    finalTotal = totalPrice;
+    taxAmt = tax;
+    return totalPrice;
+  }
 }
 
 class QuotationDetails {
@@ -174,6 +206,7 @@ class QuotationDetails {
   double? taxAmt;
   int? locationID;
   String? location;
+  Uint8List? image;
 
   QuotationDetails(
       {this.dtlID,
@@ -193,7 +226,8 @@ class QuotationDetails {
       this.taxRate,
       this.taxAmt,
       this.locationID,
-      this.location});
+      this.location,
+      this.image});
 
   QuotationDetails.fromJson(Map<String, dynamic> json) {
     dtlID = json['dtlID'];

@@ -330,7 +330,9 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => DetailsScreen(
-                                              stockid: stock.stockID!),
+                                            stockid: stock.stockID!,
+                                            source: "Sales",
+                                          ),
                                         ),
                                       );
                                     },

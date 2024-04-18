@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobilestock/models/stock.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
+import 'package:mobilestock/view/Sales/SalesDetails/details.screen.dart';
 
 import '../../../api/base.client.dart';
 
@@ -28,7 +30,7 @@ class _QuotationProductListState extends State<QuotationProductList> {
   @override
   void initState() {
     // TODO: implement initState
-    getCollectionList();
+    getProductList();
   }
 
   @override
@@ -36,7 +38,7 @@ class _QuotationProductListState extends State<QuotationProductList> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: GlobalColors.mainColor,
-        title: Text("Collection List"),
+        title: Text("Product List"),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -47,55 +49,27 @@ class _QuotationProductListState extends State<QuotationProductList> {
                 child: ListView.builder(
                     itemCount: stock.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return StockItem(
-                          stock[index].stockCode.toString(),
-                          stock[index].description.toString(),
-                          stock[index].baseUOM.toString(),
-                          stock[index].baseUOMPrice1!);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                    stockid: stock[index].stockID!,
+                                    source: "Quotation"),
+                              ));
+                        },
+                        child: StockItem(
+                            stock[index].image != null
+                                ? base64.decode(stock[index].image!)
+                                : Uint8List(0),
+                            stock[index].stockCode.toString(),
+                            stock[index].description.toString(),
+                            stock[index].baseUOM.toString(),
+                            stock[index].baseUOMPrice1!),
+                      );
                     }),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Total: ',
-                          style: TextStyle(
-                              fontSize: 22,
-                              color: GlobalColors.mainColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          totalSelected.toStringAsFixed(2),
-                          style: TextStyle(
-                              fontSize: 22,
-                              color: GlobalColors.mainColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            print("CONFIRMED");
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary:
-                                GlobalColors.mainColor, // Change the color here
-                          ),
-                          child: Text("Confirm"),
-                        )),
-                  ],
-                ),
-              )
             ],
           ),
         ),
@@ -104,19 +78,28 @@ class _QuotationProductListState extends State<QuotationProductList> {
   }
 
   Widget StockItem(
+    Uint8List stockImage,
     String stockCode,
     String description,
     String uom,
     double price,
   ) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: GlobalColors.mainColor,
-        child: Icon(
-          Icons.book_rounded,
-          color: Colors.white,
-        ),
-      ),
+      leading: stockImage != null && stockImage.isNotEmpty
+          ? ClipOval(
+              child: Image.memory(
+                stockImage,
+                width: 50,
+                height: 50,
+              ),
+            )
+          : ClipOval(
+              child: Image.asset(
+                "assets/images/no-image.png",
+                width: 50,
+                height: 50,
+              ),
+            ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -145,7 +128,7 @@ class _QuotationProductListState extends State<QuotationProductList> {
     );
   }
 
-  void getCollectionList() async {
+  void getProductList() async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
       if (companyid != null) {

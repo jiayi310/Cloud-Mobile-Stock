@@ -16,6 +16,10 @@ class Customer {
   int? priceCategory;
   int? salesAgentID;
   int? customerTypeID;
+  String? lastModifiedDateTime;
+  int? lastModifiedUserID;
+  String? createdDateTime;
+  int? createdUserID;
 
   Customer();
 
@@ -44,6 +48,10 @@ class Customer {
     deliverPostCode = json["deliverPostCode"];
     attention = json["attention"];
     priceCategory = json["priceCategory"];
+    lastModifiedDateTime = json['lastModifiedDateTime'];
+    lastModifiedUserID = json['lastModifiedUserID'];
+    createdDateTime = json['createdDateTime'];
+    createdUserID = json['createdUserID'];
     salesAgentID = json["salesAgentID"];
     customerTypeID = json["customerTypeID"];
   }
@@ -54,9 +62,30 @@ class Customer {
     data['customerCode'] = this.customerCode;
     data['name'] = this.name;
     data['name2'] = this.name2;
-    // data['salesAgent'] = this.salesAgent;
+    data['address1'] = this.address1;
+    data['address2'] = this.address2;
+    data['address3'] = this.address3;
+    data['address4'] = this.address4;
+    data['postCode'] = this.postCode;
+    data['deliverAddr1'] = this.deliverAddr1;
+    data['deliverAddr2'] = this.deliverAddr2;
+    data['deliverAddr3'] = this.deliverAddr3;
+    data['deliverAddr4'] = this.deliverAddr4;
+    data['deliverPostCode'] = this.deliverPostCode;
+    data['attention'] = this.attention;
     data['phone1'] = this.phone1;
+    data['phone2'] = this.phone2;
+    data['fax1'] = this.fax1;
+    data['fax2'] = this.fax2;
     data['email'] = this.email;
+    data['priceCategory'] = this.priceCategory;
+    data['lastModifiedDateTime'] = this.lastModifiedDateTime;
+    data['lastModifiedUserID'] = this.lastModifiedUserID;
+    data['createdDateTime'] = this.createdDateTime;
+    data['createdUserID'] = this.createdUserID;
+    data['customerTypeID'] = this.customerTypeID;
+    data['salesAgentID'] = this.salesAgentID;
+
     return data;
   }
 }
@@ -70,29 +99,3 @@ class SalesAgent {
     return SalesAgent(salesAgent: json['salesAgent'] ?? "");
   }
 }
-//
-// final List<Customer> demo_customer = [
-//   Customer(
-//       "300-A0001",
-//       "Sky Advanced Infinity (M) Sdn Bhd",
-//       "Sing Inficanty Pro (Z) Malaysia Sdn Bhd",
-//       "Jason",
-//       "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A0002", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-//   Customer("300-A001", "Sky Sdn Bhd", "Sing Sdn Bhd", "Jason", "011-985423668",
-//       "jason@gmail.com"),
-// ];

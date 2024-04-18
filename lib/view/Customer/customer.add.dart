@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mobilestock/view/Customer/textfield.widget.dart';
 
 import '../../api/base.client.dart';
@@ -514,9 +515,9 @@ class _NewCustomerState extends State<NewCustomer> {
             "fax2": fax2.text.isNotEmpty ? fax2.text : null,
             "email": email.text.isNotEmpty ? email.text : null,
             "priceCategory": 1,
-            "lastModifiedDateTime": "2023-10-23T03:26:38.370Z",
+            "lastModifiedDateTime": getCurrentDateTime(),
             "lastModifiedUserID": userid,
-            "createdDateTime": "2023-10-23T03:26:38.370Z",
+            "createdDateTime": getCurrentDateTime(),
             "createdUserID": userid,
             "companyID": companyid
           }));
@@ -581,10 +582,10 @@ class _NewCustomerState extends State<NewCustomer> {
             "priceCategory": widget.customer.priceCategory,
             "salesAgentID": widget.customer.salesAgentID,
             "customerTypeID": widget.customer.customerTypeID,
-            "lastModifiedDateTime": "2023-10-23T03:26:38.370Z",
+            "lastModifiedDateTime": getCurrentDateTime(),
             "lastModifiedUserID": userid,
-            "createdDateTime": "2023-10-23T03:26:38.370Z",
-            "createdUserID": userid,
+            "createdDateTime": widget.customer.createdDateTime,
+            "createdUserID": widget.customer.createdUserID,
             "companyID": companyid
           }));
 
@@ -595,5 +596,12 @@ class _NewCustomerState extends State<NewCustomer> {
         );
       } else {}
     }
+  }
+
+  getCurrentDateTime() {
+    DateTime now = DateTime.now();
+    String formattedDate =
+        DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(now.toUtc());
+    return formattedDate;
   }
 }

@@ -139,33 +139,34 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
                           itemBuilder: (BuildContext context, int i) {
                             return InkWell(
                               onLongPress: () {
-                                Get.defaultDialog(
-                                    cancelTextColor: GlobalColors.mainColor,
-                                    confirmTextColor: Colors.white,
-                                    buttonColor: GlobalColors.mainColor,
-                                    titlePadding: EdgeInsets.only(top: 20),
-                                    title: "Warning",
-                                    onConfirm: () {
-                                      deleteCustomer(customerlist[i]);
-                                    },
-                                    content: Container(
-                                      padding: EdgeInsets.all(20.0),
-                                      child: Column(
-                                        children: [
-                                          Center(
-                                            child: Text(
-                                              "Are you sure want to delete " +
-                                                  customerlist[i]
-                                                      .customerCode
-                                                      .toString(),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          )
-                                        ],
+                                if (FromSource == null)
+                                  Get.defaultDialog(
+                                      cancelTextColor: GlobalColors.mainColor,
+                                      confirmTextColor: Colors.white,
+                                      buttonColor: GlobalColors.mainColor,
+                                      titlePadding: EdgeInsets.only(top: 20),
+                                      title: "Warning",
+                                      onConfirm: () {
+                                        deleteCustomer(customerlist[i]);
+                                      },
+                                      content: Container(
+                                        padding: EdgeInsets.all(20.0),
+                                        child: Column(
+                                          children: [
+                                            Center(
+                                              child: Text(
+                                                "Are you sure want to delete " +
+                                                    customerlist[i]
+                                                        .customerCode
+                                                        .toString(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    textConfirm: "Confirm",
-                                    textCancel: "Cancel");
+                                      textConfirm: "Confirm",
+                                      textCancel: "Cancel");
                               },
                               onTap: () {
                                 if (FromSource != null) {

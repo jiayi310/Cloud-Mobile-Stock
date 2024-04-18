@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/Quotation.dart';
+import 'package:mobilestock/view/Quotation/NewQuotation/quotation.add.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -19,15 +20,15 @@ import 'package:printing/printing.dart';
 
 import '../../Sales/OrderHistory/history.listing.dart';
 
-class DetailsListingScreen extends StatefulWidget {
-  const DetailsListingScreen({Key? key, required this.docid}) : super(key: key);
+class QuotationListingScreen extends StatefulWidget {
+  QuotationListingScreen({Key? key, required this.docid}) : super(key: key);
   final int docid;
 
   @override
-  State<DetailsListingScreen> createState() => _DetailsListingScreen();
+  State<QuotationListingScreen> createState() => _DetailsListingScreen();
 }
 
-class _DetailsListingScreen extends State<DetailsListingScreen> {
+class _DetailsListingScreen extends State<QuotationListingScreen> {
   _DetailsListingScreen();
   Quotation quotation = new Quotation();
   Company company = new Company();
@@ -58,7 +59,17 @@ class _DetailsListingScreen extends State<DetailsListingScreen> {
           Padding(
             padding: EdgeInsets.only(right: 20),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuotationAdd(
+                      isEdit: true,
+                      quotation: quotation,
+                    ),
+                  ),
+                );
+              },
               child: Icon(
                 Icons.edit,
                 size: 25,

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobilestock/utils/global.colors.dart';
+import 'package:mobilestock/view/Quotation/QuotationProvider.dart';
 
 import '../../../api/base.client.dart';
 import '../../../models/Sales.dart';
@@ -10,9 +11,11 @@ import '../../../size.config.dart';
 import '../SalesProvider.dart';
 
 class DetailsScreen extends StatefulWidget {
-  DetailsScreen({Key? key, required this.stockid}) : super(key: key);
+  DetailsScreen({Key? key, required this.stockid, required this.source})
+      : super(key: key);
 
   final int stockid;
+  String source;
   StockDetail stock = new StockDetail();
 
   @override
@@ -666,41 +669,81 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       SizedBox(height: 40),
                                       InkWell(
                                         onTap: () async {
-                                          final salesProvider =
-                                              SalesProvider.of(context);
-                                          if (salesProvider != null) {
-                                            Uint8List? decodedImage =
-                                                await decodeImage(
-                                                    widget.stock.image);
-                                            salesProvider.sales.addItem(
-                                              stockID: widget.stock.stockID!,
-                                              stockCode: widget.stock.stockCode
-                                                  .toString(),
-                                              description: widget
-                                                  .stock.description
-                                                  .toString(),
-                                              uom: selectedUOM,
-                                              quantity: quantity,
-                                              discount: 0,
-                                              taxrate: 0,
-                                              total:
-                                                  widget.stock.baseUOMPrice1! *
-                                                      quantity,
-                                              taxAmt: 0,
-                                              taxableAmount: 0,
-                                              price:
-                                                  widget.stock.baseUOMPrice1!,
-                                              image: decodedImage,
-                                            );
-
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                  content: Text(
-                                                      'Item added to cart')),
-                                            );
-                                            // Close the modal
-                                            Navigator.of(context).pop();
+                                          if (widget.source == "Sales") {
+                                            final salesProvider =
+                                                SalesProvider.of(context);
+                                            if (salesProvider != null) {
+                                              Uint8List? decodedImage =
+                                                  await decodeImage(
+                                                      widget.stock.image);
+                                              salesProvider.sales.addItem(
+                                                stockID: widget.stock.stockID!,
+                                                stockCode: widget
+                                                    .stock.stockCode
+                                                    .toString(),
+                                                description: widget
+                                                    .stock.description
+                                                    .toString(),
+                                                uom: selectedUOM,
+                                                quantity: quantity,
+                                                discount: 0,
+                                                taxrate: 0,
+                                                total: widget
+                                                        .stock.baseUOMPrice1! *
+                                                    quantity,
+                                                taxAmt: 0,
+                                                taxableAmount: 0,
+                                                price:
+                                                    widget.stock.baseUOMPrice1!,
+                                                image: decodedImage,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        'Item added to cart')),
+                                              );
+                                              // Close the modal
+                                              Navigator.of(context).pop();
+                                            }
+                                          } else {
+                                            final quotationProvider =
+                                                QuotationProvider.of(context);
+                                            if (quotationProvider != null) {
+                                              Uint8List? decodedImage =
+                                                  await decodeImage(
+                                                      widget.stock.image);
+                                              quotationProvider.quotation
+                                                  .addItem(
+                                                stockID: widget.stock.stockID!,
+                                                stockCode: widget
+                                                    .stock.stockCode
+                                                    .toString(),
+                                                description: widget
+                                                    .stock.description
+                                                    .toString(),
+                                                uom: selectedUOM,
+                                                quantity: quantity,
+                                                discount: 0,
+                                                taxrate: 0,
+                                                total: widget
+                                                        .stock.baseUOMPrice1! *
+                                                    quantity,
+                                                taxAmt: 0,
+                                                taxableAmount: 0,
+                                                price:
+                                                    widget.stock.baseUOMPrice1!,
+                                                image: decodedImage,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        'Item added to cart')),
+                                              );
+                                              // Close the modal
+                                              Navigator.of(context).pop();
+                                            }
                                           }
                                         },
                                         child: Container(

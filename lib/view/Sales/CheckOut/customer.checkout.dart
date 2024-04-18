@@ -19,7 +19,9 @@ class _CusCheckOutState extends State<CusCheckOut> {
   @override
   Widget build(BuildContext context) {
     final salesProvider = SalesProvider.of(context);
-    if (salesProvider != null && salesProvider.sales.customerID != null) {
+    if (salesProvider != null &&
+        salesProvider.sales.customerID != null &&
+        customer == null) {
       customer = new Customer();
       customer!.customerID = salesProvider.sales.customerID!;
       customer!.customerCode = salesProvider.sales.customerCode!;
@@ -44,11 +46,11 @@ class _CusCheckOutState extends State<CusCheckOut> {
               salesProvider!.sales.customerCode =
                   customer!.customerCode.toString();
               salesProvider.sales.customerID = customer!.customerID!;
-              salesProvider!.sales.customerName = customer!.name.toString();
-              salesProvider!.sales.address1 = customer!.address1.toString();
-              salesProvider!.sales.address2 = customer!.address2.toString();
-              salesProvider!.sales.address3 = customer!.address3.toString();
-              salesProvider!.sales.address4 = customer!.address4.toString();
+              salesProvider!.sales.customerName = customer!.name ?? null;
+              salesProvider!.sales.address1 = customer!.address1 ?? null;
+              salesProvider!.sales.address2 = customer!.address2 ?? null;
+              salesProvider!.sales.address3 = customer!.address3 ?? null;
+              salesProvider!.sales.address4 = customer!.address4 ?? null;
               salesProvider!.sales.salesAgent =
                   customer!.salesAgent.salesAgent.toString();
               salesProvider!.sales.phone = customer!.phone1.toString();

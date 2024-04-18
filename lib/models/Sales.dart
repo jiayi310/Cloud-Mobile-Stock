@@ -195,10 +195,8 @@ class Sales {
         (item) => item.stockCode == stockCode && item.uom == uom);
 
     if (existingItem != null) {
-      // If the item exists, update its quantity
       existingItem.qty = (existingItem.qty ?? 0) + quantity;
     } else {
-      // If the item doesn't exist, add a new item to the list
       salesDetails.add(SalesDetails(
         stockID: stockID,
         stockCode: stockCode,

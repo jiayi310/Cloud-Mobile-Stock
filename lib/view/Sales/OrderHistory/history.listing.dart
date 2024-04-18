@@ -14,7 +14,6 @@ import '../../../models/Company.dart';
 import '../../../models/Sales.dart';
 import '../../../utils/global.colors.dart';
 import '../home.sales.dart';
-import 'listingsales.details.dart';
 
 class HistoryListingScreen extends StatefulWidget {
   HistoryListingScreen({Key? key, required this.docid}) : super(key: key);

@@ -32,7 +32,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 2, vsync: this);
+    TabController _tabController = TabController(length: 3, vsync: this);
     containerheight = ((MediaQuery.of(context).size.width - 90) / 2) + 20;
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -196,11 +196,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Tab(
                             text: "Warehouse Management",
                           ),
+                          Tab(
+                            text: "General",
+                          ),
                         ]),
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
-                        children: [_tabController1(), _tabController2()],
+                        children: [
+                          _tabController1(),
+                          _tabController2(),
+                          _tabController3()
+                        ],
                       ),
                     ),
 
@@ -299,14 +306,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           for (int i = 0; i < warehouse_menu_list.length; i++)
             InkWell(
               onTap: () {
-                Fluttertoast.showToast(
-                  msg: "Coming Soon.",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 2,
-                );
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
+                // Fluttertoast.showToast(
+                //   msg: "Coming Soon.",
+                //   toastLength: Toast.LENGTH_SHORT,
+                //   gravity: ToastGravity.BOTTOM,
+                //   timeInSecForIosWeb: 2,
+                // );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -338,6 +345,66 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                     Text(
                       warehouse_menu_list[i].title!,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  _tabController3() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GridView.extent(
+        maxCrossAxisExtent: 300,
+        crossAxisSpacing: 11,
+        mainAxisSpacing: 11,
+        childAspectRatio: (1 / 1),
+        controller: new ScrollController(keepScrollOffset: false),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        children: [
+          for (int i = 0; i < general_list.length; i++)
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: general_list[i].nav!));
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                decoration: BoxDecoration(
+                    color: HexColor(general_list[i].color!),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(5.0, 5.0),
+                          blurRadius: 10.0,
+                          spreadRadius: 2.0),
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0)
+                    ]),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      general_list[i].img!,
+                      width: 110,
+                      height: 110,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      general_list[i].title!,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                     ),

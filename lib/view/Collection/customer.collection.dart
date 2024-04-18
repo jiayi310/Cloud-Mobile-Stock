@@ -20,7 +20,8 @@ class _CusCollection extends State<CusCollection> {
   Widget build(BuildContext context) {
     final collectProvider = CollectionProvider.of(context);
     if (collectProvider != null &&
-        collectProvider.collection.customerID != null) {
+        collectProvider.collection.customerID != null &&
+        customer == null) {
       customer = new Customer();
       customer!.customerID = collectProvider.collection.customerID!;
       customer!.customerCode = collectProvider.collection.customerCode!;

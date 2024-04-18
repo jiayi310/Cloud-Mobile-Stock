@@ -47,7 +47,9 @@ class ItemsWidget extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailsScreen(
-                              stockid: demo_product[index].stockID!),
+                            stockid: demo_product[index].stockID!,
+                            source: "Sales",
+                          ),
                         ));
                   },
                 ),

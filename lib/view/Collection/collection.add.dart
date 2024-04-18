@@ -52,7 +52,6 @@ class _CollectionAddState extends State<CollectionAdd> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.isEdit) {
       docNo = widget.collection!.docNo!;
       saveImageToTempDirectory(widget.collection!.image!.split(',').last);
@@ -67,25 +66,15 @@ class _CollectionAddState extends State<CollectionAdd> {
 
     // Decode the bytes into an image using the 'image' package
     img.Image image = img.decodeImage(bytes)!;
-
-    // Get the temporary directory using path_provider package
     Directory tempDir = await getTemporaryDirectory();
-
-    // Create a temporary folder path
     String tempFolderPath = '${tempDir.path}/your_temp_folder';
 
     // Check if the temporary folder exists, if not, create it
     if (!(await Directory(tempFolderPath).exists())) {
       await Directory(tempFolderPath).create(recursive: true);
     }
-
-    // Create a temporary file name
     String tempFileName = 'temp_image.png';
-
-    // Construct the temporary file path
     String tempFilePath = '$tempFolderPath/$tempFileName';
-
-    // Write the image to the temporary file
     File(tempFilePath).writeAsBytesSync(img.encodePng(image));
 
     setState(() {
@@ -132,7 +121,7 @@ class _CollectionAddState extends State<CollectionAdd> {
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Row(
               children: [

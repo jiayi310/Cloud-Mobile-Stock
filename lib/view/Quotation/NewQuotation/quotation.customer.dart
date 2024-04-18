@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
+import 'package:mobilestock/view/Quotation/QuotationProvider.dart';
 
 import '../../../models/Customer.dart';
 import '../../Customer/customer.home.dart';
@@ -17,7 +18,23 @@ class _CusQuotation extends State<CusQuotation> {
   Customer? customer;
   @override
   Widget build(BuildContext context) {
-    final collectProvider = CollectionProvider.of(context);
+    final quotationProvider = QuotationProvider.of(context);
+    if (quotationProvider != null &&
+        quotationProvider.quotation.customerID != null &&
+        customer == null) {
+      customer = new Customer();
+      customer!.customerID = quotationProvider.quotation.customerID!;
+      customer!.customerCode = quotationProvider.quotation.customerCode!;
+      customer!.name = quotationProvider.quotation.customerName!;
+      customer?.address1 = quotationProvider?.quotation?.address1;
+      customer?.address2 = quotationProvider?.quotation?.address2;
+      customer?.address3 = quotationProvider?.quotation?.address3;
+      customer?.address4 = quotationProvider?.quotation?.address4;
+      customer?.phone1 = quotationProvider?.quotation?.phone!;
+      customer?.email = quotationProvider?.quotation?.email!;
+      customer!.salesAgent = new SalesAgent(
+          salesAgent: quotationProvider.quotation.salesAgent.toString());
+    }
     return InkWell(
       onTap: () {
         _navigateToCustomerScreen(context);
@@ -26,12 +43,23 @@ class _CusQuotation extends State<CusQuotation> {
         children: [
           if (customer != null)
             Builder(builder: (context) {
-              collectProvider!.collection.customerCode =
+              quotationProvider!.quotation.customerID = customer!.customerID;
+              quotationProvider!.quotation.customerCode =
                   customer!.customerCode.toString();
-              collectProvider!.collection.customerName =
+              quotationProvider!.quotation.customerName =
                   customer!.name.toString();
-              collectProvider!.collection.salesAgent =
+              quotationProvider!.quotation.address1 =
+                  customer!.address1.toString();
+              quotationProvider!.quotation.address2 =
+                  customer!.address2.toString();
+              quotationProvider!.quotation.address3 =
+                  customer!.address3.toString();
+              quotationProvider!.quotation.address4 =
+                  customer!.address4.toString();
+              quotationProvider!.quotation.salesAgent =
                   customer!.salesAgent.salesAgent.toString();
+              quotationProvider!.quotation.phone = customer!.phone1.toString();
+              quotationProvider!.quotation.email = customer!.email.toString();
               return Container(
                 height: 110,
                 width: double.infinity,
