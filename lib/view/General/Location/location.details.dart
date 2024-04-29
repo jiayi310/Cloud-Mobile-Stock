@@ -6,6 +6,7 @@ import 'package:mobilestock/models/Location.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../api/base.client.dart';
 import '../../../utils/global.colors.dart';
 import 'location.add.dart';
 
@@ -152,23 +153,6 @@ class _LocationDetailsState extends State<LocationDetails> {
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
                           children: [
-                            //Desc2
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Desc 2",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.name2 ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
                             //Address
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,7 +164,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.address1 ?? "",
+                                  location.address1 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -195,7 +179,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.address2 ?? "",
+                                  location.address2 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -210,7 +194,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.address3 ?? "",
+                                  location.address3 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -225,7 +209,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.address4 ?? "",
+                                  location.address4 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -240,85 +224,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.deliverAddr4 ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            //Deliver Address
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Deliver Address",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.deliverAddr1 ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.deliverAddr2 ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.deliverAddr3 ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.deliverAddr4 ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Deliver PostCode",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.deliverPostCode ?? "",
+                                  location.postCode ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -335,7 +241,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.phone2 ?? "",
+                                  location.phone2 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -352,7 +258,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.fax1 ?? "",
+                                  location.fax1 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -369,60 +275,12 @@ class _LocationDetailsState extends State<LocationDetails> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Location.fax2 ?? "",
+                                  location.fax2 ?? "",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
                             ),
                             SizedBox(height: 10),
-                            //Agent
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Agent",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.salesAgent.salesAgent ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Email",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.email ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Attention",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  Location.attention ?? "",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -430,118 +288,6 @@ class _LocationDetailsState extends State<LocationDetails> {
                     SizedBox(
                       height: 40,
                     ),
-                    // Container(
-                    //   width: MediaQuery.of(context).size.width,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.grey.withOpacity(0.1),
-                    //       borderRadius: BorderRadius.circular(20)),
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(20.0),
-                    //     child: Column(
-                    //       children: [
-                    //         //Type & Area
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "Type",
-                    //                   style: TextStyle(
-                    //                       fontSize: 13, fontWeight: FontWeight.bold),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "Wholesales",
-                    //                   style: TextStyle(fontSize: 13),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             SizedBox(width: 10),
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "Area",
-                    //                   style: TextStyle(
-                    //                       fontSize: 13, fontWeight: FontWeight.bold),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "Puchong",
-                    //                   style: TextStyle(fontSize: 13),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         SizedBox(height: 10),
-                    //         //Terms & tax Code
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "Terms",
-                    //                   style: TextStyle(
-                    //                       fontSize: 13, fontWeight: FontWeight.bold),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "C.O.D",
-                    //                   style: TextStyle(fontSize: 13),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             SizedBox(width: 10),
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "Currency",
-                    //                   style: TextStyle(
-                    //                       fontSize: 13, fontWeight: FontWeight.bold),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             Expanded(
-                    //               flex: 1,
-                    //               child: Container(
-                    //                 child: Text(
-                    //                   "RM",
-                    //                   style: TextStyle(fontSize: 13),
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     SizedBox(
                       height: 40,
                     ),
@@ -568,13 +314,13 @@ class _LocationDetailsState extends State<LocationDetails> {
 
   Future<void> getLocationData() async {
     String response = await BaseClient()
-        .get('/Location/GetLocation?Locationid=' + Locationid.toString());
+        .get('/Location/GetLocation?Locationid=' + locationid.toString());
 
     if (response != null) {
-      Location _Location = Location.fromJson(jsonDecode(response));
+      Location _location = Location.fromJson(jsonDecode(response));
 
       setState(() {
-        Location = _Location;
+        location = _location;
         _isLoading = false;
       });
     }

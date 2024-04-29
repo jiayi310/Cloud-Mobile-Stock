@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
+import 'package:mobilestock/view/WMS/Putaway/HistoryListing/putaway.listing.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/PutAway.dart';
@@ -179,15 +180,15 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                           );
                                         },
                                         onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           PutAwaylistingScreen(
-                                          //         docid:
-                                          //             PutAwaylist[i].docID!,
-                                          //       ),
-                                          //     ));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PutAwayListingScreen(
+                                                  docid:
+                                                      PutAwaylist[i].putAwayID!,
+                                                ),
+                                              ));
                                         },
                                         child: Container(
                                           height: 130,

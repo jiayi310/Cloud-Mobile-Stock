@@ -26,6 +26,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "autocomplete_textfield",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/autocomplete_textfield-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "barcode",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/barcode-2.2.6",
       "packageUri": "lib/",
@@ -150,6 +156,12 @@
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/dotted_border-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "dropdown_search",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/dropdown_search-5.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "equatable",
@@ -926,7 +938,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-03-19T03:38:42.381551Z",
+  "generated": "2024-04-19T09:38:51.712520Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

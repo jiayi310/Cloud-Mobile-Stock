@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
+import 'package:mobilestock/view/WMS/StockTransfer/HistoryListing/stocktransfer.listing.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/StockTransfer.dart';
@@ -180,15 +181,15 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
                                           );
                                         },
                                         onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           StockTransferListingScreen(
-                                          //         docid:
-                                          //             StockTransferList[i].docID!,
-                                          //       ),
-                                          //     ));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    StockTransferListingScreen(
+                                                  docid: StockTransferList[i]
+                                                      .docID!,
+                                                ),
+                                              ));
                                         },
                                         child: Container(
                                           height: 110,
@@ -279,7 +280,7 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(height: 5),
+                                                SizedBox(height: 10),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment

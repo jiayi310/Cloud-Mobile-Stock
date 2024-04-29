@@ -5,11 +5,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
+import 'package:mobilestock/view/WMS/Receiving/HistoryListing/receiving.listing.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/Receiving.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../../utils/loading.dart';
+import '../ReceivingProvider.dart';
+import '../receiving.add.dart';
 
 class ReceivingHomeScreen extends StatefulWidget {
   const ReceivingHomeScreen({Key? key}) : super(key: key);
@@ -41,18 +44,18 @@ class _ReceivingHomeScreen extends State<ReceivingHomeScreen> {
       backgroundColor: GlobalColors.wmsColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // ReceivingProviderData? providerData =
-          //     ReceivingProviderData.of(context);
-          // if (providerData != null) {
-          //   providerData.clearReceiving();
-          // }
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => ReceivingAdd(
-          //               isEdit: false,
-          //               receiving: new Receiving(paymentTotal: 0),
-          //             ))).then((value) => getData());
+          ReceivingProviderData? providerData =
+              ReceivingProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearReceiving();
+          }
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ReceivingAdd(
+                        isEdit: false,
+                        receiving: new Receiving(),
+                      ))).then((value) => getData());
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,
@@ -179,15 +182,15 @@ class _ReceivingHomeScreen extends State<ReceivingHomeScreen> {
                                           );
                                         },
                                         onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           receivinglistingScreen(
-                                          //         docid:
-                                          //             receivinglist[i].docID!,
-                                          //       ),
-                                          //     ));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReceivingListingScreen(
+                                                  docid:
+                                                      receivinglist[i].docID!,
+                                                ),
+                                              ));
                                         },
                                         child: Container(
                                           height: 130,

@@ -10,6 +10,7 @@ import 'package:mobilestock/view/General/Location/location.add.dart';
 import '../../../api/base.client.dart';
 import '../../../models/Location.dart';
 import '../../../utils/loading.dart';
+import 'location.details.dart';
 
 class LocationHomeScreen extends StatefulWidget {
   LocationHomeScreen({Key? key, this.FromSource}) : super(key: key);
@@ -168,17 +169,17 @@ class _LocationHomeScreen extends State<LocationHomeScreen> {
                                       textCancel: "Cancel");
                               },
                               onTap: () {
-                                // if (FromSource != null) {
-                                //   Navigator.pop(context, locationList[i]);
-                                // } else {
-                                //   Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //         builder: (context) => LocationDetails(
-                                //             Locationid:
-                                //                 locationList[i].LocationID!),
-                                //       ));
-                                // }
+                                if (FromSource != null) {
+                                  Navigator.pop(context, locationList[i]);
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LocationDetails(
+                                            locationid:
+                                                locationList[i].locationID!),
+                                      ));
+                                }
                               },
                               child: Container(
                                 height: 60,

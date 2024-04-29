@@ -165,7 +165,7 @@ class PackingDetails {
   String? stockCode;
   String? description;
   String? uom;
-  int? qty;
+  double? qty;
 
   PackingDetails(
       {this.dtlID,

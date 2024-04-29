@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
+import 'package:mobilestock/view/WMS/Picking/HistoryListing/picking.listing.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/Picking.dart';
@@ -179,18 +180,17 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
                                           );
                                         },
                                         onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           PickinglistingScreen(
-                                          //         docid:
-                                          //             Pickinglist[i].docID!,
-                                          //       ),
-                                          //     ));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PickingListingScreen(
+                                                  docid: Pickinglist[i].docID!,
+                                                ),
+                                              ));
                                         },
                                         child: Container(
-                                          height: 90,
+                                          height: 70,
                                           margin: EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 10),
                                           padding: EdgeInsets.all(5),
@@ -265,28 +265,6 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
                                                       ),
                                                     ),
                                                     SizedBox(width: 20),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        Pickinglist[i]
-                                                                .location ??
-                                                            "",
-                                                        style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontSize: 15,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
                                                   ],
                                                 ),
                                               ],

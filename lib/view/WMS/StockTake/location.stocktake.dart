@@ -5,6 +5,8 @@ import 'package:mobilestock/view/Collection/CollectionProvider.dart';
 import 'package:mobilestock/view/Quotation/QuotationProvider.dart';
 
 import '../../../models/Location.dart';
+import '../../General/Location/location.home.dart';
+import 'StockTakeProvider.dart';
 
 class LocStockTake extends StatefulWidget {
   const LocStockTake({Key? key}) : super(key: key);
@@ -17,23 +19,14 @@ class _LocStockTake extends State<LocStockTake> {
   Location? location;
   @override
   Widget build(BuildContext context) {
-    // final quotationProvider = QuotationProvider.of(context);
-    // if (quotationProvider != null &&
-    //     quotationProvider.quotation.locationID != null &&
-    //     location == null) {
-    //   location = new location();
-    //   location!.locationID = quotationProvider.quotation.locationID!;
-    //   location!.locationCode = quotationProvider.quotation.locationCode!;
-    //   location!.name = quotationProvider.quotation.locationName!;
-    //   location?.address1 = quotationProvider?.quotation?.address1;
-    //   location?.address2 = quotationProvider?.quotation?.address2;
-    //   location?.address3 = quotationProvider?.quotation?.address3;
-    //   location?.address4 = quotationProvider?.quotation?.address4;
-    //   location?.phone1 = quotationProvider?.quotation?.phone!;
-    //   location?.email = quotationProvider?.quotation?.email!;
-    //   location!.salesAgent = new SalesAgent(
-    //       salesAgent: quotationProvider.quotation.salesAgent.toString());
-    // }
+    final stockTakeProvider = StockTakeProvider.of(context);
+    if (stockTakeProvider != null &&
+        stockTakeProvider.stockTake.locationID != null &&
+        location == null) {
+      location = new Location();
+      location!.locationID = stockTakeProvider.stockTake.locationID!;
+      location!.location = stockTakeProvider.stockTake.location!;
+    }
     return InkWell(
       onTap: () {
         _navigateTolocationScreen(context);
@@ -42,12 +35,16 @@ class _LocStockTake extends State<LocStockTake> {
         children: [
           if (location != null)
             Builder(builder: (context) {
-              // quotationProvider!.quotation.locationID = location!.locationID;
-              // quotationProvider!.quotation.locationCode =
-              //     location!.locationCode.toString();
+              if (stockTakeProvider != null &&
+                  stockTakeProvider.stockTake.locationID != null &&
+                  location == null) {
+                stockTakeProvider!.stockTake.locationID = location!.locationID;
+                stockTakeProvider!.stockTake.location =
+                    location!.location.toString();
+              }
 
               return Container(
-                height: 110,
+                height: 50,
                 width: double.infinity,
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.all(15),
@@ -104,11 +101,15 @@ class _LocStockTake extends State<LocStockTake> {
   }
 
   Future<void> _navigateTolocationScreen(BuildContext context) async {
-    // final result = await Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => locationHomeScreen()));
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LocationHomeScreen(
+                  FromSource: "StockTake",
+                )));
 
     setState(() {
-      //location = result;
+      location = result;
     });
   }
 }

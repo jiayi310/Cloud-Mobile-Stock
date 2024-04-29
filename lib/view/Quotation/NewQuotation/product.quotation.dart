@@ -26,6 +26,8 @@ class _QuotationProductListState extends State<QuotationProductList> {
   List<Stock> productFromJson(String str) =>
       List<Stock>.from(json.decode(str).map((x) => Stock.fromJson(x)));
   double totalSelected = 0.00;
+  bool _visible = false;
+  List<Stock> productlist_search = [];
 
   @override
   void initState() {
@@ -40,37 +42,87 @@ class _QuotationProductListState extends State<QuotationProductList> {
         backgroundColor: GlobalColors.mainColor,
         title: Text("Product List"),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: InkWell(
+              onTap: () {
+                _toggle();
+              },
+              child: Icon(
+                Icons.search,
+                size: 25,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
-        child: Container(
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount: stock.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailsScreen(
-                                    stockid: stock[index].stockID!,
-                                    source: "Quotation"),
-                              ));
-                        },
-                        child: StockItem(
-                            stock[index].image != null
-                                ? base64.decode(stock[index].image!)
-                                : Uint8List(0),
-                            stock[index].stockCode.toString(),
-                            stock[index].description.toString(),
-                            stock[index].baseUOM.toString(),
-                            stock[index].baseUOMPrice1!),
-                      );
-                    }),
-              ),
-            ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            child: Column(
+              children: [
+                Visibility(
+                  visible: _visible,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10, left: 10),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: GlobalColors.mainColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 15),
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width - 118,
+                            child: TextFormField(
+                              onChanged: searchQuery,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none, hintText: "Search"),
+                            ),
+                          ),
+                          Container(
+                              alignment: Alignment.centerRight,
+                              margin: EdgeInsets.only(right: 20),
+                              child: Icon(Icons.camera_alt)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: stock.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailsScreen(
+                                      stockid: stock[index].stockID!,
+                                      source: "Quotation"),
+                                ));
+                          },
+                          child: StockItem(
+                              stock[index].image != null
+                                  ? base64.decode(stock[index].image!)
+                                  : Uint8List(0),
+                              stock[index].stockCode.toString(),
+                              stock[index].description.toString(),
+                              stock[index].baseUOM.toString(),
+                              stock[index].baseUOMPrice1!),
+                        );
+                      }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -138,8 +190,39 @@ class _QuotationProductListState extends State<QuotationProductList> {
 
         setState(() {
           stock = _productlist;
+          productlist_search = _productlist;
         });
       }
     }
+  }
+
+  void _toggle() {
+    setState(() {
+      _visible = !_visible;
+    });
+  }
+
+  void searchQuery(String query) {
+    final suggestions = productlist_search.where((element) {
+      final code = element.stockCode?.toString().toLowerCase() ?? "";
+      final desc = element.description!.toString().toLowerCase() ?? "";
+      final desc2 = element.desc2.toString().toLowerCase();
+      final group = element.stockGroupDescription.toString().toLowerCase();
+      final type = element.stockTypeDescription.toString().toLowerCase();
+      final category =
+          element.stockCategoryDescription.toString().toLowerCase();
+      final input = query.toLowerCase();
+
+      return code.contains(input) ||
+          desc.contains(input) ||
+          desc2.contains(input) ||
+          group.toString().contains(input) ||
+          type.toString().contains(input) ||
+          category.toString().contains(input);
+    }).toList();
+
+    setState(() {
+      stock = suggestions;
+    });
   }
 }

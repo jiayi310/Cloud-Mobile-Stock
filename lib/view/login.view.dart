@@ -446,7 +446,7 @@ class _LoginViewState extends State<LoginView> {
               '');
 
       if (resp != null)
-        int i = int.parse(resp.toString());
+        i = int.parse(resp.toString());
       else {
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
@@ -454,12 +454,12 @@ class _LoginViewState extends State<LoginView> {
             builder: (context) {
               return _LoginUserModal();
             });
-        Fluttertoast.showToast(
-          msg: "Incorrect email and password.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 2,
-        );
+        // Fluttertoast.showToast(
+        //   msg: "Incorrect email and password.",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 2,
+        // );
         storeTokenAndData(emailController.text, passwordController.text, value,
             0, 0, company, _username);
       }

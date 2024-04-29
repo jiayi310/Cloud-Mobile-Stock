@@ -68,6 +68,8 @@ dependencies:
   barcode_scan2: ^4.3.0
   mobx: ^2.3.0+1
   flutter_modular: ^6.3.2
+  dropdown_search: ^5.0.6
+  autocomplete_textfield: ^2.0.1
 
 
 dev_dependencies:

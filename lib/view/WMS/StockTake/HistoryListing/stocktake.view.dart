@@ -191,7 +191,7 @@ class _StockTakeHomeScreen extends State<StockTakeHomeScreen> {
                                               ));
                                         },
                                         child: Container(
-                                          height: 130,
+                                          height: 100,
                                           margin: EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 10),
                                           padding: EdgeInsets.all(5),
@@ -246,40 +246,6 @@ class _StockTakeHomeScreen extends State<StockTakeHomeScreen> {
                                                   ],
                                                 ),
                                                 SizedBox(height: 10),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        stockTakeList[i]
-                                                                .description ??
-                                                            "",
-                                                        style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 15,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 20),
-                                                    Text(
-                                                      "Approved",
-                                                      style: TextStyle(
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        fontSize: 15,
-                                                        color: Colors.green,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 5),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment

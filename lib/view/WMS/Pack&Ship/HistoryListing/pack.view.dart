@@ -10,6 +10,7 @@ import '../../../../api/base.client.dart';
 import '../../../../models/Packing.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../../utils/loading.dart';
+import 'pack.listing.dart';
 
 class PackingHomeScreen extends StatefulWidget {
   const PackingHomeScreen({Key? key}) : super(key: key);
@@ -179,15 +180,14 @@ class _PackingHomeScreen extends State<PackingHomeScreen> {
                                           );
                                         },
                                         onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           PackinglistingScreen(
-                                          //         docid:
-                                          //             Packinglist[i].docID!,
-                                          //       ),
-                                          //     ));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PackingListingScreen(
+                                                  docid: Packinglist[i].docID!,
+                                                ),
+                                              ));
                                         },
                                         child: Container(
                                           height: 130,

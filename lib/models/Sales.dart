@@ -282,7 +282,6 @@ class SalesDetails {
   int? docID;
   int? stockID;
   String? stockCode;
-  int? stockBatchID;
   String? batchNo;
   String? description;
   String? uom;
@@ -303,7 +302,6 @@ class SalesDetails {
       this.docID,
       this.stockID,
       this.stockCode,
-      this.stockBatchID,
       this.batchNo,
       this.description,
       this.uom,
@@ -324,7 +322,6 @@ class SalesDetails {
     docID = json['docID'];
     stockID = json['stockID'];
     stockCode = json['stockCode'];
-    stockBatchID = json['stockBatchID'];
     batchNo = json['batchNo'];
     description = json['description'];
     uom = json['uom'];
@@ -347,7 +344,6 @@ class SalesDetails {
     data['docID'] = this.docID;
     data['stockID'] = this.stockID;
     data['stockCode'] = this.stockCode;
-    data['stockBatchID'] = this.stockBatchID;
     data['batchNo'] = this.batchNo;
     data['description'] = this.description;
     data['uom'] = this.uom;

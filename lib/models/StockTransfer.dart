@@ -76,7 +76,7 @@ class StockTransferDetails {
   String? stockCode;
   String? description;
   String? uom;
-  int? qty;
+  double? qty;
   int? fromLocationID;
   String? fromLocation;
   int? fromStorageID;

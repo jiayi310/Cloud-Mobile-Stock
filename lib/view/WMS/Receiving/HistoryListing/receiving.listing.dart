@@ -5,28 +5,28 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:mobilestock/models/StockTake.dart';
-import 'package:mobilestock/view/WMS/StockTake/HistoryListing/stocktake.view.dart';
+import 'package:mobilestock/models/Receiving.dart';
+import 'package:mobilestock/view/WMS/Receiving/HistoryListing/Receiving.view.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/Company.dart';
-import '../../../../models/StockTake.dart';
+import '../../../../models/Receiving.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../Sales/OrderHistory/history.listing.dart';
 
-class StockTakeListingScreen extends StatefulWidget {
-  StockTakeListingScreen({Key? key, required this.docid}) : super(key: key);
+class ReceivingListingScreen extends StatefulWidget {
+  ReceivingListingScreen({Key? key, required this.docid}) : super(key: key);
   int docid;
 
   @override
-  State<StockTakeListingScreen> createState() => _StockTakeListingScreen();
+  State<ReceivingListingScreen> createState() => _ReceivingListingScreen();
 }
 
-class _StockTakeListingScreen extends State<StockTakeListingScreen> {
-  _StockTakeListingScreen();
-  StockTake stockTake = new StockTake();
+class _ReceivingListingScreen extends State<ReceivingListingScreen> {
+  _ReceivingListingScreen();
+  Receiving receiving = new Receiving();
   Company company = new Company();
   bool _isLoading = true;
 
@@ -34,7 +34,7 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getStockTakeDetail();
+    getReceivingDetail();
     getCompanyDetail();
   }
 
@@ -42,11 +42,11 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/StockTakeHome': (context) => StockTakeHomeScreen(),
+        '/ReceivingHome': (context) => ReceivingHomeScreen(),
       },
       home: WillPopScope(
         onWillPop: () async {
-          Navigator.popUntil(context, ModalRoute.withName('/StockTakeHome'));
+          Navigator.popUntil(context, ModalRoute.withName('/ReceivingHome'));
 
           return true;
         },
@@ -64,7 +64,7 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
               },
             ),
             title: Text(
-              stockTake.docNo.toString(),
+              receiving.docNo.toString(),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             actions: [
@@ -74,9 +74,9 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
-                  //     builder: (context) => StockTakeAdd(
+                  //     builder: (context) => ReceivingAdd(
                   //       isEdit: true,
-                  //       StockTake: StockTake,
+                  //       Receiving: Receiving,
                   //     ),
                   //   ),
                   // );
@@ -93,8 +93,8 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                       final userSessionDto = UserSessionDto(
                           int.parse(_userid!), int.parse(_companyid!));
 
-                      await getStockTakeReport(
-                          userSessionDto, stockTake.docID!);
+                      await getReceivingReport(
+                          userSessionDto, receiving.docID!);
                     }
                   },
                   itemBuilder: (context) => [
@@ -127,7 +127,7 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "Stock Take",
+                                    "Receiving",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
@@ -136,7 +136,7 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                                     height: 5,
                                   ),
                                   Text(
-                                    stockTake.docNo.toString(),
+                                    receiving.docNo.toString(),
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.black38),
                                   ),
@@ -225,6 +225,21 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                           SizedBox(
                             height: 5,
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "BILL TO",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "",
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 10,
                           ),
@@ -232,13 +247,40 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Date: " +
-                                    (stockTake.docDate != null &&
-                                            stockTake.docDate
+                                receiving.supplierCode.toString() +
+                                    " " +
+                                    receiving.supplierName.toString(),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "",
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                receiving.address1 ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              Text(
+                                "Date:   " +
+                                    (receiving.docDate != null &&
+                                            receiving.docDate
                                                     .toString()
                                                     .length >=
                                                 10
-                                        ? stockTake.docDate
+                                        ? receiving.docDate
                                             .toString()
                                             .substring(0, 10)
                                         : "N/A"),
@@ -246,10 +288,53 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                receiving.address2 ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                              if (receiving.remark != null)
+                                Text(
+                                  "Remark:   " + (receiving.remark ?? ""),
+                                ),
+                            ],
                           ),
                           SizedBox(
                             height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                receiving.address3 ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                receiving.address4 ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -280,13 +365,13 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
     );
   }
 
-  getStockTakeReport(UserSessionDto userSessionDto, int StockTakeid) async {
+  getReceivingReport(UserSessionDto userSessionDto, int Receivingid) async {
     final body = jsonEncode({
       'userid': userSessionDto.userid,
       'companyid': userSessionDto.companyid
     });
     final resp = await BaseClient().postPDF(
-        '/Report/GetStockTakeReport?stocktakeid=' + StockTakeid.toString(),
+        '/Report/GetReceivingReport?Receivingid=' + Receivingid.toString(),
         body);
 
     try {
@@ -297,7 +382,7 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
 
         String currentDate =
             DateFormat('yyyyMMddHHmmss').format(DateTime.now());
-        String fileName = '${currentDate}_${stockTake.docNo}.pdf';
+        String fileName = '${currentDate}_${receiving.docNo}.pdf';
         String filePath = '${documentsDirectory.path}/$fileName';
 
         // Save the PDF file to local storage
@@ -316,17 +401,17 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
     }
   }
 
-  Future<void> getStockTakeDetail() async {
+  Future<void> getReceivingDetail() async {
     await Future.delayed(Duration(seconds: 2));
     if (widget.docid != null) {
       final response = await BaseClient()
-          .get('/StockTake/GetStockTake?docid=' + widget.docid.toString());
+          .get('/Receiving/GetReceiving?docid=' + widget.docid.toString());
 
-      StockTake _stockTake = StockTake.fromJson(jsonDecode(response));
+      Receiving _receiving = Receiving.fromJson(jsonDecode(response));
 
       if (mounted) {
         setState(() {
-          stockTake = _stockTake;
+          receiving = _receiving;
           _isLoading = false;
         });
       }
@@ -354,7 +439,7 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
   List<DataColumn> _createColumns() {
     return [
       DataColumn(label: Text('Stock Code')),
-      DataColumn(label: Text('Description')),
+      DataColumn(label: Text('Desc.')),
       DataColumn(label: Text('UOM')),
       DataColumn(
         label: Text(
@@ -364,16 +449,17 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
         numeric: true, // Set numeric to true to align content to the right
       ),
       DataColumn(
-          label: Text(
-            'Stor. Code',
-            textAlign: TextAlign.right,
-          ),
-          numeric: true),
+        label: Text(
+          'BatchNo',
+          textAlign: TextAlign.right, // Align text to the right
+        ),
+        numeric: true, // Set numeric to true to align content to the right
+      ),
     ];
   }
 
   List<DataRow> _createRows() {
-    return stockTake?.stockTakeDetails
+    return receiving?.receivingDetails
             ?.map((stItem) => DataRow(cells: [
                   // DataCell(Text(salesItem['#'].toString())),
                   DataCell(Text(stItem.stockCode.toString() ?? '')),
@@ -387,18 +473,14 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.right,
                       ))),
-                  DataCell(
-                    ConstrainedBox(
+                  DataCell(ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 4,
-                      ),
+                          maxWidth: MediaQuery.of(context).size.width / 4),
                       child: Text(
-                        stItem?.storageCode.toString() ?? '',
+                        stItem?.batchNo ?? '',
                         overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right, // Align text to the right
-                      ),
-                    ),
-                  ),
+                        textAlign: TextAlign.right,
+                      ))),
                 ]))
             ?.toList() ??
         [];

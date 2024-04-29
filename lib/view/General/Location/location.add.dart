@@ -45,6 +45,7 @@ class _NewLocationState extends State<NewLocation> {
     getUserData();
     super.initState();
     if (widget.isEdit) {
+      location.text = widget.location.location ?? '';
       phone1.text = widget.location.phone1 ?? '';
       phone2.text = widget.location.phone2 ?? '';
       address1.text = widget.location.address1 ?? '';
@@ -331,9 +332,12 @@ class _NewLocationState extends State<NewLocation> {
   updateData() async {
     if (_formKey.currentState!.validate()) {
       String response = await BaseClient().post(
-          '/Location/UpdateLocation?Locationid=' +
-              widget.location.locationID.toString(),
+          '/Location/UpdateLocation?locationid=' +
+              widget.location.locationID.toString() +
+              '&companyid=' +
+              companyid.toString(),
           jsonEncode({
+            "locationID": widget.location.locationID.toString(),
             "location": location.text.isNotEmpty ? location.text : null,
             "address1": address1.text.isNotEmpty ? address1.text : null,
             "address2": address2.text.isNotEmpty ? address2.text : null,

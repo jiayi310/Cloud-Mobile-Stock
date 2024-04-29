@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/StockTake.dart';
+import 'package:mobilestock/view/WMS/StockTake/product.list.dart';
 
 import '../../../api/base.client.dart';
 import '../../../models/Stock.dart';
@@ -14,6 +15,7 @@ import '../../../models/StockTake.dart';
 import '../../../models/StockTake.dart';
 import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
+import '../../Quotation/NewQuotation/product.quotation.dart';
 import '../../Sales/CheckOut/checkout.view.dart';
 import 'location.stocktake.dart';
 
@@ -173,7 +175,13 @@ class _StockTakeAddState extends State<StockTakeAdd> {
                       Icons.add_box_outlined,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductList(),
+                          )).then((value) => refreshMainPage());
+                    },
                   ),
                 ],
               ),
