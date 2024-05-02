@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import '../../../models/Stock.dart';
 import '../../../utils/global.colors.dart';
 
 class StockTakeUOMList extends StatefulWidget {
   StockTakeUOMList({Key? key, required this.stock}) : super(key: key);
-  Stock stock;
+  final Stock stock;
 
   @override
   State<StockTakeUOMList> createState() => _StockTakeUOMListState();
 }
 
 class _StockTakeUOMListState extends State<StockTakeUOMList> {
+  String? uomSelected;
+  int _currentValue = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +44,24 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
-                buildUOMDropdown(),
+                DropdownButton<String>(
+                  value: uomSelected,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      uomSelected = newValue;
+                    });
+                  },
+                  items: <String>[
+                    'UOM 1',
+                    'UOM 2',
+                    'UOM 3', // Add more UOMs as needed
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
             SizedBox(
@@ -55,7 +76,25 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                       color: GlobalColors.mainColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
-                )
+                ),
+                DropdownButton<String>(
+                  value: uomSelected,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      uomSelected = newValue;
+                    });
+                  },
+                  items: <String>[
+                    'UOM 1',
+                    'UOM 2',
+                    'UOM 3', // Add more UOMs as needed
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
             SizedBox(
@@ -70,7 +109,25 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                       color: GlobalColors.mainColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
-                )
+                ),
+                DropdownButton<String>(
+                  value: uomSelected,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      uomSelected = newValue;
+                    });
+                  },
+                  items: <String>[
+                    'UOM 1',
+                    'UOM 2',
+                    'UOM 3', // Add more UOMs as needed
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
             SizedBox(
@@ -85,7 +142,13 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                       color: GlobalColors.mainColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
-                )
+                ),
+                NumberPicker(
+                  value: _currentValue,
+                  minValue: 0,
+                  maxValue: 100,
+                  onChanged: (value) => setState(() => _currentValue = value),
+                ),
               ],
             ),
           ],

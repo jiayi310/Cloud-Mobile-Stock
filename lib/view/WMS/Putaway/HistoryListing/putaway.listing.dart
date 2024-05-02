@@ -64,7 +64,7 @@ class _PutAwayListingScreen extends State<PutAwayListingScreen> {
               },
             ),
             title: Text(
-              putAway.putAwayID.toString(),
+              putAway.docNo.toString(),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             actions: [
@@ -136,17 +136,12 @@ class _PutAwayListingScreen extends State<PutAwayListingScreen> {
                                     height: 5,
                                   ),
                                   Text(
-                                    putAway.putAwayID.toString(),
+                                    putAway.docNo.toString(),
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.black38),
                                   ),
                                   SizedBox(
                                     height: 5,
-                                  ),
-                                  Text(
-                                    "Approved",
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.green),
                                   ),
                                 ],
                               ),
@@ -246,32 +241,139 @@ class _PutAwayListingScreen extends State<PutAwayListingScreen> {
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 30,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Details:",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            height: 5,
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Item:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.stockCode! + " " + putAway.description!,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "UOM:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.uom.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Batch No:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.batchNo.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Quantity:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.qty!.toStringAsFixed(0),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Location:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.location.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Storage:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.storageCode.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Transfer From:",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Text(
+                                putAway.receivingDocNo.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      // Container(
-                      //   width: double.infinity,
-                      //   child: DataTable(
-                      //     horizontalMargin: 10,
-                      //     columnSpacing: 10,
-                      //     headingRowHeight: 30,
-                      //     headingTextStyle: TextStyle(
-                      //         fontWeight: FontWeight.bold, color: Colors.white),
-                      //     headingRowColor: MaterialStateProperty.resolveWith(
-                      //             (states) => Colors.black),
-                      //     dataTextStyle:
-                      //     TextStyle(fontSize: 11, color: Colors.black),
-                      //     columns: _createColumns(),
-                      //     rows: _createRows(),
-                      //   ),
-                      //),
                     ],
                   )),
                 ),
@@ -348,27 +450,6 @@ class _PutAwayListingScreen extends State<PutAwayListingScreen> {
         });
       }
     }
-  }
-
-  List<DataColumn> _createColumns() {
-    return [
-      DataColumn(label: Text('Stock Code')),
-      DataColumn(label: Text('Description')),
-      DataColumn(label: Text('UOM')),
-      DataColumn(
-        label: Text(
-          'Qty',
-          textAlign: TextAlign.right, // Align text to the right
-        ),
-        numeric: true, // Set numeric to true to align content to the right
-      ),
-      DataColumn(
-          label: Text(
-            'Stor. Code',
-            textAlign: TextAlign.right,
-          ),
-          numeric: true),
-    ];
   }
 }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:mobilestock/models/Receiving.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Quotation/QuotationProvider.dart';
 
@@ -8,6 +9,7 @@ import '../../../api/base.client.dart';
 import '../../../models/Sales.dart';
 import '../../../models/Stock.dart';
 import '../../../size.config.dart';
+import '../../WMS/Receiving/ReceivingProvider.dart';
 import '../SalesProvider.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -706,7 +708,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               // Close the modal
                                               Navigator.of(context).pop();
                                             }
-                                          } else {
+                                          } else if (widget.source ==
+                                              "Quotation") {
                                             final quotationProvider =
                                                 QuotationProvider.of(context);
                                             if (quotationProvider != null) {
@@ -733,6 +736,36 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 taxableAmount: 0,
                                                 price:
                                                     widget.stock.baseUOMPrice1!,
+                                                image: decodedImage,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        'Item added to cart')),
+                                              );
+                                              // Close the modal
+                                              Navigator.of(context).pop();
+                                            }
+                                          } else if (widget.source ==
+                                              "Receiving") {
+                                            final receivingProvider =
+                                                ReceivingProvider.of(context);
+                                            if (receivingProvider != null) {
+                                              Uint8List? decodedImage =
+                                                  await decodeImage(
+                                                      widget.stock.image);
+                                              receivingProvider.receiving
+                                                  .addItem(
+                                                stockID: widget.stock.stockID!,
+                                                stockCode: widget
+                                                    .stock.stockCode
+                                                    .toString(),
+                                                description: widget
+                                                    .stock.description
+                                                    .toString(),
+                                                uom: selectedUOM,
+                                                quantity: quantity,
                                                 image: decodedImage,
                                               );
                                               ScaffoldMessenger.of(context)

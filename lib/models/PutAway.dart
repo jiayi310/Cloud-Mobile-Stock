@@ -1,5 +1,6 @@
 class PutAway {
   int? putAwayID;
+  String? docNo;
   int? stockID;
   int? stockBatchID;
   String? batchNo;
@@ -19,6 +20,7 @@ class PutAway {
 
   PutAway(
       {this.putAwayID,
+      this.docNo,
       this.stockID,
       this.stockBatchID,
       this.batchNo,
@@ -38,6 +40,7 @@ class PutAway {
 
   PutAway.fromJson(Map<String, dynamic> json) {
     putAwayID = json['putAwayID'];
+    docNo = json['docNo'];
     stockID = json['stockID'];
     stockBatchID = json['stockBatchID'];
     batchNo = json['batchNo'];
@@ -59,6 +62,7 @@ class PutAway {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['putAwayID'] = this.putAwayID;
+    data['docNo'] = this.docNo;
     data['stockID'] = this.stockID;
     data['stockBatchID'] = this.stockBatchID;
     data['batchNo'] = this.batchNo;

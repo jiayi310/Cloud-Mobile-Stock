@@ -6,6 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/Receiving.dart';
+import 'package:mobilestock/view/WMS/Receiving/product.receiving.dart';
+import 'package:mobilestock/view/WMS/Receiving/receiving.item.dart';
 import 'package:mobilestock/view/WMS/Receiving/receiving.supplier.dart';
 
 import '../../../api/base.client.dart';
@@ -165,11 +167,11 @@ class _ReceivingAddState extends State<ReceivingAdd> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => ReceivingProductList(),
-                      //     )).then((value) => refreshMainPage());
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReceivingProductList(),
+                          )).then((value) => refreshMainPage());
                     },
                   ),
                 ],
@@ -179,10 +181,10 @@ class _ReceivingAddState extends State<ReceivingAdd> {
           SizedBox(
             height: 10,
           ),
-          // ItemReceiving(
-          //   ReceivingDetails: ReceivingDetails,
-          //   refreshMainPage: refreshMainPage,
-          // ),
+          ItemReceiving(
+            receivingDetails: receivingDetails,
+            refreshMainPage: refreshMainPage,
+          ),
         ],
       )),
     );

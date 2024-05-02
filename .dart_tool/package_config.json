@@ -470,6 +470,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "infinite_listview",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/infinite_listview-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/intl-0.18.1",
       "packageUri": "lib/",
@@ -528,6 +534,12 @@
       "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/modular_core-3.3.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "numberpicker",
+      "rootUri": "file:///Users/agilec/.pub-cache/hosted/pub.dev/numberpicker-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "octo_image",
@@ -938,7 +950,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-04-19T09:38:51.712520Z",
+  "generated": "2024-04-30T03:09:42.344382Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

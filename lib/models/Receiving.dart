@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:get/get.dart';
+
 class Receiving {
   int? docID;
   String? docNo;
@@ -24,33 +26,33 @@ class Receiving {
   String? createdDateTime;
   int? createdUserID;
   int? companyID;
-  List<ReceivingDetails>? receivingDetails;
+  List<ReceivingDetails> receivingDetails = [];
 
-  Receiving(
-      {this.docID,
-      this.docNo,
-      this.docDate,
-      this.supplierID,
-      this.supplierCode,
-      this.supplierName,
-      this.address1,
-      this.address2,
-      this.address3,
-      this.address4,
-      this.phone,
-      this.fax,
-      this.email,
-      this.attention,
-      this.description,
-      this.remark,
-      this.isPutAway,
-      this.isVoid,
-      this.lastModifiedDateTime,
-      this.lastModifiedUserID,
-      this.createdDateTime,
-      this.createdUserID,
-      this.companyID,
-      this.receivingDetails});
+  Receiving({
+    this.docID,
+    this.docNo,
+    this.docDate,
+    this.supplierID,
+    this.supplierCode,
+    this.supplierName,
+    this.address1,
+    this.address2,
+    this.address3,
+    this.address4,
+    this.phone,
+    this.fax,
+    this.email,
+    this.attention,
+    this.description,
+    this.remark,
+    this.isPutAway,
+    this.isVoid,
+    this.lastModifiedDateTime,
+    this.lastModifiedUserID,
+    this.createdDateTime,
+    this.createdUserID,
+    this.companyID,
+  });
 
   Receiving.fromJson(Map<String, dynamic> json) {
     docID = json['docID'];
@@ -114,6 +116,38 @@ class Receiving {
           this.receivingDetails!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  void addItem({
+    required int stockID,
+    required String stockCode,
+    required String description,
+    required String uom,
+    required double quantity,
+    required Uint8List image,
+  }) {
+    var existingItem = receivingDetails.firstWhereOrNull(
+      (item) => item.stockCode == stockCode && item.uom == uom,
+    );
+
+    if (existingItem != null) {
+      // If the item exists, update its quantity
+      existingItem.qty = (existingItem.qty ?? 0) + quantity;
+    } else {
+      // If the item doesn't exist, add a new item to the list
+      receivingDetails.add(ReceivingDetails(
+        stockID: stockID,
+        stockCode: stockCode,
+        description: description,
+        uom: uom ?? "",
+        qty: quantity,
+        image: image,
+      ));
+    }
+  }
+
+  void removeItem(String stockcode) {
+    receivingDetails!.removeWhere((item) => item.stockCode == stockcode);
   }
 }
 

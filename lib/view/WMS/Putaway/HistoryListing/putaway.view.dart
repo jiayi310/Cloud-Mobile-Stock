@@ -6,11 +6,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
 import 'package:mobilestock/view/WMS/Putaway/HistoryListing/putaway.listing.dart';
+import 'package:mobilestock/view/WMS/Putaway/putaway.add.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/PutAway.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../../utils/loading.dart';
+import '../PutAwayProvider.dart';
 
 class PutAwayHomeScreen extends StatefulWidget {
   const PutAwayHomeScreen({Key? key}) : super(key: key);
@@ -42,18 +44,15 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
       backgroundColor: GlobalColors.wmsColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // PutAwayProviderData? providerData =
-          //     PutAwayProviderData.of(context);
-          // if (providerData != null) {
-          //   providerData.clearPutAway();
-          // }
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => PutAwayAdd(
-          //               isEdit: false,
-          //               PutAway: new PutAway(paymentTotal: 0),
-          //             ))).then((value) => getData());
+          PutAwayProviderData? providerData = PutAwayProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearPutAway();
+          }
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PutAwayAdd(putAway: new PutAway())))
+              .then((value) => getData());
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,
@@ -159,7 +158,7 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                     child: Text(
                                                       "Are you sure want to delete " +
                                                           PutAwaylist[i]
-                                                              .receivingDocNo
+                                                              .docNo
                                                               .toString(),
                                                       textAlign:
                                                           TextAlign.center,
@@ -216,7 +215,7 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                       flex: 1,
                                                       child: Text(
                                                         PutAwaylist[i]
-                                                            .putAwayID
+                                                            .docNo
                                                             .toString(),
                                                         style: TextStyle(
                                                           overflow: TextOverflow
@@ -254,9 +253,12 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                     Flexible(
                                                       flex: 1,
                                                       child: Text(
-                                                        PutAwaylist[i]
-                                                            .description
-                                                            .toString(),
+                                                        (PutAwaylist[i]
+                                                                    .stockCode! +
+                                                                " " +
+                                                                PutAwaylist[i]
+                                                                    .description!) ??
+                                                            "",
                                                         style: TextStyle(
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -269,12 +271,13 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                     ),
                                                     SizedBox(width: 20),
                                                     Text(
-                                                      "Approved",
+                                                      PutAwaylist[i]
+                                                          .uom
+                                                          .toString(),
                                                       style: TextStyle(
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         fontSize: 15,
-                                                        color: Colors.green,
                                                       ),
                                                     ),
                                                   ],
@@ -289,8 +292,22 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                       flex: 1,
                                                       child: Text(
                                                         PutAwaylist[i]
-                                                                .stockCode ??
-                                                            "",
+                                                            .batchNo
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontSize: 15,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Flexible(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        PutAwaylist[i]
+                                                            .qty
+                                                            .toString(),
                                                         style: TextStyle(
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -311,7 +328,23 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                       flex: 1,
                                                       child: Text(
                                                         PutAwaylist[i]
-                                                                .description ??
+                                                                .location! +
+                                                            " / " +
+                                                            PutAwaylist[i]
+                                                                .storageCode!,
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontSize: 13,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Flexible(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        PutAwaylist[i]
+                                                                .receivingDocNo ??
                                                             "",
                                                         style: TextStyle(
                                                           overflow: TextOverflow
@@ -321,7 +354,6 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(width: 20),
                                                   ],
                                                 ),
                                               ],
@@ -355,11 +387,12 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
           .get('/PutAway/GetPutAwayListByCompanyId?companyId=' + companyid);
       List<PutAway> _PutAwaylist = PutAwayFromJson(response);
 
-      // // Sort the collection list by docDate in descending order
-      // _PutAwaylist.sort((a, b) => b.docDate!.compareTo(a.docDate!));
-      //
-      // // If docDate is the same, sort by docNo in descending order
-      // _PutAwaylist.sort((a, b) => b.docNo!.compareTo(a.docNo!));
+      // Sort the collection list by docDate in descending order
+      _PutAwaylist.sort(
+          (a, b) => b.createdDateTime!.compareTo(a.createdDateTime!));
+
+      // If docDate is the same, sort by docNo in descending order
+      _PutAwaylist.sort((a, b) => b.docNo!.compareTo(a.docNo!));
 
       setState(() {
         PutAwaylist = _PutAwaylist;
