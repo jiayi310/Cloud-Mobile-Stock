@@ -35,13 +35,9 @@ class _LocStockTake extends State<LocStockTake> {
         children: [
           if (location != null)
             Builder(builder: (context) {
-              if (stockTakeProvider != null &&
-                  stockTakeProvider.stockTake.locationID != null &&
-                  location == null) {
-                stockTakeProvider!.stockTake.locationID = location!.locationID;
-                stockTakeProvider!.stockTake.location =
-                    location!.location.toString();
-              }
+              stockTakeProvider!.stockTake.locationID = location!.locationID;
+              stockTakeProvider!.stockTake.location =
+                  location!.location.toString();
 
               return Container(
                 height: 50,

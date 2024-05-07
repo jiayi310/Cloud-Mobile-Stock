@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -10,10 +12,12 @@ import 'package:mobilestock/view/WMS/Putaway/product.putaway.dart';
 import 'package:mobilestock/view/WMS/Putaway/receiving.list.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/Location.dart';
 import '../../../models/PutAway.dart';
 import '../../../models/Stock.dart';
 import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
+import '../../General/Location/location.home.dart';
 import 'HistoryListing/PutAway.listing.dart';
 import 'PutAwayProvider.dart';
 
@@ -30,10 +34,34 @@ class _PutAwayAddState extends State<PutAwayAdd> {
   String companyid = "",
       userid = "",
       stockcode = "-",
+      description = "",
       uom = "-",
       receivingDocNo = "";
-  int stockid = 0;
+  double balQty = 0;
+  int stockid = 0, receivingID = 0, storageID = 0;
   final storage = new FlutterSecureStorage();
+  Location? location = new Location();
+  List<LocationDropDown> locationList = [];
+  String storagecode = "";
+  List<LocationDropDown> storageFromJson(String str) =>
+      List<LocationDropDown>.from(
+          json.decode(str).map((x) => LocationDropDown.fromJson(x)));
+
+  int _quantity = 0;
+
+  void _decrement() {
+    setState(() {
+      if (_quantity > 0) {
+        _quantity--;
+      }
+    });
+  }
+
+  void _increment() {
+    setState(() {
+      _quantity++;
+    });
+  }
 
   @override
   void initState() {
@@ -130,6 +158,7 @@ class _PutAwayAddState extends State<PutAwayAdd> {
                         if (value != null) {
                           stockid = value['stockId'];
                           stockcode = value['stockCode'];
+                          description = value['description'];
                           uom = value['selectedUOM'];
 
                           refreshMainPage();
@@ -152,11 +181,11 @@ class _PutAwayAddState extends State<PutAwayAdd> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Stock Code",
+                      "Stock",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    Text(stockcode),
+                    Text(stockcode + " " + description),
                   ],
                 ),
                 SizedBox(
@@ -206,7 +235,9 @@ class _PutAwayAddState extends State<PutAwayAdd> {
                           ),
                         ).then((value) {
                           if (value != null) {
+                            receivingID = value['receivingID'];
                             receivingDocNo = value['receivingDocNo'];
+                            balQty = value['balQty'];
 
                             refreshMainPage();
                           }
@@ -238,7 +269,7 @@ class _PutAwayAddState extends State<PutAwayAdd> {
                     child: Container(
                       width: 200,
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -251,6 +282,15 @@ class _PutAwayAddState extends State<PutAwayAdd> {
                               color: Colors.black.withOpacity(0.7),
                             ),
                           ),
+                          Text(
+                            "Balance Qty: " + balQty.toStringAsFixed(0),
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.red,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -261,131 +301,211 @@ class _PutAwayAddState extends State<PutAwayAdd> {
           SizedBox(
             height: 10,
           ),
-          Container(
-            color: GlobalColors.mainColor,
-            height: 50,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Storage",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
+          if (stockid != 0 &&
+              stockcode != "-" &&
+              uom != "-" &&
+              receivingDocNo != "")
+            Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Qty",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Enter Quantity',
-                          border: OutlineInputBorder(),
+                Container(
+                  color: GlobalColors.mainColor,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Storage",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter quantity';
-                          }
-                          // You can add additional validation if needed
-                          return null;
-                        },
-                        onSaved: (value) {
-                          // You can handle the value here when the form is saved
-                        },
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Location",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Enter Quantity',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter quantity';
-                          }
-                          // You can add additional validation if needed
-                          return null;
-                        },
-                        onSaved: (value) {
-                          // You can handle the value here when the form is saved
-                        },
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Qty",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.remove),
+                                onPressed: _decrement,
+                              ),
+                              SizedBox(
+                                width: 100,
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]')), // Allow only numbers
+                                  ],
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    alignLabelWithHint: true,
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                  ),
+                                  textAlign: TextAlign.right,
+                                  controller: TextEditingController(
+                                      text: _quantity
+                                          .toString()), // Use a controller to set the initial value
+                                  readOnly:
+                                      true, // Make the TextFormField read-only
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add),
+                                onPressed: _increment,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Storage",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Enter Quantity',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter quantity';
-                          }
-                          // You can add additional validation if needed
-                          return null;
-                        },
-                        onSaved: (value) {
-                          // You can handle the value here when the form is saved
-                        },
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-                  ],
-                ),
+                      Divider(
+                        color: Colors.grey,
+                        thickness: 1,
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _navigateTolocationScreen(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Location",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (location == null ||
+                                    location!.location == null)
+                                  Text("Select a location"),
+                                if (location != null &&
+                                    location!.location != null)
+                                  Text(
+                                    location!.location.toString(),
+                                  ),
+                                Icon(Icons.chevron_right_outlined),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        thickness: 1,
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Storage",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              if (location!.locationID == null) {
+                                Fluttertoast.showToast(
+                                    msg: "Please select the location");
+                              } else {
+                                await getLocationData();
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Choose an Item'),
+                                      content: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            for (int i = 0;
+                                                i <
+                                                    locationList[0]
+                                                        .storageDropdownDtoList!
+                                                        .length;
+                                                i++)
+                                              ListTile(
+                                                title: Text(locationList[0]
+                                                    .storageDropdownDtoList![i]
+                                                    .storageCode
+                                                    .toString()),
+                                                onTap: () {
+                                                  setState(() {
+                                                    storagecode = locationList[
+                                                            0]
+                                                        .storageDropdownDtoList![
+                                                            i]
+                                                        .storageCode
+                                                        .toString();
+
+                                                    storageID = locationList[0]
+                                                        .storageDropdownDtoList![
+                                                            i]
+                                                        .storageID!;
+                                                  });
+
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (storagecode == "") Text("Select a storage"),
+                                if (storagecode != "") Text(storagecode),
+                                Icon(Icons.chevron_right_outlined),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
         ],
       )),
     );
@@ -417,48 +537,72 @@ class _PutAwayAddState extends State<PutAwayAdd> {
   }
 
   sendPutAwayData() async {
-    Map<String, dynamic> jsonData = {
-      "docID": 0,
-      "docNo": docNo,
-      "docDate": getCurrentDateTime(),
-      "isVoid": false,
-      "lastModifiedDateTime": getCurrentDateTime(),
-      "lastModifiedUserID": userid,
-      "createdDateTime": getCurrentDateTime(),
-      "createdUserID": userid,
-      "companyID": companyid,
-    };
+    if (stockid != 0) {
+      if (receivingID != 0) {
+        if (location!.locationID != null) {
+          if (storageID != 0) {
+            Map<String, dynamic> jsonData = {
+              "putAwayID": 0,
+              "docNo": docNo,
+              "stockID": stockid,
+              "stockCode": stockcode,
+              "description": description,
+              "uom": uom,
+              "qty": _quantity,
+              "receivingDocNo": receivingDocNo,
+              "receivingDtlID": receivingID,
+              "locationID": location!.locationID,
+              "location": location!.location.toString(),
+              "storageID": storageID,
+              "storageCode": storagecode,
+              "createdDateTime": getCurrentDateTime(),
+              "createdUserID": userid,
+              "companyID": companyid,
+            };
 
-    // Encode the JSON data
-    String jsonString = jsonEncode(jsonData);
+            // Encode the JSON data
+            String jsonString = jsonEncode(jsonData);
 
-    try {
-      final response = await BaseClient().post(
-        '/PutAway/CreatePutAway',
-        jsonString,
-      );
+            try {
+              final response = await BaseClient().post(
+                '/PutAway/CreatePutAway',
+                jsonString,
+              );
 
-      // Check the status code of the response
-      if (response != null) {
-        Map<String, dynamic> responseBody = json.decode(response);
-        String docID = responseBody['docID'].toString();
+              if (response != null) {
+                Map<String, dynamic> responseBody = json.decode(response);
+                String docID = responseBody['putAwayID'].toString();
 
-        print('API request successful');
+                print('API request successful');
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PutAwayListingScreen(docid: int.parse(docID)),
-          ),
-        );
-        PutAwayProviderData? providerData = PutAwayProviderData.of(context);
-        if (providerData != null) {
-          providerData.clearPutAway();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PutAwayListingScreen(docid: int.parse(docID)),
+                  ),
+                );
+                PutAwayProviderData? providerData =
+                    PutAwayProviderData.of(context);
+                if (providerData != null) {
+                  providerData.clearPutAway();
+                }
+              }
+            } catch (e) {
+              // Handle exceptions
+              print('Exception during API request: $e');
+            }
+          } else {
+            Fluttertoast.showToast(msg: "Please select the storage");
+          }
+        } else {
+          Fluttertoast.showToast(msg: "Please select the location");
         }
+      } else {
+        Fluttertoast.showToast(msg: "Please select a Receiving Document");
       }
-    } catch (e) {
-      // Handle exceptions
-      print('Exception during API request: $e');
+    } else {
+      Fluttertoast.showToast(msg: "Please select a product");
     }
   }
 
@@ -466,5 +610,35 @@ class _PutAwayAddState extends State<PutAwayAdd> {
     setState(() {
       widget.putAway = widget.putAway;
     });
+  }
+
+  Future<void> _navigateTolocationScreen(BuildContext context) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LocationHomeScreen(
+                  FromSource: "PutAway",
+                )));
+
+    setState(() {
+      location = result;
+    });
+  }
+
+  Future<List<LocationDropDown>> getLocationData() async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get(
+          '/Location/GetLocationWithStorage?companyId=' +
+              companyid +
+              '&currentLocationId=' +
+              location!.locationID.toString());
+      List<LocationDropDown> _locationList = storageFromJson(response);
+
+      setState(() {
+        locationList = _locationList;
+      });
+    }
+    return locationList;
   }
 }

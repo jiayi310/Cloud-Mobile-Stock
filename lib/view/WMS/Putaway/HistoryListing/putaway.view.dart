@@ -170,7 +170,7 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
                                             textConfirm: "Confirm",
                                             textCancel: "Cancel",
                                             onConfirm: () {
-                                              removeCollection(
+                                              removePutAway(
                                                   PutAwaylist[i].putAwayID);
 
                                               // Close the dialog
@@ -419,14 +419,13 @@ class _PutAwayHomeScreen extends State<PutAwayHomeScreen> {
     });
   }
 
-  Future<void> removeCollection(int? docID) async {
+  Future<void> removePutAway(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
-      String response = await BaseClient().get(
-          '/Collection/RemoveCollection?docId=' +
-              docID.toString() +
-              '&companyId=' +
-              companyid);
+      String response = await BaseClient().get('/PutAway/RemovePutAway?docId=' +
+          docID.toString() +
+          '&companyId=' +
+          companyid);
 
       if (response != 0) {
         Fluttertoast.showToast(

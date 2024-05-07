@@ -128,8 +128,10 @@ class _ReceivingListState extends State<ReceivingList> {
                                   return InkWell(
                                     onTap: () {
                                       Navigator.pop(context, {
+                                        'receivingID': receivingList[i].docID,
                                         'receivingDocNo':
                                             receivingList[i].docNo,
+                                        'balQty': receivingList[i].balQty,
                                       });
                                     },
                                     child: Column(

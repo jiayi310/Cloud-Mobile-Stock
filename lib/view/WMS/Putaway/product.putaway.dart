@@ -186,8 +186,8 @@ class _PutAwayProductListState extends State<PutAwayProductList> {
                                           ListTile(
                                             title: Text(uom),
                                             onTap: () {
-                                              _selectProductAndUOM(
-                                                  stockid, stockCode, uom);
+                                              _selectProductAndUOM(stockid,
+                                                  stockCode, description, uom);
                                             },
                                           ),
                                       ],
@@ -283,14 +283,17 @@ class _PutAwayProductListState extends State<PutAwayProductList> {
     return uom;
   }
 
-  void _selectProductAndUOM(int stockid, String stockCode, String selectedUOM) {
+  void _selectProductAndUOM(
+      int stockid, String stockCode, String description, String selectedUOM) {
     Navigator.pop(context, {
       'stockId': stockid,
+      "description": description,
       'stockCode': stockCode,
       'selectedUOM': selectedUOM,
     });
     Navigator.pop(context, {
       'stockId': stockid,
+      "description": description,
       'stockCode': stockCode,
       'selectedUOM': selectedUOM,
     });

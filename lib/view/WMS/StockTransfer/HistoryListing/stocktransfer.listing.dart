@@ -358,8 +358,8 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
 
   List<DataColumn> _createColumns() {
     return [
-      DataColumn(label: Text('Stock Code')),
-      DataColumn(label: Text('Description')),
+      DataColumn(label: Text('Stock')),
+      DataColumn(label: Text('Desc.')),
       DataColumn(label: Text('UOM')),
       DataColumn(
         label: Text(
@@ -370,7 +370,13 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
       ),
       DataColumn(
           label: Text(
-            'From Loc',
+            'From',
+            textAlign: TextAlign.right,
+          ),
+          numeric: true),
+      DataColumn(
+          label: Text(
+            'To',
             textAlign: TextAlign.right,
           ),
           numeric: true),
@@ -388,7 +394,7 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width / 4),
                       child: Text(
-                        stItem?.qty?.toStringAsFixed(2) ?? '',
+                        stItem?.qty?.toStringAsFixed(0) ?? '',
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.right,
                       ))),
@@ -398,9 +404,25 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
                         maxWidth: MediaQuery.of(context).size.width / 4,
                       ),
                       child: Text(
-                        stItem?.fromLocation.toString() ?? '',
+                        (stItem?.fromLocation.toString() ?? '') +
+                            " / " +
+                            (stItem?.fromStorageCode.toString() ?? ''),
                         overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right, // Align text to the right
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width / 4,
+                      ),
+                      child: Text(
+                        (stItem?.toLocation.toString() ?? '') +
+                            " / " +
+                            (stItem?.toStorageCode.toString() ?? ''),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
                       ),
                     ),
                   ),

@@ -78,3 +78,66 @@ class Location {
     return data;
   }
 }
+
+class LocationDropDown {
+  int? locationID;
+  String? location;
+  bool? isDisabled;
+  List<StorageDropdownDtoList>? storageDropdownDtoList;
+
+  LocationDropDown(
+      {this.locationID,
+      this.location,
+      this.isDisabled,
+      this.storageDropdownDtoList});
+
+  LocationDropDown.fromJson(Map<String, dynamic> json) {
+    locationID = json['locationID'];
+    location = json['location'];
+    isDisabled = json['isDisabled'];
+    if (json['storageDropdownDtoList'] != null) {
+      storageDropdownDtoList = <StorageDropdownDtoList>[];
+      json['storageDropdownDtoList'].forEach((v) {
+        storageDropdownDtoList!.add(new StorageDropdownDtoList.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['locationID'] = this.locationID;
+    data['location'] = this.location;
+    data['isDisabled'] = this.isDisabled;
+    if (this.storageDropdownDtoList != null) {
+      data['storageDropdownDtoList'] =
+          this.storageDropdownDtoList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class StorageDropdownDtoList {
+  int? storageID;
+  String? storageCode;
+  String? location;
+  bool? isDisabled;
+
+  StorageDropdownDtoList(
+      {this.storageID, this.storageCode, this.location, this.isDisabled});
+
+  StorageDropdownDtoList.fromJson(Map<String, dynamic> json) {
+    storageID = json['storageID'];
+    storageCode = json['storageCode'];
+    location = json['location'];
+    isDisabled = json['isDisabled'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['storageID'] = this.storageID;
+    data['storageCode'] = this.storageCode;
+    data['location'] = this.location;
+    data['isDisabled'] = this.isDisabled;
+    return data;
+  }
+}

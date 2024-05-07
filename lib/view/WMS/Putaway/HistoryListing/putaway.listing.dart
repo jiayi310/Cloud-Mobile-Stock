@@ -68,40 +68,40 @@ class _PutAwayListingScreen extends State<PutAwayListingScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             actions: [
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PutAwayAdd(
-                  //       isEdit: true,
-                  //       PutAway: PutAway,
-                  //     ),
-                  //   ),
-                  // );
-                },
-              ),
-              PopupMenuButton<MenuItem>(
-                  onSelected: (value) async {
-                    if (value == MenuItem.item1) {
-                      //Clicked
-                    } else if (value == MenuItem.item2) {
-                      final storage = new FlutterSecureStorage();
-                      String? _userid = await storage.read(key: "userid");
-                      String? _companyid = await storage.read(key: "companyid");
-                      final userSessionDto = UserSessionDto(
-                          int.parse(_userid!), int.parse(_companyid!));
-
-                      await getPutAwayReport(
-                          userSessionDto, putAway.putAwayID!);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                            value: MenuItem.item2,
-                            child: Text('Download Receipt'))
-                      ]),
+              // IconButton(
+              //   icon: Icon(Icons.edit),
+              //   onPressed: () {
+              //     // Navigator.push(
+              //     //   context,
+              //     //   MaterialPageRoute(
+              //     //     builder: (context) => PutAwayAdd(
+              //     //       isEdit: true,
+              //     //       PutAway: PutAway,
+              //     //     ),
+              //     //   ),
+              //     // );
+              //   },
+              // ),
+              // PopupMenuButton<MenuItem>(
+              //     onSelected: (value) async {
+              //       if (value == MenuItem.item1) {
+              //         //Clicked
+              //       } else if (value == MenuItem.item2) {
+              //         final storage = new FlutterSecureStorage();
+              //         String? _userid = await storage.read(key: "userid");
+              //         String? _companyid = await storage.read(key: "companyid");
+              //         final userSessionDto = UserSessionDto(
+              //             int.parse(_userid!), int.parse(_companyid!));
+              //
+              //         await getPutAwayReport(
+              //             userSessionDto, putAway.putAwayID!);
+              //       }
+              //     },
+              //     itemBuilder: (context) => [
+              //           PopupMenuItem(
+              //               value: MenuItem.item2,
+              //               child: Text('Download Receipt'))
+              //         ]),
             ],
           ),
           body: _isLoading
