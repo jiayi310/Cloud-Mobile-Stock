@@ -9,14 +9,14 @@ import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Collection/CollectionProvider.dart';
 import 'package:mobilestock/view/Sales/SalesDetails/details.screen.dart';
 import 'package:mobilestock/view/WMS/StockTake/uom.product.dart';
+import 'package:mobilestock/view/WMS/StockTransfer/transfer.select.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/StockTake.dart';
 
 class ProductList extends StatefulWidget {
-  ProductList({
-    Key? key,
-  }) : super(key: key);
-
+  ProductList({Key? key, required this.fromSource}) : super(key: key);
+  String fromSource;
   @override
   State<ProductList> createState() => _ProductListState();
 }
@@ -34,6 +34,8 @@ class _ProductListState extends State<ProductList> {
   int _currentValue = 3;
   String? uomSelected, batchSelected;
   StockDetail productDetails = new StockDetail();
+  List<StockTakeDetails> stockTakeDetails = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -107,14 +109,23 @@ class _ProductListState extends State<ProductList> {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => StockTakeUOMList(
-                                    stock: stock[index],
-                                  ),
-                                ));
-
+                            if (widget.fromSource == "StockTake") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => StockTakeUOMList(
+                                      stock: stock[index],
+                                    ),
+                                  ));
+                            } else if (widget.fromSource == "StockTransfer") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TransferSelection(
+                                      stock: stock[index],
+                                    ),
+                                  ));
+                            }
                             // showDialog(
                             //   barrierDismissible: false,
                             //   context: context,

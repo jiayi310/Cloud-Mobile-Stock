@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/StockTake.dart';
+import 'package:mobilestock/view/WMS/StockTake/item.stocktake.dart';
 import 'package:mobilestock/view/WMS/StockTake/product.list.dart';
 
 import '../../../api/base.client.dart';
@@ -17,6 +18,8 @@ import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
 import '../../Quotation/NewQuotation/product.quotation.dart';
 import '../../Sales/CheckOut/checkout.view.dart';
+import 'HistoryListing/stocktake.listing.dart';
+import 'StockTakeProvider.dart';
 import 'location.stocktake.dart';
 
 class StockTakeAdd extends StatefulWidget {
@@ -42,8 +45,8 @@ class _StockTakeAddState extends State<StockTakeAdd> {
     super.didChangeDependencies();
 
     if (!widget.isEdit) {
-      // final stockTakeProvider = StockTakeProvider.of(context);
-      // StockTakeDetails = StockTakeProvider?.StockTake.StockTakeDetails ?? [];
+      final stockTakeProvider = StockTakeProvider.of(context);
+      stockTakeDetails = stockTakeProvider?.stockTake.stockTakeDetails ?? [];
     }
   }
 
@@ -59,18 +62,13 @@ class _StockTakeAddState extends State<StockTakeAdd> {
   @override
   Widget build(BuildContext context) {
     if (widget.isEdit) {
-      // final StockTakeProvider = StockTakeProvider.of(context);
-      // if (StockTakeProvider != null) {
-      //   StockTakeProvider.setStockTake(widget.StockTake);
-      // }
-      // StockTakeDetails = widget.StockTake.StockTakeDetails!;
-      // if (widget.isEdit &&
-      //     StockTakeProvider!.StockTake.StockTakeDetails.isNotEmpty) {
-      //   updateSalesItemsWithImages(
-      //       StockTakeProvider.StockTake.StockTakeDetails);
-      // }
+      final stockTakeProvider = StockTakeProvider.of(context);
+      if (stockTakeProvider != null) {
+        stockTakeProvider.setStockTake(widget.stockTake);
+      }
+      stockTakeDetails = widget.stockTake.stockTakeDetails!;
     }
-    // widget.stockTake = StockTakeProvider.of(context)!.StockTake;
+    widget.stockTake = StockTakeProvider.of(context)!.stockTake;
     return Scaffold(
       bottomNavigationBar: Container(
         height: 100,
@@ -176,11 +174,36 @@ class _StockTakeAddState extends State<StockTakeAdd> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductList(),
-                          )).then((value) => refreshMainPage());
+                      if (widget.stockTake!.location != null) {
+                        var stProvider = Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductList(
+                                    fromSource: "StockTake",
+                                  ),
+                                ))
+                            .then((value) => refreshMainPage())
+                            .then((returnedData) {
+                          if (returnedData != null) {
+                            setState(() {
+                              stockTakeDetails = returnedData;
+                            });
+                          }
+                        });
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "Please select a location",
+                          toastLength:
+                              Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+                          gravity: ToastGravity
+                              .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
+                          timeInSecForIosWeb:
+                              1, // Time in seconds before the toast disappears on iOS and web
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
                     },
                   ),
                 ],
@@ -190,10 +213,10 @@ class _StockTakeAddState extends State<StockTakeAdd> {
           SizedBox(
             height: 10,
           ),
-          // ItemStockTake(
-          //   StockTakeDetails: StockTakeDetails,
-          //   refreshMainPage: refreshMainPage,
-          // ),
+          ItemStockTake(
+            stItems: stockTakeDetails,
+            refreshMainPage: refreshMainPage,
+          ),
           SizedBox(
             height: 10,
           ),
@@ -223,7 +246,7 @@ class _StockTakeAddState extends State<StockTakeAdd> {
   updateStockTakeData() async {
     companyid = (await storage.read(key: "companyid"))!;
     userid = (await storage.read(key: "userid"))!;
-    if (widget.stockTake!.docNo != null) {
+    if (widget.stockTake!.locationID != null) {
       Map<String, dynamic> jsonData = {
         "docID": widget.stockTake!.docID,
         "docNo": docNo,
@@ -306,30 +329,37 @@ class _StockTakeAddState extends State<StockTakeAdd> {
   }
 
   sendStockTakeData() async {
-    if (widget.stockTake!.docID != null) {
+    if (widget.stockTake!.locationID != null) {
       Map<String, dynamic> jsonData = {
         "docID": 0,
         "docNo": docNo,
         "docDate": getCurrentDateTime(),
+        "description": null,
+        "remark": null,
+        "isMerge": false,
+        "isAdjustment": false,
         "isVoid": false,
         "lastModifiedDateTime": getCurrentDateTime(),
         "lastModifiedUserID": userid,
         "createdDateTime": getCurrentDateTime(),
         "createdUserID": userid,
+        "locationID": widget.stockTake.locationID,
+        "location": widget.stockTake.location,
         "companyID": companyid,
-        "StockTakeDetails": stockTakeDetails.map((quoteItem) {
+        "stockTakeDetails": stockTakeDetails.map((stItem) {
           return {
             "dtlID": 0,
             "docID": 0,
-            "stockID": quoteItem.stockID,
-            "stockCode": quoteItem.stockCode.toString(),
-            "description": quoteItem.description.toString(),
-            "uom": quoteItem.uom.toString(),
-            "qty": quoteItem.qty ?? 0,
-            "taxableAmt": 0,
-            "taxRate": 0,
-            "locationID": 1,
-            "location": "HQ",
+            "stockID": stItem.stockID,
+            "stockBatchID": stItem.stockBatchID,
+            "batchNo": stItem.batchNo,
+            "stockCode": stItem.stockCode.toString(),
+            "description": stItem.description.toString(),
+            "uom": stItem.uom,
+            "qty": stItem.qty ?? 0,
+            "locationID": stItem.locationID,
+            "storageID": stItem.storageID,
+            "storageCode": stItem.storageCode
           };
         }).toList(),
       };
@@ -350,18 +380,18 @@ class _StockTakeAddState extends State<StockTakeAdd> {
 
           print('API request successful');
 
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) =>
-          //         StockTakeListingScreen(docid: int.parse(docID)),
-          //   ),
-          // );
-          // StockTakeProviderData? providerData =
-          // StockTakeProviderData.of(context);
-          // if (providerData != null) {
-          //   providerData.clearStockTake();
-          // }
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  StockTakeListingScreen(docid: int.parse(docID)),
+            ),
+          );
+          StockTakeProviderData? providerData =
+              StockTakeProviderData.of(context);
+          if (providerData != null) {
+            providerData.clearStockTake();
+          }
         }
       } catch (e) {
         // Handle exceptions
@@ -384,7 +414,10 @@ class _StockTakeAddState extends State<StockTakeAdd> {
 
   refreshMainPage() {
     setState(() {
-      stockTakeDetails = stockTakeDetails;
+      final stockTakeProvider = StockTakeProvider.of(context);
+      if (stockTakeProvider != null) {
+        stockTakeDetails = stockTakeProvider!.stockTake.stockTakeDetails!;
+      }
     });
   }
 }

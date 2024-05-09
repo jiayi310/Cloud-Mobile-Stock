@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Collection.dart';
 import 'package:mobilestock/view/WMS/StockTransfer/HistoryListing/stocktransfer.listing.dart';
+import 'package:mobilestock/view/WMS/StockTransfer/stocktransfer.add.dart';
 
 import '../../../../api/base.client.dart';
 import '../../../../models/StockTransfer.dart';
@@ -48,13 +49,13 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
           // if (providerData != null) {
           //   providerData.clearStockTransfer();
           // }
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => StockTransferAdd(
-          //               isEdit: false,
-          //               StockTransfer: new StockTransfer(paymentTotal: 0),
-          //             ))).then((value) => getData());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StockTransferAdd(
+                        isEdit: false,
+                        stockTransfer: new StockTransfer(),
+                      ))).then((value) => getData());
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,

@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobilestock/models/StockTake.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../../api/base.client.dart';
 import '../../../models/Location.dart';
 import '../../../models/Stock.dart';
+import '../../../models/Stock_.dart' as StockModel;
 import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
 import 'StockTakeProvider.dart';
@@ -22,7 +24,8 @@ class StockTakeUOMList extends StatefulWidget {
 }
 
 class _StockTakeUOMListState extends State<StockTakeUOMList> {
-  String? uomSelected;
+  StockModel.StockUOMDtoList? uomSelected;
+  StockModel.StockBatchDtoList? batchSelected;
   int _currentValue = 1;
   String companyid = "";
   List<LocationDropDown> locationList = [];
@@ -32,8 +35,11 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
   List<LocationDropDown> storageFromJson(String str) =>
       List<LocationDropDown>.from(
           json.decode(str).map((x) => LocationDropDown.fromJson(x)));
+  StockModel.Stock_ stock = new StockModel.Stock_();
+  StockModel.Stock_ stockFromJson(String str) =>
+      StockModel.Stock_.fromJson(json.decode(str));
 
-  int _quantity = 0;
+  double _quantity = 0;
 
   void _decrement() {
     setState(() {
@@ -47,6 +53,12 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
     setState(() {
       _quantity++;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getStock(widget.stock.stockID!);
   }
 
   @override
@@ -83,7 +95,27 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
           children: [
             InkWell(
               onTap: () {
-                // !widget.isEdit ? postData() : updateData();
+                //!widget.isEdit ? postData() : updateData();
+                addItem();
+                StockTakeDetails stockTakeDetail = new StockTakeDetails();
+                stockTakeDetail.stockID = stock.stockID;
+                stockTakeDetail.stockBatchID = batchSelected!.stockBatchID;
+                stockTakeDetail.batchNo = batchSelected!.batchNo;
+                stockTakeDetail.stockCode = stock.stockCode;
+                stockTakeDetail.description = stock.description;
+                stockTakeDetail.uom = uomSelected!.uom;
+                stockTakeDetail.qty = _quantity;
+                stockTakeDetail.storageID = storageID;
+                stockTakeDetail.storageCode = storagecode;
+
+                final stockTakeProvider = StockTakeProvider.of(context);
+                if (stockTakeProvider != null) {
+                  stockTakeDetail.locationID =
+                      stockTakeProvider.stockTake.locationID;
+                  stockTakeProvider!.addStockTakeDetail(stockTakeDetail);
+                }
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -119,24 +151,22 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
-                DropdownButton<String>(
+                DropdownButton<StockModel.StockUOMDtoList>(
                   value: uomSelected,
-                  onChanged: (String? newValue) {
+                  onChanged: (StockModel.StockUOMDtoList? newValue) {
                     setState(() {
-                      uomSelected = newValue;
+                      uomSelected = newValue!;
                     });
                   },
-                  items: <String>[
-                    'UOM 1',
-                    'UOM 2',
-                    'UOM 3', // Add more UOMs as needed
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                  items: (stock.stockUOMDtoList ?? [])
+                      .map<DropdownMenuItem<StockModel.StockUOMDtoList>>((uom) {
+                    return DropdownMenuItem<StockModel.StockUOMDtoList>(
+                      value: uom,
+                      child: Text(uom.uom ??
+                          ''), // Accessing properties with dot notation
                     );
                   }).toList(),
-                ),
+                )
               ],
             ),
             SizedBox(
@@ -152,21 +182,22 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
-                DropdownButton<String>(
-                  value: uomSelected,
-                  onChanged: (String? newValue) {
+                DropdownButton<StockModel.StockBatchDtoList>(
+                  value: batchSelected,
+                  onChanged: (StockModel.StockBatchDtoList? newValue) {
                     setState(() {
-                      uomSelected = newValue;
+                      batchSelected = newValue;
                     });
                   },
-                  items: <String>[
-                    'UOM 1',
-                    'UOM 2',
-                    'UOM 3', // Add more UOMs as needed
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                  items: (stock.stockBatchDtoList ??
+                          []) // Check if stockUOMDtoList is null
+                      .map<DropdownMenuItem<StockModel.StockBatchDtoList>>(
+                          (batch) {
+                    return DropdownMenuItem<StockModel.StockBatchDtoList>(
+                      value: batch, // Accessing properties with dot notation
+                      child: Text(
+                        batch.batchNo ?? '',
+                      ), // Accessing properties with dot notation
                     );
                   }).toList(),
                 ),
@@ -281,8 +312,8 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                         ),
                         textAlign: TextAlign.right,
                         controller: TextEditingController(
-                            text: _quantity
-                                .toString()), // Use a controller to set the initial value
+                            text: _quantity.toStringAsFixed(
+                                0)), // Use a controller to set the initial value
                         readOnly: true, // Make the TextFormField read-only
                       ),
                     ),
@@ -315,5 +346,41 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
       });
     }
     return locationList;
+  }
+
+  Future<StockModel.Stock_> getStock(int stockID) async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient()
+          .get('/Stock/GetStock?stockId=' + stockID.toString());
+      StockModel.Stock_ _stock = stockFromJson(response);
+
+      setState(() {
+        stock = _stock;
+      });
+    }
+    return stock;
+  }
+
+  void addItem() {
+    if (uomSelected == null || uomSelected!.uom!.isEmpty) {
+      Fluttertoast.showToast(msg: "Please select a UOM");
+      return;
+    }
+
+    if (batchSelected == null || batchSelected!.batchNo!.isEmpty) {
+      Fluttertoast.showToast(msg: "Please select a batch");
+      return;
+    }
+
+    if (storagecode.isEmpty) {
+      Fluttertoast.showToast(msg: "Please select a storage");
+      return;
+    }
+
+    // if (_quantity == 0) {
+    //   Fluttertoast.showToast(msg: "Quantity cannot be zero");
+    //   return;
+    // }
   }
 }

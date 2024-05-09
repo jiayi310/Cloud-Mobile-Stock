@@ -30,6 +30,13 @@ class StockTakeProviderData extends InheritedWidget {
   void setStockTake(StockTake newStockTake) {
     stockTake = newStockTake;
   }
+
+  void addStockTakeDetail(StockTakeDetails detail) {
+    if (stockTake.stockTakeDetails == null) {
+      stockTake.stockTakeDetails = [];
+    }
+    stockTake.stockTakeDetails!.add(detail);
+  }
 }
 
 class StockTakeProvider extends StatefulWidget {
