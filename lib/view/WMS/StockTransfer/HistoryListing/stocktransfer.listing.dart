@@ -258,27 +258,34 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        width: double.infinity,
-                        child: DataTable(
-                          horizontalMargin: 10,
-                          columnSpacing: 10,
-                          headingRowHeight: 30,
-                          headingTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                          headingRowColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.black),
-                          dataTextStyle:
-                              TextStyle(fontSize: 11, color: Colors.black),
-                          columns: _createColumns(),
-                          rows: _createRows(),
-                        ),
-                      ),
+                      // Container(
+                      //   width: double.infinity,
+                      //   child: DataTable(
+                      //     horizontalMargin: 10,
+                      //     columnSpacing: 10,
+                      //     headingRowHeight: 30,
+                      //     headingTextStyle: TextStyle(
+                      //         fontWeight: FontWeight.bold, color: Colors.white),
+                      //     headingRowColor: MaterialStateProperty.resolveWith(
+                      //         (states) => Colors.black),
+                      //     dataTextStyle:
+                      //         TextStyle(fontSize: 11, color: Colors.black),
+                      //     columns: _createColumns(),
+                      //     rows: _createRows(),
+                      //   ),
+                      // ),
+                      _buildStockTransferList(),
                     ],
                   )),
                 ),
         ),
       ),
+    );
+  }
+
+  Widget _buildStockTransferList() {
+    return Column(
+      children: _stockTransferList(), // Generate items here
     );
   }
 
@@ -356,77 +363,171 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
     }
   }
 
-  List<DataColumn> _createColumns() {
-    return [
-      DataColumn(label: Text('Stock')),
-      DataColumn(label: Text('Desc.')),
-      DataColumn(label: Text('UOM')),
-      DataColumn(
-        label: Text(
-          'Qty',
-          textAlign: TextAlign.right, // Align text to the right
-        ),
-        numeric: true, // Set numeric to true to align content to the right
-      ),
-      DataColumn(
-          label: Text(
-            'From',
-            textAlign: TextAlign.right,
-          ),
-          numeric: true),
-      DataColumn(
-          label: Text(
-            'To',
-            textAlign: TextAlign.right,
-          ),
-          numeric: true),
-    ];
-  }
-
-  List<DataRow> _createRows() {
+  List<Widget> _stockTransferList() {
     return stockTransfer?.stockTransferDetails
-            ?.map((stItem) => DataRow(cells: [
-                  // DataCell(Text(salesItem['#'].toString())),
-                  DataCell(Text(stItem.stockCode.toString() ?? '')),
-                  DataCell(Text(stItem.description.toString() ?? '')),
-                  DataCell(Text(stItem.uom.toString() ?? '')),
-                  DataCell(ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 4),
-                      child: Text(
-                        stItem?.qty?.toStringAsFixed(0) ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
-                      ))),
-                  DataCell(
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 4,
+            ?.map((stItem) => Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            10.0)), // Adjust the radius as needed
+                        color: Colors.grey.withOpacity(0.1),
                       ),
-                      child: Text(
-                        (stItem?.fromLocation.toString() ?? '') +
-                            " / " +
-                            (stItem?.fromStorageCode.toString() ?? ''),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  stItem.stockCode.toString(),
+                                  style: TextStyle(
+                                    fontSize: 14, // Adjust font size as needed
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors
+                                        .black, // Change text color as needed
+                                  ),
+                                ),
+                                Text(
+                                  stItem.description!.length > 35
+                                      ? stItem.description!.substring(0, 30) +
+                                          '...'
+                                      : stItem.description ?? "",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors
+                                        .black, // Change text color as needed
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  stItem.uom.toString(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors
+                                        .black, // Change text color as needed
+                                  ),
+                                ),
+                                Text(
+                                  stItem.batchNo.toString(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors
+                                        .black, // Change text color as needed
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 2 -
+                                      50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        stItem.fromLocation.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors
+                                              .black, // Change text color as needed
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        stItem.fromStorageCode.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors
+                                              .black, // Change text color as needed
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 24, // Set the desired width here
+                                  child: Icon(Icons.arrow_forward_ios_sharp),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 2 -
+                                      50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        stItem.toLocation.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors
+                                              .black, // Change text color as needed
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        stItem.toStorageCode.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors
+                                              .black, // Change text color as needed
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Qty: " + stItem.qty!.toStringAsFixed(0),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  DataCell(
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 4,
-                      ),
-                      child: Text(
-                        (stItem?.toLocation.toString() ?? '') +
-                            " / " +
-                            (stItem?.toStorageCode.toString() ?? ''),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                  ),
-                ]))
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                ))
             ?.toList() ??
         [];
   }

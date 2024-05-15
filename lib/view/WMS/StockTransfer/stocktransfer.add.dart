@@ -11,6 +11,7 @@ import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
 import '../StockTake/product.list.dart';
 import 'HistoryListing/StockTransfer.listing.dart';
+import 'StockTransferProvider.dart';
 import 'item.stocktransfer.dart';
 
 class StockTransferAdd extends StatefulWidget {
@@ -36,10 +37,11 @@ class _StockTransferAddState extends State<StockTransferAdd> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // if (!widget.isEdit) {
-    //   final stockTransferProvider = StockTransferProvider.of(context);
-    //   StockTransferDetails = StockTransferProvider?.StockTransfer.StockTransferDetails ?? [];
-    // }
+    if (!widget.isEdit) {
+      final stockTransferProvider = StockTransferProvider.of(context);
+      stockTransferDetails =
+          stockTransferProvider?.stockTransfer.stockTransferDetails ?? [];
+    }
   }
 
   @override
@@ -54,13 +56,13 @@ class _StockTransferAddState extends State<StockTransferAdd> {
   @override
   Widget build(BuildContext context) {
     if (widget.isEdit) {
-      // final StockTransferProvider = StockTransferProvider.of(context);
-      // if (StockTransferProvider != null) {
-      //   StockTransferProvider.setStockTransfer(widget.StockTransfer);
-      // }
-      // StockTransferDetails = widget.StockTransfer.StockTransferDetails!;
+      final stockTransferProvider = StockTransferProvider.of(context);
+      if (stockTransferProvider != null) {
+        stockTransferProvider.setStockTransfer(widget.stockTransfer);
+      }
+      stockTransferDetails = widget.stockTransfer.stockTransferDetails!;
     }
-    //  widget.StockTransfer = StockTransferProvider.of(context)!.StockTransfer;
+    widget.stockTransfer = StockTransferProvider.of(context)!.stockTransfer;
     return Scaffold(
       bottomNavigationBar: Container(
         height: 100,
@@ -164,20 +166,6 @@ class _StockTransferAddState extends State<StockTransferAdd> {
                           });
                         }
                       });
-                      //   } else {
-                      //     Fluttertoast.showToast(
-                      //       msg: "Please select a location",
-                      //       toastLength:
-                      //       Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
-                      //       gravity: ToastGravity
-                      //           .BOTTOM, // You can set the position (TOP, CENTER, BOTTOM)
-                      //       timeInSecForIosWeb:
-                      //       1, // Time in seconds before the toast disappears on iOS and web
-                      //       backgroundColor: Colors.black,
-                      //       textColor: Colors.white,
-                      //       fontSize: 16.0,
-                      //     );
-                      //
                     },
                   ),
                 ],
@@ -188,9 +176,9 @@ class _StockTransferAddState extends State<StockTransferAdd> {
             height: 10,
           ),
           ItemStockTransfer(
-              //stItems: StockTransferDetails,
-              // refreshMainPage: refreshMainPage,
-              ),
+            stockTransferDetails: stockTransferDetails,
+            refreshMainPage: refreshMainPage,
+          ),
           SizedBox(
             height: 10,
           ),
@@ -308,16 +296,13 @@ class _StockTransferAddState extends State<StockTransferAdd> {
       "docNo": docNo,
       "docDate": getCurrentDateTime(),
       "description": null,
-      "remark": null,
-      "isMerge": false,
-      "isAdjustment": false,
       "isVoid": false,
       "lastModifiedDateTime": getCurrentDateTime(),
       "lastModifiedUserID": userid,
       "createdDateTime": getCurrentDateTime(),
       "createdUserID": userid,
       "companyID": companyid,
-      "StockTransferDetails": stockTransferDetails.map((stItem) {
+      "stockTransferDetails": stockTransferDetails.map((stItem) {
         return {
           "dtlID": 0,
           "docID": 0,
@@ -327,7 +312,15 @@ class _StockTransferAddState extends State<StockTransferAdd> {
           "stockCode": stItem.stockCode.toString(),
           "description": stItem.description.toString(),
           "uom": stItem.uom,
-          "qty": stItem.qty ?? 0
+          "qty": stItem.qty ?? 0,
+          "fromLocationID": stItem.fromLocationID,
+          "fromLocation": stItem.fromLocation,
+          "fromStorageID": stItem.fromStorageID,
+          "fromStorageCode": stItem.fromStorageCode,
+          "toLocationID": stItem.toLocationID,
+          "toLocation": stItem.toLocation,
+          "toStorageID": stItem.toStorageID,
+          "toStorageCode": stItem.toStorageCode,
         };
       }).toList(),
     };
@@ -355,11 +348,11 @@ class _StockTransferAddState extends State<StockTransferAdd> {
                 StockTransferListingScreen(docid: int.parse(docID)),
           ),
         );
-        // StockTransferProviderData? providerData =
-        // StockTransferProviderData.of(context);
-        // if (providerData != null) {
-        //   providerData.clearStockTransfer();
-        // }
+        StockTransferProviderData? providerData =
+            StockTransferProviderData.of(context);
+        if (providerData != null) {
+          providerData.clearStockTransfer();
+        }
       }
     } catch (e) {
       // Handle exceptions
@@ -369,10 +362,11 @@ class _StockTransferAddState extends State<StockTransferAdd> {
 
   refreshMainPage() {
     setState(() {
-      // final StockTransferProvider = stockTransferProvider.of(context);
-      // if (StockTransferProvider != null) {
-      //   stockTransferDetails = StockTransferProvider!.StockTransfer.StockTransferDetails!;
-      // }
+      final stockTransferProvider = StockTransferProvider.of(context);
+      if (stockTransferProvider != null) {
+        stockTransferDetails =
+            stockTransferProvider!.stockTransfer.stockTransferDetails!;
+      }
     });
   }
 }

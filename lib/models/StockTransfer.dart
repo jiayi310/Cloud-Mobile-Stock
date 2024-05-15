@@ -10,7 +10,7 @@ class StockTransfer {
   String? createdDateTime;
   int? createdUserID;
   int? companyID;
-  List<StockTransferDetails>? stockTransferDetails;
+  List<StockTransferDetails> stockTransferDetails = [];
 
   StockTransfer(
       {this.docID,
@@ -23,8 +23,7 @@ class StockTransfer {
       this.lastModifiedUserID,
       this.createdDateTime,
       this.createdUserID,
-      this.companyID,
-      this.stockTransferDetails});
+      this.companyID});
 
   StockTransfer.fromJson(Map<String, dynamic> json) {
     docID = json['docID'];

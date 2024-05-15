@@ -8,11 +8,13 @@ import 'package:mobilestock/view/Quotation/QuotationProvider.dart';
 import 'package:mobilestock/view/Sales/SalesProvider.dart';
 import 'package:mobilestock/view/WMS/Receiving/ReceivingProvider.dart';
 import 'package:mobilestock/view/WMS/StockTake/StockTakeProvider.dart';
+import 'package:mobilestock/view/WMS/StockTransfer/StockTransferProvider.dart';
 import 'package:mobilestock/view/splash.view.dart';
 
 import 'models/Receiving.dart';
 import 'models/Sales.dart';
 import 'models/StockTake.dart';
+import 'models/StockTransfer.dart';
 
 void main() {
   runApp(
@@ -26,9 +28,11 @@ void main() {
           child: ReceivingProvider(
             receiving: Receiving(),
             child: StockTakeProvider(
-              stockTake: StockTake(),
-              child: MyApp(),
-            ),
+                stockTake: StockTake(),
+                child: StockTransferProvider(
+                  stockTransfer: StockTransfer(),
+                  child: MyApp(),
+                )),
           ),
         ),
       ),

@@ -28,7 +28,7 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
   StockModel.StockBatchDtoList? batchSelected;
   int _currentValue = 1;
   String companyid = "";
-  List<LocationDropDown> locationList = [];
+  List<LocationDropDown> storagelist = [];
   String storagecode = "";
   int storageID = 0;
   final storage = new FlutterSecureStorage();
@@ -97,25 +97,6 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
               onTap: () {
                 //!widget.isEdit ? postData() : updateData();
                 addItem();
-                StockTakeDetails stockTakeDetail = new StockTakeDetails();
-                stockTakeDetail.stockID = stock.stockID;
-                stockTakeDetail.stockBatchID = batchSelected!.stockBatchID;
-                stockTakeDetail.batchNo = batchSelected!.batchNo;
-                stockTakeDetail.stockCode = stock.stockCode;
-                stockTakeDetail.description = stock.description;
-                stockTakeDetail.uom = uomSelected!.uom;
-                stockTakeDetail.qty = _quantity;
-                stockTakeDetail.storageID = storageID;
-                stockTakeDetail.storageCode = storagecode;
-
-                final stockTakeProvider = StockTakeProvider.of(context);
-                if (stockTakeProvider != null) {
-                  stockTakeDetail.locationID =
-                      stockTakeProvider.stockTake.locationID;
-                  stockTakeProvider!.addStockTakeDetail(stockTakeDetail);
-                }
-                Navigator.pop(context);
-                Navigator.pop(context);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -237,23 +218,23 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                                 children: <Widget>[
                                   for (int i = 0;
                                       i <
-                                          locationList[0]
+                                          storagelist[0]
                                               .storageDropdownDtoList!
                                               .length;
                                       i++)
                                     ListTile(
-                                      title: Text(locationList[0]
+                                      title: Text(storagelist[0]
                                           .storageDropdownDtoList![i]
                                           .storageCode
                                           .toString()),
                                       onTap: () {
                                         setState(() {
-                                          storagecode = locationList[0]
+                                          storagecode = storagelist[0]
                                               .storageDropdownDtoList![i]
                                               .storageCode
                                               .toString();
 
-                                          storageID = locationList[0]
+                                          storageID = storagelist[0]
                                               .storageDropdownDtoList![i]
                                               .storageID!;
                                         });
@@ -272,7 +253,11 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      if (storagecode == "") Text("Select a storage"),
+                      if (storagecode == "")
+                        Text(
+                          "Select a storage",
+                          style: TextStyle(color: Colors.red),
+                        ),
                       if (storagecode != "") Text(storagecode),
                       Icon(Icons.chevron_right_outlined),
                     ],
@@ -339,13 +324,13 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
               companyid +
               '&currentLocationId=' +
               locationID.toString());
-      List<LocationDropDown> _locationList = storageFromJson(response);
+      List<LocationDropDown> _storagelist = storageFromJson(response);
 
       setState(() {
-        locationList = _locationList;
+        storagelist = _storagelist;
       });
     }
-    return locationList;
+    return storagelist;
   }
 
   Future<StockModel.Stock_> getStock(int stockID) async {
@@ -382,5 +367,24 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
     //   Fluttertoast.showToast(msg: "Quantity cannot be zero");
     //   return;
     // }
+
+    StockTakeDetails stockTakeDetail = new StockTakeDetails();
+    stockTakeDetail.stockID = stock.stockID;
+    stockTakeDetail.stockBatchID = batchSelected!.stockBatchID;
+    stockTakeDetail.batchNo = batchSelected!.batchNo;
+    stockTakeDetail.stockCode = stock.stockCode;
+    stockTakeDetail.description = stock.description;
+    stockTakeDetail.uom = uomSelected!.uom;
+    stockTakeDetail.qty = _quantity;
+    stockTakeDetail.storageID = storageID;
+    stockTakeDetail.storageCode = storagecode;
+
+    final stockTakeProvider = StockTakeProvider.of(context);
+    if (stockTakeProvider != null) {
+      stockTakeDetail.locationID = stockTakeProvider.stockTake.locationID;
+      stockTakeProvider!.addStockTakeDetail(stockTakeDetail);
+    }
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 }
