@@ -15,10 +15,9 @@ class SplashView extends StatelessWidget {
       Get.to(() => LoginView());
     });
     return Scaffold(
-      backgroundColor: GlobalColors.mainColor,
+      backgroundColor: Colors.white,
       body: Center(
-          child:
-              Image.asset('assets/images/agiliti_logo_blue.png', height: 100)),
+          child: Image.asset('assets/images/cubehous_logo.png', height: 100)),
     );
   }
 }

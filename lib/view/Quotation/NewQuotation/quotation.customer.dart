@@ -46,20 +46,15 @@ class _CusQuotation extends State<CusQuotation> {
               quotationProvider!.quotation.customerID = customer!.customerID;
               quotationProvider!.quotation.customerCode =
                   customer!.customerCode.toString();
-              quotationProvider!.quotation.customerName =
-                  customer!.name.toString();
-              quotationProvider!.quotation.address1 =
-                  customer!.address1.toString();
-              quotationProvider!.quotation.address2 =
-                  customer!.address2.toString();
-              quotationProvider!.quotation.address3 =
-                  customer!.address3.toString();
-              quotationProvider!.quotation.address4 =
-                  customer!.address4.toString();
+              quotationProvider!.quotation.customerName = customer!.name ?? "";
+              quotationProvider!.quotation.address1 = customer!.address1 ?? "";
+              quotationProvider!.quotation.address2 = customer!.address2 ?? "";
+              quotationProvider!.quotation.address3 = customer!.address3 ?? "";
+              quotationProvider!.quotation.address4 = customer!.address4 ?? "";
               quotationProvider!.quotation.salesAgent =
-                  customer!.salesAgent.salesAgent.toString();
-              quotationProvider!.quotation.phone = customer!.phone1.toString();
-              quotationProvider!.quotation.email = customer!.email.toString();
+                  customer!.salesAgent.salesAgent ?? "";
+              quotationProvider!.quotation.phone = customer!.phone1 ?? "";
+              quotationProvider!.quotation.email = customer!.email ?? "";
               return Container(
                 height: 110,
                 width: double.infinity,

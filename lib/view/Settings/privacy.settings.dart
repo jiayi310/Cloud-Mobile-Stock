@@ -40,6 +40,7 @@ class Privacy extends StatelessWidget {
                 height: 10,
               ),
               Text(
+                textAlign: TextAlign.justify,
                 "This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You."
                 "We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the Free Privacy Policy Generator.",
               ),
@@ -61,6 +62,7 @@ class Privacy extends StatelessWidget {
                 height: 10,
               ),
               Text(
+                  textAlign: TextAlign.justify,
                   "The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural."),
               SizedBox(
                 height: 10,
@@ -72,11 +74,13 @@ class Privacy extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Text("For the purposes of this Privacy Policy:\n"
+              Text(
+                  textAlign: TextAlign.justify,
+                  "For the purposes of this Privacy Policy:\n"
                   "\tAccount means a unique account created for You to access our Service or parts of our Service."
                   "Affiliate means an entity that controls, is controlled by or is under common control with a party, where \"control\" means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority."
-                  "Application refers to Agiliti, the software program provided by the Company."
-                  "Company (referred to as either \"the Company\", \"We\", \"Us\" or \"Our\" in this Agreement) refers to Agilec Technology Sdn Bhd, 2A-1, Jalan Puteri 2/5, 47100 Bandar Puteri Puchong, Selangor."
+                  "Application refers to Cubehous, the software program provided by the Company."
+                  "Company (referred to as either \"the Company\", \"We\", \"Us\" or \"Our\" in this Agreement) refers to Presoft (M) Sdn Bhd, 2A-1, Jalan Puteri 2/5, 47100 Bandar Puteri Puchong, Selangor."
                   "Country refers to: Malaysia"
                   "Device means any device that can access the Service such as a computer, a cellphone or a digital tablet."
                   "Personal Data is any information that relates to an identified or identifiable individual."

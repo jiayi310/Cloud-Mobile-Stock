@@ -165,7 +165,7 @@ class _CollectionInvoiceListState extends State<CollectionInvoiceList> {
           sales[index].isSelected = !sales[index].isSelected;
           if (sales[index].isSelected) {
             selectedSales.add(sales[index]);
-            totalSelected += sales[index].finalTotal!;
+            totalSelected += sales[index].outstanding!;
 
             if (collectionProvider != null) {
               collectionProvider.collection.addItem(

@@ -46,15 +46,15 @@ class _CusCheckOutState extends State<CusCheckOut> {
               salesProvider!.sales.customerCode =
                   customer!.customerCode.toString();
               salesProvider.sales.customerID = customer!.customerID!;
-              salesProvider!.sales.customerName = customer!.name ?? null;
-              salesProvider!.sales.address1 = customer!.address1 ?? null;
-              salesProvider!.sales.address2 = customer!.address2 ?? null;
-              salesProvider!.sales.address3 = customer!.address3 ?? null;
-              salesProvider!.sales.address4 = customer!.address4 ?? null;
+              salesProvider!.sales.customerName = customer!.name ?? "";
+              salesProvider!.sales.address1 = customer!.address1 ?? "";
+              salesProvider!.sales.address2 = customer!.address2 ?? "";
+              salesProvider!.sales.address3 = customer!.address3 ?? "";
+              salesProvider!.sales.address4 = customer!.address4 ?? "";
               salesProvider!.sales.salesAgent =
                   customer!.salesAgent.salesAgent.toString();
-              salesProvider!.sales.phone = customer!.phone1.toString();
-              salesProvider!.sales.email = customer!.email.toString();
+              salesProvider!.sales.phone = customer!.phone1 ?? "";
+              salesProvider!.sales.email = customer!.email ?? "";
               return Container(
                 height: 110,
                 width: double.infinity,

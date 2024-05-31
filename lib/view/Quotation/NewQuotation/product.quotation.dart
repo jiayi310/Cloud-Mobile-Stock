@@ -170,7 +170,7 @@ class _QuotationProductListState extends State<QuotationProductList> {
             children: [
               Text(description),
               Text(
-                price.toString(),
+                price.toStringAsFixed(2),
                 style: TextStyle(color: Colors.red),
               ),
             ],

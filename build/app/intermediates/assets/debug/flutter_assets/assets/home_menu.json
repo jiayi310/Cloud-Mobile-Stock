@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Workflows",
+    "img": "assets/images/salesflow.png",
+    "color": "FFFADD"
+  },
+  {
+    "title": "Customer",
+    "img": "assets/images/customer.png",
+    "color": "FFFFFF"
+  },
+  {
+    "title": "Stock",
+    "img": "assets/images/inventory.png",
+    "color": "FFFFFF"
+  },
+  {
+    "title": "Clock In",
+    "img": "assets/images/clock.png",
+    "color": "FFFFFF"
+    },
+  {
+    "title": "Quotation",
+    "img": "assets/images/quotation.png",
+    "color": "FFFFFF"
+  },
+  {
+    "title": "Sales",
+    "img": "assets/images/sales.png",
+    "color": "FFFFFF"
+  },
+  {
+    "title": "Collection",
+    "img": "assets/images/collection.png",
+    "color": "FFFFFF"
+  },
+  {
+    "title": "Analysis",
+    "img": "assets/images/analysis.png",
+    "color": "FFFFFF"
+  }
+]

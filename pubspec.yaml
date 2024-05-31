@@ -71,6 +71,7 @@ dependencies:
   dropdown_search: ^5.0.6
   autocomplete_textfield: ^2.0.1
   numberpicker: ^2.1.2
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:
@@ -80,7 +81,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
-  image_path: "assets/images/agiliti_logo_blue_icon.png"
+  image_path: "assets/images/cubehouse.jpg"
   android: true
   ios: true
   remove_alpha_ios: true

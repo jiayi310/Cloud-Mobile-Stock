@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		n4bqDnsUdIZo9IoEKdZqhzN3/HU=
+		fLoi/rQia6EFqgU26l7ESZkpJYA=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		XCz9brO1F7VFc1Xj/d9USAwC1GI=
+		o6Vu631NOuAlCMHWfBJwZ/nWh84=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -26,7 +26,7 @@
 		</data>
 		<key>flutter_assets/assets/.DS_Store</key>
 		<data>
-		jNgrNDc7tZbXFPzrhddET0OFL3o=
+		rzJBYfNRH9s6UDIgptnmRFWn+NM=
 		</data>
 		<key>flutter_assets/assets/home_menu.json</key>
 		<data>
@@ -35,18 +35,6 @@
 		<key>flutter_assets/assets/images/.DS_Store</key>
 		<data>
 		NeeEidNQRqBLOT9g+O+qEng9V+c=
-		</data>
-		<key>flutter_assets/assets/images/agiliti_logo.png</key>
-		<data>
-		ySWqNoezxTVD2U3fgIj2P8AcGho=
-		</data>
-		<key>flutter_assets/assets/images/agiliti_logo_blue.png</key>
-		<data>
-		LJhN9Exb2RVSajJj+l0IIqWcAbo=
-		</data>
-		<key>flutter_assets/assets/images/agiliti_logo_blue_icon.png</key>
-		<data>
-		0qxraxA09alM9d5FUkHYSBS+WSs=
 		</data>
 		<key>flutter_assets/assets/images/analysis.png</key>
 		<data>
@@ -75,6 +63,14 @@
 		<key>flutter_assets/assets/images/crown.png</key>
 		<data>
 		1RJE5a8gtMGKjdNnMWzdNpG8ER4=
+		</data>
+		<key>flutter_assets/assets/images/cubehous_logo.png</key>
+		<data>
+		d1e7A5xXudnCftwyEQFWb1bfH4o=
+		</data>
+		<key>flutter_assets/assets/images/cubehouse.jpg</key>
+		<data>
+		7jCwp+hXhe5RnAcdaoee5LpCfpI=
 		</data>
 		<key>flutter_assets/assets/images/customer.png</key>
 		<data>
@@ -226,7 +222,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		Jhk6JtHu2vcNy5ydPneKyrrkPQE=
+		l9JEVMsHycat8vCG58Iz2il2MaI=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -263,14 +259,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			VfToyZueseZ+XG9KZ+FaniR7lTA7XvqtCGmQAmlxonk=
+			8YLJfrdv+BjTu+QtCiamg8uUZFfdXezanSSrLcy0oIM=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ODBHMgZc54dvbDb2jhEfJa9c4ls6Vxo43neiMKmwWrU=
+			sByfQ5PHt3bUl3V66kHuSz4UzsVGM2Jkb/AM6oX1AKA=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -292,27 +288,6 @@
 			<key>hash2</key>
 			<data>
 			0JRAUKHZ95N5AIOWonSBBx48/jVR9vmXh3fsalclWnw=
-			</data>
-		</dict>
-		<key>flutter_assets/assets/images/agiliti_logo.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			wNUiIK2uDKWAtdyn+7Hfe3LkTqX6Q4SvJE4Ug1p2/uY=
-			</data>
-		</dict>
-		<key>flutter_assets/assets/images/agiliti_logo_blue.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			OGf0igeAThU9VRzHoE/5yEodBYNd3McyqSTBge+yFNk=
-			</data>
-		</dict>
-		<key>flutter_assets/assets/images/agiliti_logo_blue_icon.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ecE7uOOtcoZbsIN7sKBFjvNBp6+u8TCy2/jIS8DBBB8=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/analysis.png</key>
@@ -362,6 +337,20 @@
 			<key>hash2</key>
 			<data>
 			wsGgwi75LkTsSH9cOmr4JGUt9xRG8A8pWcCf5mUG/YA=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/cubehous_logo.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			wnuJmdO4/unUkEh/F8PXDyWkMDNWRXtLho9Yrx7g0Vg=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/images/cubehouse.jpg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			biGg6EJrKwWXq8ov6/ZZZkyFxw1F1x4R0fR3wWvwUj0=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/images/customer.png</key>
@@ -627,7 +616,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			V/Aoof1HSSuxu+kVTQlDaW8G+WdrWzTF+B+QMdnwc9k=
+			9/P604vIVcn0vqpKzCSw8ZNQu4qZNOXt+dBXfF8AIv4=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

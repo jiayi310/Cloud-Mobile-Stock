@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobilestock/models/Receiving.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/Quotation/QuotationProvider.dart';
+import 'package:mobilestock/view/Settings/settings.constant.dart';
 
 import '../../../api/base.client.dart';
 import '../../../models/Sales.dart';
@@ -36,7 +37,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     getData();
-    _controller.text = quantity.toString();
+    _controller.text = quantity.toStringAsFixed(0);
     selectedUOM = widget.stock.baseUOM.toString();
     getStockBalance(selectedUOM);
   }
@@ -231,7 +232,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               height: 10,
                             ),
                             Text(
-                              totalBaseUOMBalanceQty.toStringAsFixed(2),
+                              totalBaseUOMBalanceQty.toStringAsFixed(0),
                             ),
                             const SizedBox(height: defaultPadding / 2),
                           ],
@@ -274,6 +275,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               onTap: () {
                 selectedUOM = widget.stock.baseUOM.toString();
                 quantity = 1;
+                pricePerUnit = getPriceBasedOnUOM(selectedUOM);
                 updateTotalPrice();
                 showModalBottomSheet(
                   backgroundColor: Colors.transparent,
@@ -351,7 +353,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                                     ["uom"]
                                                                 .toString();
                                                           }
-
+                                                          pricePerUnit =
+                                                              getPriceBasedOnUOM(
+                                                                  selectedUOM);
                                                           updateTotalPrice();
                                                         });
                                                       },
@@ -517,7 +521,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 IconButton(
                                                   icon: const Icon(
                                                     Icons.remove,
-                                                    color: Colors.indigo,
+                                                    color: kprimaryColor,
                                                   ),
                                                   onPressed: () {
                                                     setState(() {
@@ -526,7 +530,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                       _controller.text =
                                                           quantity
                                                               .toStringAsFixed(
-                                                                  2);
+                                                                  0);
                                                     });
                                                     updateTotalPrice();
                                                   },
@@ -548,13 +552,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 IconButton(
                                                   icon: const Icon(
                                                     Icons.add,
-                                                    color: Colors.indigo,
+                                                    color: kprimaryColor,
                                                   ),
                                                   onPressed: () {
                                                     setState(() {
                                                       quantity++;
                                                       _controller.text =
-                                                          quantity.toString();
+                                                          quantity
+                                                              .toStringAsFixed(
+                                                                  0);
                                                     });
                                                     updateTotalPrice();
                                                   },
@@ -598,7 +604,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           Text(
                                             remark,
                                             style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 15,
+                                              color: Colors.redAccent,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -636,7 +643,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                       ),
                                                     ),
                                                     Text(totalBaseUOMBalanceQty
-                                                        .toStringAsFixed(2)),
+                                                        .toStringAsFixed(0)),
                                                   ],
                                                 );
                                               }
@@ -695,8 +702,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                     quantity,
                                                 taxAmt: 0,
                                                 taxableAmount: 0,
-                                                price:
-                                                    widget.stock.baseUOMPrice1!,
+                                                price: pricePerUnit!,
                                                 image: decodedImage,
                                               );
                                               ScaffoldMessenger.of(context)
@@ -734,8 +740,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                     quantity,
                                                 taxAmt: 0,
                                                 taxableAmount: 0,
-                                                price:
-                                                    widget.stock.baseUOMPrice1!,
+                                                price: pricePerUnit!,
                                                 image: decodedImage,
                                               );
                                               ScaffoldMessenger.of(context)
@@ -882,7 +887,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void updateTotalPrice() {
-    pricePerUnit = getPriceBasedOnUOM(selectedUOM);
+    //pricePerUnit = getPriceBasedOnUOM(selectedUOM);
     double totalPrice = quantity * pricePerUnit;
 
     setState(() {

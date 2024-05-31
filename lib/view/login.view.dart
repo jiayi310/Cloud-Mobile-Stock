@@ -89,7 +89,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 Container(
                     alignment: Alignment.center,
-                    child: Image.asset('assets/images/agiliti_logo.png',
+                    child: Image.asset('assets/images/cubehous_logo.png',
                         height: 80)),
                 const SizedBox(height: 30),
                 Text(

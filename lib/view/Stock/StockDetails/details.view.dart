@@ -33,8 +33,8 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(id);
     getData();
-    getStockBalance();
   }
 
   @override
@@ -53,17 +53,17 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: InkWell(
-              onTap: () {},
-              child: Icon(
-                Icons.edit,
-                size: 25,
-                color: Colors.green,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(right: 20),
+          //   child: InkWell(
+          //     onTap: () {},
+          //     child: Icon(
+          //       Icons.edit,
+          //       size: 25,
+          //       color: Colors.green,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       body: _isLoading
@@ -762,6 +762,7 @@ class _StockDetails extends State<StockDetails> with TickerProviderStateMixin {
         bytes = Base64Decoder().convert(productDetails.image.toString());
         uomSelected = productDetails.baseUOM;
         _isLoading = false;
+        getStockBalance();
       });
     }
   }

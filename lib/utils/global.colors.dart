@@ -2,7 +2,8 @@ import 'package:hexcolor/hexcolor.dart';
 
 class GlobalColors {
   //1E319D main color
-  static HexColor mainColor = HexColor('1E319D');
+  //static HexColor mainColor = HexColor('1E319D');
+  static HexColor mainColor = HexColor('FF9700');
   static HexColor textColor = HexColor('4F4F4F');
   static HexColor wmsColor = HexColor('A4AFEA');
 }

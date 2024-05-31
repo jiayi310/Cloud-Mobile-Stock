@@ -122,7 +122,7 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Image.asset(
-                                'assets/images/agiliti_logo.png',
+                                'assets/images/cubehous_logo.png',
                                 height: 60,
                               ),
                               Column(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobilestock/models/Customer.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
@@ -26,6 +27,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   final storage = new FlutterSecureStorage();
   Customer customer = new Customer();
   bool _isLoading = true;
+  String address = "";
 
   @override
   void initState() {
@@ -136,19 +138,42 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                             Icons.message,
                             color: Colors.blue,
                           ),
-                          Icon(
-                            Icons.email,
-                            color: Colors.orange,
+                          IconButton(
+                            onPressed: () {
+                              if (customer.email != null &&
+                                  customer.email!.isNotEmpty) {
+                                _sendEmail(customer.email!);
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "Email is empty",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.email,
+                              color: Colors.orange,
+                            ),
                           ),
                           IconButton(
-                            onPressed: () => MapUtils.openMap(
-                                customer.address1.toString() +
-                                    customer.address2.toString() +
-                                    "" +
-                                    customer.address3.toString() +
-                                    "" +
-                                    customer.address4.toString() +
-                                    ""),
+                            onPressed: () {
+                              if (address.isNotEmpty) {
+                                MapUtils.openMap(address);
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "Address is empty",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                              }
+                            },
                             icon: Icon(
                               Icons.map,
                               color: Colors.pinkAccent,
@@ -592,10 +617,48 @@ class _CustomerDetailsState extends State<CustomerDetails> {
 
       setState(() {
         customer = _customer;
+        address = [
+          customer.address1,
+          customer.address2,
+          customer.address3,
+          customer.address4,
+        ].where((part) => part != null && part!.isNotEmpty).join(', ');
+
         _isLoading = false;
       });
     }
   }
+}
+
+void _sendEmail(String email) async {
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: email,
+    query: encodeQueryParameters(<String, String>{
+      'subject': '',
+      'body': '',
+    }),
+  );
+
+  if (await canLaunch(emailUri.toString())) {
+    await launch(emailUri.toString());
+  } else {
+    Fluttertoast.showToast(
+      msg: "Could not send email",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+}
+
+String? encodeQueryParameters(Map<String, String> params) {
+  return params.entries
+      .map((MapEntry<String, String> e) =>
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+      .join('&');
 }
 
 Widget buildCircle({
@@ -615,7 +678,10 @@ class MapUtils {
   MapUtils._();
 
   static Future<void> openMap(String addr) async {
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$addr';
+    String encodedAddress = Uri.encodeComponent(addr);
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$encodedAddress';
+
     if (await canLaunch(googleUrl)) {
       await launch(googleUrl);
     } else {

@@ -26,16 +26,16 @@ class AboutUs extends StatelessWidget {
             children: [
               Container(
                   alignment: Alignment.center,
-                  child: Image.asset('assets/images/agiliti_logo.png',
+                  child: Image.asset('assets/images/cubehous_logo.png',
                       height: 80)),
               Text(
-                "Agiliti Mobile Stock",
+                "Cubehous",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 20,
               ),
-              Text("@2023 Agilec Technology Sdn. Bhd."),
+              Text("@2024 Presoft (M) Sdn. Bhd."),
               Text(
                   "All rights Reserved. The usage of this app indicates that you agree to be bound by our Terms and Conditions."),
               SizedBox(

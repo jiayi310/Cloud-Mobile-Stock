@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobilestock/view/Analysis/widgets.custom.dart';
 import 'package:mobilestock/view/Analysis/widgets.grid.dart';
+import 'package:mobilestock/view/Settings/settings.constant.dart';
 import 'package:pie_chart/pie_chart.dart' as Pie;
 
 import '../../api/base.client.dart';
@@ -47,7 +48,7 @@ class _StatsScreenState extends State<AnalysisScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1E319D),
+      backgroundColor: kprimaryColor,
       appBar: CustomAppBar(),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),

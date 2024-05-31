@@ -37,17 +37,17 @@ class _StockHomeScreen extends State<StockHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddStock(),
-              ));
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => AddStock(),
+      //         ));
+      //   },
+      //   child: Icon(Icons.add),
+      //   backgroundColor: Colors.green,
+      // ),
       appBar: AppBar(
         foregroundColor: GlobalColors.mainColor,
         backgroundColor: Colors.white,

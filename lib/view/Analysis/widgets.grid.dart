@@ -59,7 +59,7 @@ class _StatsGridState extends State<StatsGrid> {
           Flexible(
             child: Row(
               children: <Widget>[
-                _buildStatCard('Total Sales', totalsales, Colors.orange),
+                _buildStatCard('Total Sales', totalsales, Colors.indigo),
                 _buildStatCard(
                     'Average Order Value', averageordervalue, Colors.red),
               ],

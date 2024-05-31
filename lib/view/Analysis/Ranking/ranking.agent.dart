@@ -95,60 +95,68 @@ class _Ranking_AgentState extends State<Ranking_Agent> {
           ),
         ),
       ),
-      body: ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return TriadeRanking(
-                list: list,
-              );
-            }
-            if (index < 3) {
-              return Container();
-            }
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20),
-              leading: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    (index + 1).toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+      body: list.isNotEmpty
+          ? ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return TriadeRanking(
+                    list: list,
+                  );
+                }
+                if (index < 3) {
+                  return Container();
+                }
+                return ListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  leading: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        (index + 1).toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
                   ),
-                ],
+                  title: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(.2),
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: EdgeInsets.only(right: 20),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundImage:
+                              // list[index].profileImage != null
+                              //     ? MemoryImage(base64Decode(list[index].profileImage!)):
+                              AssetImage("assets/images/customer.png")
+                                  as ImageProvider,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          list[index].salesAgentDescription.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        Spacer(),
+                        Text(
+                          list[index].amt!.toStringAsFixed(2),
+                          style:
+                              TextStyle(color: Color(0xff45C9A1), fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              })
+          : Center(
+              child: Text(
+                'No Data',
+                style: TextStyle(color: Colors.white),
               ),
-              title: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(.2),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.only(right: 20),
-                child: Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage:
-                          // list[index].profileImage != null
-                          //     ? MemoryImage(base64Decode(list[index].profileImage!)):
-                          AssetImage("assets/images/customer.png")
-                              as ImageProvider,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      list[index].salesAgentDescription.toString(),
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    Spacer(),
-                    Text(
-                      list[index].amt!.toStringAsFixed(2),
-                      style: TextStyle(color: Color(0xff45C9A1), fontSize: 15),
-                    )
-                  ],
-                ),
-              ),
-            );
-          }),
+            ),
     );
   }
 

@@ -119,7 +119,7 @@ class _PackingListingScreen extends State<PackingListingScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Image.asset(
-                                'assets/images/agiliti_logo.png',
+                                'assets/images/cubehous_logo.png',
                                 height: 60,
                               ),
                               Column(

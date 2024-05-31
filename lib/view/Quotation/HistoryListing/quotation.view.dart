@@ -276,7 +276,9 @@ class _QuotationHomeScreen extends State<QuotationHomeScreen> {
                                   SizedBox(width: 20),
                                   Text(
                                     "RM" +
-                                        quotationList[i].finalTotal.toString(),
+                                        quotationList[i]
+                                            .finalTotal!
+                                            .toStringAsFixed(2),
                                     style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                       fontWeight: FontWeight.bold,

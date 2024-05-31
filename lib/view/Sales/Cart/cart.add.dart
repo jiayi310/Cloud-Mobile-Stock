@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobilestock/models/Sales.dart';
 import 'package:mobilestock/utils/global.colors.dart';
+import 'package:mobilestock/view/Settings/settings.constant.dart';
 
 import '../SalesProvider.dart';
 
@@ -89,7 +90,7 @@ class _MyWidgetState extends State<AddCartButtonCart> {
           IconButton(
             icon: const Icon(
               Icons.remove,
-              color: Colors.indigo,
+              color: kprimaryColor,
             ),
             onPressed: () {
               setState(() {
@@ -110,7 +111,7 @@ class _MyWidgetState extends State<AddCartButtonCart> {
           IconButton(
             icon: const Icon(
               Icons.add,
-              color: Colors.indigo,
+              color: kprimaryColor,
             ),
             onPressed: () {
               setState(() {

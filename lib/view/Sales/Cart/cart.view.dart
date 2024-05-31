@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobilestock/view/Settings/settings.constant.dart';
 
 import '../../../models/Sales.dart';
 import '../../../size.config.dart';
@@ -44,8 +45,11 @@ class _CartListState extends State<CartList> {
     totalPrice = 0;
 
     for (var i in selectedIndexes) {
-      totalQuantity++;
-      totalPrice += (salesItems[i].unitPrice ?? 0) * (salesItems[i].qty ?? 0);
+      if (i >= 0 && i < salesItems.length) {
+        totalQuantity++;
+        totalPrice += (salesItems.elementAt(i).unitPrice ?? 0) *
+            (salesItems.elementAt(i).qty ?? 0);
+      }
     }
   }
 
@@ -343,8 +347,8 @@ class _CartListState extends State<CartList> {
                                             Text(
                                               "RM " +
                                                   salesItems[i]
-                                                      .unitPrice
-                                                      .toString(),
+                                                      .unitPrice!
+                                                      .toStringAsFixed(2),
                                               style: TextStyle(
                                                 overflow: TextOverflow.ellipsis,
                                                 fontWeight: FontWeight.bold,
@@ -379,7 +383,7 @@ class _CartListState extends State<CartList> {
                                                 IconButton(
                                                   icon: const Icon(
                                                     Icons.remove,
-                                                    color: Colors.indigo,
+                                                    color: kprimaryColor,
                                                   ),
                                                   onPressed: () {
                                                     setState(() {
@@ -410,7 +414,9 @@ class _CartListState extends State<CartList> {
                                                   },
                                                 ),
                                                 Text(
-                                                  salesItems[i].qty.toString(),
+                                                  salesItems[i]
+                                                      .qty!
+                                                      .toStringAsFixed(0),
                                                   style: TextStyle(
                                                       color: GlobalColors
                                                           .mainColor),
@@ -418,7 +424,7 @@ class _CartListState extends State<CartList> {
                                                 IconButton(
                                                   icon: const Icon(
                                                     Icons.add,
-                                                    color: Colors.indigo,
+                                                    color: kprimaryColor,
                                                   ),
                                                   onPressed: () {
                                                     setState(() {
@@ -481,7 +487,23 @@ class _CartListState extends State<CartList> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  salesItems.removeAt(index);
+                  if (index >= 0 && index < salesItems.length) {
+                    salesItems.removeAt(index);
+
+                    // Update the selectedIndexes after removing the item
+                    selectedIndexes.remove(index);
+                    Set<int> updatedIndexes = {};
+                    for (var i in selectedIndexes) {
+                      if (i > index) {
+                        updatedIndexes.add(i - 1);
+                      } else {
+                        updatedIndexes.add(i);
+                      }
+                    }
+                    selectedIndexes = updatedIndexes;
+
+                    recalculateTotal();
+                  }
                   Navigator.of(context).pop();
                 });
               },

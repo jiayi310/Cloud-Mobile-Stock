@@ -10,6 +10,7 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../api/base.client.dart';
 import '../models/Menu.dart';
 import 'Settings/settings.screen.dart';
+import 'Stock/StockDetails/details.view.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 3, vsync: this);
+    TabController _tabController = TabController(length: 1, vsync: this);
     containerheight = ((MediaQuery.of(context).size.width - 90) / 2) + 20;
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -122,60 +123,64 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           )
                         ],
                       ),
-                      SizedBox(height: 20),
+                      if (MediaQuery.of(context).orientation ==
+                          Orientation.portrait)
+                        SizedBox(height: 20),
 
                       //searchbar
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  blurRadius: 15,
-                                  spreadRadius: 2,
-                                  offset: Offset(5, 5))
-                            ]),
-                        padding: EdgeInsets.only(top: 5),
-                        child: TypeAheadField<Menu>(
-                            hideSuggestionsOnKeyboardHide: true,
-                            textFieldConfiguration: TextFieldConfiguration(
-                                decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.search),
-                                    border: InputBorder.none,
-                                    fillColor: Colors.white,
-                                    hintText: 'Search')),
-                            suggestionsCallback: getMenuSuggestions,
-                            itemBuilder: (context, Menu suggestion) {
-                              final menu = suggestion;
+                      if (MediaQuery.of(context).orientation ==
+                          Orientation.portrait)
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    blurRadius: 15,
+                                    spreadRadius: 2,
+                                    offset: Offset(5, 5))
+                              ]),
+                          padding: EdgeInsets.only(top: 5),
+                          child: TypeAheadField<Menu>(
+                              hideSuggestionsOnKeyboardHide: true,
+                              textFieldConfiguration: TextFieldConfiguration(
+                                  decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.search),
+                                      border: InputBorder.none,
+                                      fillColor: Colors.white,
+                                      hintText: 'Search')),
+                              suggestionsCallback: getMenuSuggestions,
+                              itemBuilder: (context, Menu suggestion) {
+                                final menu = suggestion;
 
-                              return ListTile(
-                                leading: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    menu.img.toString(),
-                                    height: 70,
-                                    width: 70,
+                                return ListTile(
+                                  leading: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      menu.img.toString(),
+                                      height: 70,
+                                      width: 70,
+                                    ),
                                   ),
-                                ),
-                                title: Text(menu.title.toString()),
-                              );
-                            },
-                            onSuggestionSelected: (Menu suggestions) {
-                              final _menu = suggestions;
-
-                              if (_menu.title != "ClockIn")
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: _menu.nav!));
-                              else
-                                Fluttertoast.showToast(
-                                  msg: "Coming Soon.",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 2,
+                                  title: Text(menu.title.toString()),
                                 );
-                            }),
-                      ),
+                              },
+                              onSuggestionSelected: (Menu suggestions) {
+                                final _menu = suggestions;
+
+                                if (_menu.title != "ClockIn")
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: _menu.nav!));
+                                else
+                                  Fluttertoast.showToast(
+                                    msg: "Coming Soon.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 2,
+                                  );
+                              }),
+                        ),
                     ],
                   ),
                 ),
@@ -193,20 +198,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Tab(
                             text: "Sales Ordering",
                           ),
-                          Tab(
-                            text: "Warehouse Management",
-                          ),
-                          Tab(
-                            text: "General",
-                          ),
+                          // Tab(
+                          //   text: "Warehouse Management",
+                          // ),
+                          // Tab(
+                          //   text: "General",
+                          // ),
                         ]),
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
                         children: [
                           _tabController1(),
-                          _tabController2(),
-                          _tabController3()
+                          // _tabController2(),
+                          // _tabController3()
                         ],
                       ),
                     ),

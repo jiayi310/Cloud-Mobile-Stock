@@ -92,8 +92,8 @@ class _DetailsListingScreen extends State<QuotationListingScreen> {
                 }
               },
               itemBuilder: (context) => [
-                    PopupMenuItem(
-                        value: MenuItem.item1, child: Text('Convert to Sales')),
+                    // PopupMenuItem(
+                    //     value: MenuItem.item1, child: Text('Convert to Sales')),
                     PopupMenuItem(
                         value: MenuItem.item2, child: Text('Print Receipt'))
                   ]),
@@ -115,7 +115,7 @@ class _DetailsListingScreen extends State<QuotationListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Image.asset(
-                            'assets/images/agiliti_logo.png',
+                            'assets/images/cubehous_logo.png',
                             height: 60,
                           ),
                           Column(
@@ -425,8 +425,8 @@ class _DetailsListingScreen extends State<QuotationListingScreen> {
                       ))),
                   DataCell(
                       Center(child: Text(salesItem?.uom?.toString() ?? ''))),
-                  DataCell(
-                      Center(child: Text(salesItem?.qty?.toString() ?? ''))),
+                  DataCell(Center(
+                      child: Text(salesItem?.qty?.toStringAsFixed(0) ?? ''))),
                   DataCell(Align(
                       alignment: Alignment.centerRight,
                       child: Text(salesItem?.total?.toStringAsFixed(2) ?? ''))),

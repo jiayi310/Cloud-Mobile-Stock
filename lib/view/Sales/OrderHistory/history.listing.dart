@@ -119,7 +119,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Image.asset(
-                            'assets/images/agiliti_logo.png',
+                            'assets/images/cubehous_logo.png',
                             height: 60,
                           ),
                           Column(
@@ -383,7 +383,7 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                     children: [
                       // Text("Authorised Signature:"),
                       // Image.asset(
-                      //   'assets/images/agiliti_logo.png',
+                      //   'assets/images/cubehous_logo.png',
                       //   height: 100,
                       // ),
                     ],
@@ -511,8 +511,8 @@ class _HistoryListingScreen extends State<HistoryListingScreen> {
                       ))),
                   DataCell(
                       Center(child: Text(salesItem?.uom?.toString() ?? ''))),
-                  DataCell(
-                      Center(child: Text(salesItem?.qty?.toString() ?? ''))),
+                  DataCell(Center(
+                      child: Text(salesItem?.qty?.toStringAsFixed(0) ?? ''))),
                   DataCell(Align(
                       alignment: Alignment.centerRight,
                       child: Text(salesItem?.total?.toStringAsFixed(2) ?? ''))),

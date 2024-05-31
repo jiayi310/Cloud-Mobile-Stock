@@ -191,8 +191,10 @@ class Sales {
     required Uint8List image,
   }) {
     // Check if an item with the same code already exists in the list
-    var existingItem = salesDetails.firstWhereOrNull(
-        (item) => item.stockCode == stockCode && item.uom == uom);
+    var existingItem = salesDetails.firstWhereOrNull((item) =>
+        item.stockCode == stockCode &&
+        item.uom == uom &&
+        item.unitPrice == price);
 
     if (existingItem != null) {
       existingItem.qty = (existingItem.qty ?? 0) + quantity;

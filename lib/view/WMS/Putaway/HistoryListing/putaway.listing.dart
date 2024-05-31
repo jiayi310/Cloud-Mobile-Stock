@@ -120,7 +120,7 @@ class _PutAwayListingScreen extends State<PutAwayListingScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Image.asset(
-                                'assets/images/agiliti_logo.png',
+                                'assets/images/cubehous_logo.png',
                                 height: 60,
                               ),
                               Column(
