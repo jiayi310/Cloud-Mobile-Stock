@@ -74,7 +74,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             children: [
               Container(
                 child: Padding(
-                  padding: const EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.all(25.0),hh
                   child: Column(
                     children: [
                       Row(
