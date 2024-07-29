@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:mobilestock/models/StockTransfer.dart';
 
 import '../../../api/base.client.dart';
+import '../../../models/StockTransfer.dart';
 import '../../../models/StockTransfer.dart';
 import '../../../size.config.dart';
 import '../../../utils/global.colors.dart';
@@ -224,48 +226,93 @@ class _StockTransferAddState extends State<StockTransferAdd> {
             "dtlID": quoteItem.dtlID != null ? quoteItem.dtlID : 0,
             "docID": quoteItem.docID != null ? quoteItem.docID : 0,
             "stockID": quoteItem.stockID,
+            "stockBatchID": quoteItem.stockBatchID ?? 0,
+            "batchNo": quoteItem.batchNo ?? "",
             "stockCode": quoteItem.stockCode.toString(),
             "description": quoteItem.description.toString(),
             "uom": quoteItem.uom.toString(),
             "qty": quoteItem.qty ?? 0,
-            "taxableAmt": 0,
-            "taxRate": 0,
-            "locationID": 1,
-            "location": "HQ",
+            "fromLocationID": quoteItem.fromLocationID,
+            "fromLocation": quoteItem.fromLocation,
+            "fromStorageID": quoteItem.fromStorageID,
+            "fromStorageCode": quoteItem.fromStorageCode,
+            "toLocationID": quoteItem.toLocationID,
+            "toLocation": quoteItem.toLocation,
+            "toStorageID": quoteItem.toStorageID,
+            "toStorageCode": quoteItem.toStorageCode,
           };
         }).toList(),
       };
 
       // Encode the JSON data
       String jsonString = jsonEncode(jsonData);
+      print("--------------------------------");
+      print("jsonData: ${jsonString}");
+      print("--------------------------------");
 
       try {
         final response = await BaseClient().post(
-          '/StockTransfer/UpdateStockTransfer?StockTransferId=' +
+          '/StockTransfer/UpdateStockTransfer?docId=' +
               widget.stockTransfer.docID.toString(),
           jsonString,
         );
 
         // Check the status code of the response
-        if (response == "true") {
-          print('API request successful');
+        if (response == null) {
+          print('Response is null');
+          Fluttertoast.showToast(
+            msg: "Update failed: No response from server",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else {
+          // Check the status code of the response
+          if (response == "true") {
+            print('API request successful');
 
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => StockTransferListingScreen(
-          //         docid: int.parse(widget.StockTransfer.docID.toString())),
-          //   ),
-          // );
-          // StockTransferProviderData? providerData =
-          // StockTransferProviderData.of(context);
-          // if (providerData != null) {
-          //   providerData.clearStockTransfer();
-          // }
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StockTransferListingScreen(
+                  docid: int.parse(widget.stockTransfer.docID.toString()),
+                ),
+              ),
+            );
+            StockTransferProviderData? providerData =
+                StockTransferProviderData.of(context);
+            if (providerData != null) {
+              providerData.clearStockTransfer();
+            }
+          } else {
+            print('Edit: Running here5');
+            print('API request unsuccessful: ${response.body}');
+            Fluttertoast.showToast(
+              msg: "Update failed: ${response.body}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          }
         }
       } catch (e) {
         // Handle exceptions
         print('Exception during API request: $e');
+        Fluttertoast.showToast(
+          msg: "Update failed: $e",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
     } else {
       Fluttertoast.showToast(

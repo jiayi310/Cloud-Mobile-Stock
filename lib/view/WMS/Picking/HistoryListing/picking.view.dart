@@ -11,6 +11,7 @@ import '../../../../api/base.client.dart';
 import '../../../../models/Picking.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../../utils/loading.dart';
+import '../picking.add.dart';
 
 class PickingHomeScreen extends StatefulWidget {
   const PickingHomeScreen({Key? key}) : super(key: key);
@@ -42,18 +43,18 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
       backgroundColor: GlobalColors.wmsColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // PickingProviderData? providerData =
-          //     PickingProviderData.of(context);
-          // if (providerData != null) {
-          //   providerData.clearPicking();
-          // }
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => PickingAdd(
-          //               isEdit: false,
-          //               Picking: new Picking(paymentTotal: 0),
-          //             ))).then((value) => getData());
+          //PickingProviderData? providerData = PickingProviderData.of(context);
+          //if (providerData != null) {
+          //  providerData.clearReceiving();
+          //}
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PickingAdd(
+                        isEdit: false,
+                        picking: new Picking(),
+                        //picking: new Picking(paymentTotal: 0),
+                      ))).then((value) => getData());
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,
@@ -171,7 +172,7 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
                                             textConfirm: "Confirm",
                                             textCancel: "Cancel",
                                             onConfirm: () {
-                                              removeCollection(
+                                              removePicking(
                                                   Pickinglist[i].docID);
 
                                               // Close the dialog
@@ -190,7 +191,6 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
                                               ));
                                         },
                                         child: Container(
-                                          height: 70,
                                           margin: EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 10),
                                           padding: EdgeInsets.all(5),
@@ -201,7 +201,10 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 10.0, right: 10),
+                                                left: 10.0,
+                                                right: 10,
+                                                top: 10,
+                                                bottom: 10),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -253,13 +256,32 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
                                                     Flexible(
                                                       flex: 1,
                                                       child: Text(
-                                                        Pickinglist[i]
-                                                                .description ??
-                                                            "",
+                                                        'Total Items: ${Pickinglist[i].pickingItems?.length ?? 0}',
                                                         style: TextStyle(
                                                           overflow: TextOverflow
                                                               .ellipsis,
-                                                          fontSize: 13,
+                                                          fontSize: 12,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 20),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 5),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Flexible(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        'Total Quantity: ${calculateTotalQuantity(Pickinglist[i].pickingItems)}',
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontSize: 12,
                                                           color: Colors.black,
                                                         ),
                                                       ),
@@ -285,6 +307,12 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
     );
   }
 
+  int calculateTotalQuantity(List<PickingItems>? pickItems) {
+    if (pickItems == null) return 0;
+    return pickItems.fold(
+        0, (total, detail) => total + (detail.qty?.toInt() ?? 0));
+  }
+
   void _toggle() {
     setState(() {
       _visible = !_visible;
@@ -294,23 +322,56 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
   Future<List<Picking>> getData() async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
-      String response = await BaseClient()
-          .get('/Picking/GetPickingListByCompanyId?companyId=' + companyid);
-      List<Picking> _Pickinglist = PickingFromJson(response);
+      try {
+        // Fetch picking list by company ID
+        String response = await BaseClient()
+            .get('/Picking/GetPickingListByCompanyId?companyId=' + companyid);
+        List<Picking> _Pickinglist = PickingFromJson(response);
 
-      // Sort the collection list by docDate in descending order
-      _Pickinglist.sort((a, b) => b.docDate!.compareTo(a.docDate!));
+        // Fetch pickingItems for each picking
+        for (var picking in _Pickinglist) {
+          if (picking.docID != null) {
+            String pickingItemsResponse = await BaseClient()
+                .get('/Picking/GetPicking?docId=' + picking.docID.toString());
+            try {
+              picking.pickingItems = PickingItemsFromJson(pickingItemsResponse);
+            } catch (e) {
+              print("Error parsing picking items: $e");
+              picking.pickingItems =
+                  []; // Set to an empty list if parsing fails
+            }
+          }
+        }
 
-      // If docDate is the same, sort by docNo in descending order
-      _Pickinglist.sort((a, b) => b.docNo!.compareTo(a.docNo!));
+        // Sort the collection list by docDate in descending order
+        _Pickinglist.sort((a, b) => b.docDate!.compareTo(a.docDate!));
 
-      setState(() {
-        Pickinglist = _Pickinglist;
-        Pickinglist_search = _Pickinglist;
-        _isLoading = false;
-      });
+        // If docDate is the same, sort by docNo in descending order
+        _Pickinglist.sort((a, b) => b.docNo!.compareTo(a.docNo!));
+
+        setState(() {
+          Pickinglist = _Pickinglist;
+          Pickinglist_search = _Pickinglist;
+          _isLoading = false;
+        });
+      } catch (e) {
+        print("Error fetching picking data: $e");
+        setState(() {
+          _isLoading = false; // Handle error case
+        });
+      }
     }
     return Pickinglist;
+  }
+
+  List<PickingItems> PickingItemsFromJson(String str) {
+    final jsonData =
+        json.decode(str) as Map<String, dynamic>; // Decode as a map
+    final items = jsonData['pickingItems']
+        as List<dynamic>; // Access the list within the map
+    return items
+        .map((item) => PickingItems.fromJson(item as Map<String, dynamic>))
+        .toList();
   }
 
   void searchQuery(String query) {
@@ -327,14 +388,16 @@ class _PickingHomeScreen extends State<PickingHomeScreen> {
     });
   }
 
-  Future<void> removeCollection(int? docID) async {
+  Future<void> removePicking(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
+
+    print('Company ID: $companyid, Document ID: $docID');
+
     if (companyid != null) {
-      String response = await BaseClient().get(
-          '/Collection/RemoveCollection?docId=' +
-              docID.toString() +
-              '&companyId=' +
-              companyid);
+      String response = await BaseClient().get('/Picking/RemovePicking?docId=' +
+          docID.toString() +
+          '&companyId=' +
+          companyid);
 
       if (response != 0) {
         Fluttertoast.showToast(

@@ -67,6 +67,10 @@ class _StockTakeAddState extends State<StockTakeAdd> {
         stockTakeProvider.setStockTake(widget.stockTake);
       }
       stockTakeDetails = widget.stockTake.stockTakeDetails!;
+      if (widget.isEdit &&
+          stockTakeProvider!.stockTake.stockTakeDetails!.isNotEmpty) {
+        //updateStockTakeDetails(stockTakeProvider.stockTake.stockTakeDetails);
+      }
     }
     widget.stockTake = StockTakeProvider.of(context)!.stockTake;
     return Scaffold(
@@ -246,68 +250,120 @@ class _StockTakeAddState extends State<StockTakeAdd> {
   updateStockTakeData() async {
     companyid = (await storage.read(key: "companyid"))!;
     userid = (await storage.read(key: "userid"))!;
-    if (widget.stockTake!.locationID != null) {
+    if (widget.stockTake!.stockTakeDetails != null) {
       Map<String, dynamic> jsonData = {
         "docID": widget.stockTake!.docID,
         "docNo": docNo,
         "docDate": widget.stockTake!.docDate,
+        "description": widget.stockTake!.description,
+        "remark": widget.stockTake!.remark,
+        "isMerge": widget.stockTake!.isMerge,
+        "mergeDocID": widget.stockTake!.mergeDocID,
+        "mergeDocNo": widget.stockTake!.mergeDocNo,
+        "mergeDate": widget.stockTake!.mergeDate,
+        "isAdjustment": widget.stockTake!.isAdjustment,
+        "adjustmentDocID": widget.stockTake!.adjustmentDocID,
+        "adjustmentDocNo": widget.stockTake!.adjustmentDocNo,
+        "adjustmentDate": widget.stockTake!.adjustmentDate,
         "isVoid": false,
         "lastModifiedDateTime": getCurrentDateTime(),
         "lastModifiedUserID": userid,
         "createdDateTime": widget.stockTake!.createdDateTime,
         "createdUserID": widget.stockTake!.createdUserID,
+        "locationID": widget.stockTake!.locationID,
+        "location": widget.stockTake!.location,
         "companyID": companyid,
         "stockTakeDetails": stockTakeDetails.map((quoteItem) {
           return {
             "dtlID": quoteItem.dtlID != null ? quoteItem.dtlID : 0,
             "docID": quoteItem.docID != null ? quoteItem.docID : 0,
             "stockID": quoteItem.stockID,
+            "stockBatchID": quoteItem.stockBatchID,
+            "batchNo": quoteItem.batchNo,
             "stockCode": quoteItem.stockCode.toString(),
             "description": quoteItem.description.toString(),
             "uom": quoteItem.uom.toString(),
             "qty": quoteItem.qty ?? 0,
-            "taxableAmt": 0,
-            "taxRate": 0,
             "locationID": 1,
-            "location": "HQ",
+            "storageID": quoteItem.storageID ?? 0,
+            "storageCode": quoteItem.storageCode.toString(),
           };
         }).toList(),
       };
 
       // Encode the JSON data
       String jsonString = jsonEncode(jsonData);
+      print("--------------------------------");
+      print("jsonData: ${jsonString}");
+      print("--------------------------------");
 
       try {
         final response = await BaseClient().post(
-          '/StockTake/UpdateStockTake?StockTakeId=' +
+          '/StockTake/UpdateStockTake?docId=' +
               widget.stockTake.docID.toString(),
           jsonString,
         );
 
         // Check the status code of the response
-        if (response == "true") {
-          print('API request successful');
+        if (response == null) {
+          print('Response is null');
+          Fluttertoast.showToast(
+            msg: "Update failed: No response from server",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        } else {
+          // Check the status code of the response
+          if (response == "true") {
+            print('API request successful');
 
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => StockTakeListingScreen(
-          //         docid: int.parse(widget.StockTake.docID.toString())),
-          //   ),
-          // );
-          // StockTakeProviderData? providerData =
-          // StockTakeProviderData.of(context);
-          // if (providerData != null) {
-          //   providerData.clearStockTake();
-          // }
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StockTakeListingScreen(
+                  docid: int.parse(widget.stockTake.docID.toString()),
+                ),
+              ),
+            );
+            StockTakeProviderData? providerData =
+                StockTakeProviderData.of(context);
+            if (providerData != null) {
+              providerData.clearStockTake();
+            }
+          } else {
+            print('Edit: Running here5');
+            print('API request unsuccessful: ${response.body}');
+            Fluttertoast.showToast(
+              msg: "Update failed: ${response.body}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          }
         }
       } catch (e) {
         // Handle exceptions
         print('Exception during API request: $e');
+        Fluttertoast.showToast(
+          msg: "Update failed: $e",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
     } else {
       Fluttertoast.showToast(
-        msg: "Please select a location",
+        msg: "Update failed: No stock take details",
         toastLength: Toast.LENGTH_SHORT,
         // or Toast.LENGTH_LONG
         gravity: ToastGravity.BOTTOM,
@@ -420,4 +476,18 @@ class _StockTakeAddState extends State<StockTakeAdd> {
       }
     });
   }
+
+  // void updateStockTakeDetails(
+  //     List<StockTakeDetails>? stockTakeDetailsList) async {
+  //   for (final stockTakeItem in stockTakeDetailsList!) {
+  //     if (stockTakeItem.stockID != null) {
+  //       final response = await BaseClient()
+  //           .get('/Stock/GetStock?stockId=' + stockTakeItem.stockID.toString());
+  //
+  //       final _product = StockTakeDetails.fromJson(jsonDecode(response));
+  //
+  //       setState(() {});
+  //     }
+  //   }
+  // }
 }

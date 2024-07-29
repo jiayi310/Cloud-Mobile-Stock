@@ -11,9 +11,8 @@ class Picking {
   String? createdDateTime;
   int? createdUserID;
   int? companyID;
-  List<PickingDetails>? pickingDetails;
+  List<PickingDetails>? pickingDetails = [];
   List<PickingItems>? pickingItems;
-  List<int>? salesDocIDList;
 
   Picking(
       {this.docID,
@@ -29,8 +28,7 @@ class Picking {
       this.createdUserID,
       this.companyID,
       this.pickingDetails,
-      this.pickingItems,
-      this.salesDocIDList});
+      this.pickingItems});
 
   Picking.fromJson(Map<String, dynamic> json) {
     docID = json['docID'];
@@ -57,13 +55,6 @@ class Picking {
         pickingItems!.add(new PickingItems.fromJson(v));
       });
     }
-    if (json.containsKey('salesDocIDList')) {
-      // Proceed with accessing and casting the value
-      salesDocIDList = json['salesDocIDList'].cast<int>();
-    } else {
-      // Handle the case where the key does not exist
-      // Assign a default value or take appropriate action
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -87,8 +78,11 @@ class Picking {
     if (this.pickingItems != null) {
       data['pickingItems'] = this.pickingItems!.map((v) => v.toJson()).toList();
     }
-    data['salesDocIDList'] = this.salesDocIDList;
     return data;
+  }
+
+  void removeItem(int pickingItemID) {
+    pickingItems!.removeWhere((item) => item.pickingItemID == pickingItemID);
   }
 }
 
@@ -154,6 +148,11 @@ class PickingDetails {
     data['storageID'] = this.storageID;
     data['storageCode'] = this.storageCode;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Stock Code: $stockCode, Description: $description, UOM: $uom, Qty: $qty, Storage Code: $storageCode';
   }
 }
 

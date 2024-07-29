@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mobilestock/models/Receiving.dart';
 import 'package:mobilestock/view/WMS/Receiving/HistoryListing/Receiving.view.dart';
+import 'package:mobilestock/view/WMS/Receiving/receiving.add.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -62,6 +63,8 @@ class _ReceivingListingScreen extends State<ReceivingListingScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
+
+              // In the update function of EditReceivingScreen
             ),
             title: Text(
               receiving.docNo.toString(),
@@ -71,15 +74,15 @@ class _ReceivingListingScreen extends State<ReceivingListingScreen> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ReceivingAdd(
-                  //       isEdit: true,
-                  //       Receiving: Receiving,
-                  //     ),
-                  //   ),
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReceivingAdd(
+                        isEdit: true,
+                        receiving: receiving,
+                      ),
+                    ),
+                  );
                 },
               ),
               PopupMenuButton<MenuItem>(

@@ -15,6 +15,7 @@ import '../../../../models/Company.dart';
 import '../../../../models/StockTake.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../Sales/OrderHistory/history.listing.dart';
+import '../stocktake.add.dart';
 
 class StockTakeListingScreen extends StatefulWidget {
   StockTakeListingScreen({Key? key, required this.docid}) : super(key: key);
@@ -68,19 +69,26 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             actions: [
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => StockTakeAdd(
-                  //       isEdit: true,
-                  //       StockTake: StockTake,
-                  //     ),
-                  //   ),
-                  // );
-                },
+              Padding(
+                padding: EdgeInsets.only(right: 20),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StockTakeAdd(
+                          isEdit: true,
+                          stockTake: stockTake,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    size: 25,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               PopupMenuButton<MenuItem>(
                   onSelected: (value) async {
@@ -353,22 +361,49 @@ class _StockTakeListingScreen extends State<StockTakeListingScreen> {
 
   List<DataColumn> _createColumns() {
     return [
-      DataColumn(label: Text('Stock Code')),
-      DataColumn(label: Text('Description')),
-      DataColumn(label: Text('UOM')),
       DataColumn(
-        label: Text(
-          'Qty',
-          textAlign: TextAlign.right, // Align text to the right
+          label: Flexible(
+        child: Text(
+          'Stock Code',
+          overflow: TextOverflow.ellipsis,
         ),
-        numeric: true, // Set numeric to true to align content to the right
+      )),
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'Description',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ),
       DataColumn(
-          label: Text(
+        label: Flexible(
+          child: Text(
+            'UOM',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'Qty',
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        numeric: true,
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
             'Stor. Code',
             textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
           ),
-          numeric: true),
+        ),
+        numeric: true,
+      ),
     ];
   }
 

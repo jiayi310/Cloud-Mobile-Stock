@@ -141,32 +141,35 @@ class _LocationHomeScreen extends State<LocationHomeScreen> {
                               onLongPress: () {
                                 if (FromSource == null)
                                   Get.defaultDialog(
-                                      cancelTextColor: GlobalColors.mainColor,
-                                      confirmTextColor: Colors.white,
-                                      buttonColor: GlobalColors.mainColor,
-                                      titlePadding: EdgeInsets.only(top: 20),
-                                      title: "Warning",
-                                      onConfirm: () {
-                                        deleteLocation(locationList[i]);
-                                      },
-                                      content: Container(
-                                        padding: EdgeInsets.all(20.0),
-                                        child: Column(
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                "Are you sure want to delete " +
-                                                    locationList[i]
-                                                        .location
-                                                        .toString(),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                    cancelTextColor: GlobalColors.mainColor,
+                                    confirmTextColor: Colors.white,
+                                    buttonColor: GlobalColors.mainColor,
+                                    titlePadding: EdgeInsets.only(top: 20),
+                                    title: "Warning",
+                                    content: Container(
+                                      padding: EdgeInsets.all(20.0),
+                                      child: Column(
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              "Are you sure want to delete " +
+                                                  locationList[i]
+                                                      .location
+                                                      .toString(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      textConfirm: "Confirm",
-                                      textCancel: "Cancel");
+                                    ),
+                                    textConfirm: "Confirm",
+                                    textCancel: "Cancel",
+                                    onConfirm: () {
+                                      deleteLocation(locationList[i]);
+
+                                      Get.back();
+                                    },
+                                  );
                               },
                               onTap: () {
                                 if (FromSource != null) {
@@ -178,7 +181,7 @@ class _LocationHomeScreen extends State<LocationHomeScreen> {
                                         builder: (context) => LocationDetails(
                                             locationid:
                                                 locationList[i].locationID!),
-                                      ));
+                                      )).then((value) => getLocationData());
                                 }
                               },
                               child: Container(
@@ -317,6 +320,31 @@ class _LocationHomeScreen extends State<LocationHomeScreen> {
       locationList = suggestions;
     });
   }
+/*
+  Future<void> deleteLocation(Location docID) async {
+    companyid = (await storage.read(key: "companyid"))!;
+    if (companyid != null) {
+      String response = await BaseClient().get(
+          '/Location/DeleteLocation?docId=' +
+              docID.toString() +
+              '&companyId=' +
+              companyid);
+
+      if (response != 0) {
+        Fluttertoast.showToast(
+          msg: 'Deleted successfully',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        //getData();
+      }
+    }
+  }
+*/
 
   Future<void> deleteLocation(Location Location) async {
     String response = await BaseClient().post(

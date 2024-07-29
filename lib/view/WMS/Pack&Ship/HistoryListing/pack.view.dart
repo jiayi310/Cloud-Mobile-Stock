@@ -10,6 +10,7 @@ import '../../../../api/base.client.dart';
 import '../../../../models/Packing.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../../utils/loading.dart';
+import '../packing.add.dart';
 import 'pack.listing.dart';
 
 class PackingHomeScreen extends StatefulWidget {
@@ -47,13 +48,13 @@ class _PackingHomeScreen extends State<PackingHomeScreen> {
           // if (providerData != null) {
           //   providerData.clearPacking();
           // }
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => PackingAdd(
-          //               isEdit: false,
-          //               Packing: new Packing(paymentTotal: 0),
-          //             ))).then((value) => getData());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PackingAdd(
+                        isEdit: false,
+                        packing: new Packing(),
+                      ))).then((value) => getData());
         },
         child: Icon(Icons.add),
         backgroundColor: GlobalColors.mainColor,
@@ -171,7 +172,7 @@ class _PackingHomeScreen extends State<PackingHomeScreen> {
                                             textConfirm: "Confirm",
                                             textCancel: "Cancel",
                                             onConfirm: () {
-                                              removeCollection(
+                                              removePackNShip(
                                                   Packinglist[i].docID);
 
                                               // Close the dialog
@@ -388,14 +389,13 @@ class _PackingHomeScreen extends State<PackingHomeScreen> {
     });
   }
 
-  Future<void> removeCollection(int? docID) async {
+  Future<void> removePackNShip(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
-      String response = await BaseClient().get(
-          '/Collection/RemoveCollection?docId=' +
-              docID.toString() +
-              '&companyId=' +
-              companyid);
+      String response = await BaseClient().get('/Packing/RemovePacking?docId=' +
+          docID.toString() +
+          '&companyId=' +
+          companyid);
 
       if (response != 0) {
         Fluttertoast.showToast(

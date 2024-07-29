@@ -34,6 +34,10 @@ class Packing {
   int? companyID;
   List<PackingDetails>? packingDetails;
 
+  void removePackingDetail(PackingDetails detail) {
+    packingDetails?.remove(detail);
+  }
+
   Packing(
       {this.docID,
       this.docNo,
@@ -158,6 +162,7 @@ class Packing {
 class PackingDetails {
   int? dtlID;
   int? docID;
+  int? salesDocID;
   int? pickingItemID;
   int? stockID;
   int? stockBatchID;
@@ -170,6 +175,7 @@ class PackingDetails {
   PackingDetails(
       {this.dtlID,
       this.docID,
+      this.salesDocID,
       this.pickingItemID,
       this.stockID,
       this.stockBatchID,
@@ -182,6 +188,7 @@ class PackingDetails {
   PackingDetails.fromJson(Map<String, dynamic> json) {
     dtlID = json['dtlID'];
     docID = json['docID'];
+    salesDocID = json['salesDocID'];
     pickingItemID = json['pickingItemID'];
     stockID = json['stockID'];
     stockBatchID = json['stockBatchID'];
@@ -196,6 +203,7 @@ class PackingDetails {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['dtlID'] = this.dtlID;
     data['docID'] = this.docID;
+    data['salesDocID'] = this.salesDocID;
     data['pickingItemID'] = this.pickingItemID;
     data['stockID'] = this.stockID;
     data['stockBatchID'] = this.stockBatchID;

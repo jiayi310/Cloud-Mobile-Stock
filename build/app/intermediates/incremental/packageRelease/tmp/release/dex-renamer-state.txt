@@ -1,4 +1,4 @@
-#Tue May 21 18:17:34 MYT 2024
+#Tue Jul 16 16:40:23 MYT 2024
 base.0=/Users/agilec/StudioProjects/MobileStock/AgilitiCloudMobileStock/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

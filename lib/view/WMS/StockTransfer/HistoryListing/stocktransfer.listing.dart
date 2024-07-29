@@ -15,6 +15,7 @@ import '../../../../models/Company.dart';
 import '../../../../models/StockTransfer.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../Sales/OrderHistory/history.listing.dart';
+import '../stocktransfer.add.dart';
 
 class StockTransferListingScreen extends StatefulWidget {
   StockTransferListingScreen({Key? key, required this.docid}) : super(key: key);
@@ -73,15 +74,15 @@ class _StockTransferListingScreen extends State<StockTransferListingScreen> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => StockTransferAdd(
-                  //       isEdit: true,
-                  //       StockTransfer: StockTransfer,
-                  //     ),
-                  //   ),
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StockTransferAdd(
+                        isEdit: true,
+                        stockTransfer: stockTransfer,
+                      ),
+                    ),
+                  );
                 },
               ),
               PopupMenuButton<MenuItem>(

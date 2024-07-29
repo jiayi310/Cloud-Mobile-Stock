@@ -38,7 +38,7 @@
 		</data>
 		<key>Modules/barcode_scan2.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		BEnWptuMd/PBJFPTVfjgKqzxzMQ=
+		KETi1hEGSRucbk77FO2JMGo15g4=
 		</data>
 		<key>Modules/barcode_scan2.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/barcode_scan2.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		k8PXJKHMXOqUOediqXlialC36eA=
+		FuliTgTKqPTX4h8FuSkbSgvx9UI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -112,7 +112,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			u0xXtoW8p9aIObWy2xQ2yQvBIRkyE8gkWQPs16+P/Iw=
+			IzapSieEtMcr0X5/4kSwHOjb/nozoik3MIaGC7PzjHQ=
 			</data>
 		</dict>
 		<key>Modules/barcode_scan2.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
@@ -133,7 +133,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			0sUyFCsLBcBl5nWM8cyL6ORucQ3fTjFpbjGzdctk57c=
+			kTMPIvgXWNU7RxdJKyY+fi3DCghHlp9GPouEDJMdnL8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

@@ -366,6 +366,16 @@ class _ReceivingAddState extends State<ReceivingAdd> {
           if (providerData != null) {
             providerData.clearReceiving();
           }
+
+          widget.receiving.supplierID = null;
+          widget.receiving.supplierCode = null;
+          widget.receiving.supplierName = null;
+          widget.receiving.address1 = null;
+          widget.receiving.address2 = null;
+          widget.receiving.address3 = null;
+          widget.receiving.address4 = null;
+          widget.receiving.phone = null;
+          widget.receiving.email = null;
         }
       } catch (e) {
         // Handle exceptions

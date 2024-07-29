@@ -41,6 +41,12 @@ class _SupplierDetailsState extends State<SupplierDetails> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           supplier.supplierCode.toString(),
           style: TextStyle(fontWeight: FontWeight.bold),

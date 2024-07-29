@@ -15,6 +15,7 @@ import '../../../../models/Company.dart';
 import '../../../../models/Picking.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../Sales/OrderHistory/history.listing.dart';
+import '../picking.add.dart';
 
 class PickingListingScreen extends StatefulWidget {
   PickingListingScreen({Key? key, required this.docid}) : super(key: key);
@@ -71,15 +72,15 @@ class _PickingListingScreen extends State<PickingListingScreen> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PickingAdd(
-                  //       isEdit: true,
-                  //       Picking: Picking,
-                  //     ),
-                  //   ),
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PickingAdd(
+                        isEdit: true,
+                        picking: picking,
+                      ),
+                    ),
+                  );
                 },
               ),
               PopupMenuButton<MenuItem>(
@@ -258,7 +259,7 @@ class _PickingListingScreen extends State<PickingListingScreen> {
                         child: DataTable(
                           horizontalMargin: 10,
                           columnSpacing: 10,
-                          headingRowHeight: 30,
+                          headingRowHeight: 50,
                           headingTextStyle: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
                           headingRowColor: MaterialStateProperty.resolveWith(
@@ -266,7 +267,7 @@ class _PickingListingScreen extends State<PickingListingScreen> {
                           dataTextStyle:
                               TextStyle(fontSize: 11, color: Colors.black),
                           columns: _createColumns(),
-                          rows: _createRows(),
+                          rows: _createRows(context),
                         ),
                       ),
                     ],
@@ -320,6 +321,12 @@ class _PickingListingScreen extends State<PickingListingScreen> {
 
       Picking _picking = Picking.fromJson(jsonDecode(response));
 
+      if (_picking.docNo != null) {
+        print("PickingItems: ${_picking.docNo}");
+      } else {
+        print("PickingItems is null or empty.");
+      }
+
       if (mounted) {
         setState(() {
           picking = _picking;
@@ -333,6 +340,7 @@ class _PickingListingScreen extends State<PickingListingScreen> {
     await Future.delayed(Duration(seconds: 2));
     final storage = new FlutterSecureStorage();
     String? _companyid = await storage.read(key: "companyid");
+    print('companyid: ${widget.docid.toString()}');
     if (_companyid != null) {
       final response = await BaseClient()
           .get('/Company/GetCompany?companyid=' + _companyid.toString());
@@ -349,50 +357,114 @@ class _PickingListingScreen extends State<PickingListingScreen> {
 
   List<DataColumn> _createColumns() {
     return [
-      DataColumn(label: Text('Stock Code')),
-      DataColumn(label: Text('Description')),
-      DataColumn(label: Text('UOM')),
       DataColumn(
-        label: Text(
-          'Qty',
-          textAlign: TextAlign.right, // Align text to the right
+        label: Flexible(
+          child: Text(
+            'Stock Code',
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        numeric: true, // Set numeric to true to align content to the right
       ),
       DataColumn(
-          label: Text(
+        label: Flexible(
+          child: Text(
+            'Description',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'UOM',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'Qty',
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        numeric: true,
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
             'Stor. Code',
             textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
           ),
-          numeric: true),
+        ),
+        numeric: true,
+      ),
     ];
   }
 
-  List<DataRow> _createRows() {
+  List<DataRow> _createRows(BuildContext context) {
     return picking?.pickingDetails
             ?.map((stItem) => DataRow(cells: [
                   // DataCell(Text(salesItem['#'].toString())),
-                  DataCell(Text(stItem.stockCode.toString() ?? '')),
-                  DataCell(Text(stItem.description.toString() ?? '')),
-                  DataCell(Text(stItem.uom.toString() ?? '')),
-                  DataCell(ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 4),
-                      child: Text(
-                        stItem?.qty?.toStringAsFixed(2) ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
-                      ))),
+                  DataCell(Row(
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        fit: FlexFit.tight,
+                        child: Text(stItem.stockCode.toString() ?? ''),
+                      )
+                    ],
+                  )),
                   DataCell(
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 4,
-                      ),
-                      child: Text(
-                        stItem?.storageCode.toString() ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right, // Align text to the right
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          fit: FlexFit.tight,
+                          child: Text(stItem.description.toString() ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Text(stItem.uom.toString() ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Text(
+                            stItem?.qty?.toStringAsFixed(2) ?? '',
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 2,
+                          fit: FlexFit.tight,
+                          child: Text(
+                            stItem?.storageCode.toString() ?? '',
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ]))

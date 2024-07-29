@@ -361,6 +361,8 @@ class _StockTakeHomeScreen extends State<StockTakeHomeScreen> {
 
   Future<void> removeStockTake(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
+    print('Running here 565656');
+    print('stock ID: ${docID.toString()}');
     if (companyid != null) {
       var response = await BaseClient().get(
           '/StockTake/RemoveStockTake?docId=' +

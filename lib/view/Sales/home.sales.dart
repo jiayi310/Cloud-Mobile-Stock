@@ -378,7 +378,11 @@ class _HomeSalesScreenState extends State<HomeSalesScreen> {
   updateNoOfItem() {
     setState(() {
       final salesProvider = SalesProvider.of(context);
-      numOfitem = salesProvider!.sales.salesDetails.length;
+      int nNoOfItem = salesProvider!.sales.salesDetails.length;
+      nNoOfItem = nNoOfItem + 1;
+      // print('cart length: ${salesProvider!.sales.salesDetails.length}');
+      // numOfitem = salesProvider!.sales.salesDetails.length;
+      numOfitem = nNoOfItem;
     });
   }
 

@@ -12,6 +12,7 @@ class ItemStockTake extends StatefulWidget {
       : super(key: key);
   List<StockTakeDetails> stItems;
   final Function refreshMainPage;
+
   @override
   State<ItemStockTake> createState() => _ItemStockTakeState();
 }
@@ -26,103 +27,110 @@ class _ItemStockTakeState extends State<ItemStockTake> {
           shrinkWrap: true,
           itemCount: widget.stItems.length,
           itemBuilder: (BuildContext context, int i) {
-            final item = widget.stItems[i].docID;
+            final item = widget.stItems[i];
             return Slidable(
-              key: Key(item.toString()),
+              key: Key(item.docID.toString()),
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
                 children: [
                   ElevatedButton(
                       onPressed: () {
                         TextEditingController _amountController =
-                            TextEditingController();
+                            TextEditingController(text: item.qty.toString());
+                        double quantity = item.qty ?? 0;
+
                         showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Change Payment Amount'),
-                            content: TextField(
-                              // You can customize this text field according to your needs
-                              decoration: InputDecoration(
-                                hintText: 'Enter new amount',
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Edit Quantity'),
+                              content: SizedBox(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.remove),
+                                      onPressed: () {
+                                        setState(() {
+                                          quantity =
+                                              (quantity > 0) ? quantity - 1 : 0;
+                                          _amountController.text =
+                                              quantity.toString();
+                                        });
+                                      },
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      child: TextField(
+                                        controller: _amountController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) {
+                                          // Optional: Validate the input here if needed
+                                        },
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.add),
+                                      onPressed: () {
+                                        setState(() {
+                                          quantity += 1;
+                                          _amountController.text =
+                                              quantity.toString();
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                              keyboardType: TextInputType.number,
-                              controller:
-                                  _amountController, // Assign the controller
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    double newAmount = double.tryParse(
-                                            _amountController.text) ??
-                                        0.0;
-                                    if (newAmount != null &&
-                                        newAmount <=
-                                            (widget.stItems[i].qty ?? 0.0)) {
-                                      final stockTakeProvider =
-                                          StockTakeProvider.of(context);
-                                      if (stockTakeProvider != null) {
-                                        // stockTakeProvider.stockTake
-                                        //     .updateAmount(
-                                        //         widget.stItems[i].salesDocID!,
-                                        //         newAmount);
-                                        widget.refreshMainPage();
-                                      }
-                                      Fluttertoast.showToast(
-                                        msg: "Changed",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.grey,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0,
-                                      );
-                                      Navigator.of(context).pop();
-                                    } else {
-                                      Fluttertoast.showToast(
-                                        msg: "Payment Amount > Sales Amount",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.grey,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0,
-                                      );
-                                    }
-                                  });
-                                },
-                                child: Text('Save'),
-                              ),
-                            ],
-                          ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // Implement update logic here
+                                    setState(() {
+                                      item.qty = double.tryParse(
+                                              _amountController.text) ??
+                                          0;
+                                    });
+                                    Navigator.of(context).pop();
+                                    widget.refreshMainPage();
+                                  },
+                                  child: Text('Update'),
+                                ),
+                              ],
+                            );
+                          },
                         );
-                        widget.refreshMainPage();
                       },
                       style: ElevatedButton.styleFrom(primary: Colors.blue),
                       child: Icon(
                         Icons.edit,
                       )),
                   ElevatedButton(
-                      onPressed: () {
+                    onPressed: () {
+                      final stockTakeProvider = StockTakeProvider.of(context);
+                      if (stockTakeProvider != null) {
                         setState(() {
-                          final stockTakeProvider =
-                              StockTakeProvider.of(context);
-                          if (stockTakeProvider != null) {
-                            //   stockTakeProvider.stockTake.removeItem(item!);
-                            widget.refreshMainPage();
-                          }
+                          final item = widget.stItems[i];
+                          stockTakeProvider.stockTake
+                              .removeStockTakeDetail(item);
+                          widget.refreshMainPage();
                         });
-                      },
-                      style: ElevatedButton.styleFrom(primary: Colors.red),
-                      child: Icon(
-                        Icons.delete,
-                      )),
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    child: Icon(
+                      Icons.delete,
+                    ),
+                  ),
                 ],
               ),
               child: Container(
@@ -144,7 +152,7 @@ class _ItemStockTakeState extends State<ItemStockTake> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.stItems[i].stockCode.toString(),
+                              item.stockCode.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,
@@ -153,7 +161,7 @@ class _ItemStockTakeState extends State<ItemStockTake> {
                               ),
                             ),
                             Text(
-                              widget.stItems[i].batchNo.toString(),
+                              item.batchNo.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 13,
@@ -161,7 +169,7 @@ class _ItemStockTakeState extends State<ItemStockTake> {
                               ),
                             ),
                             Text(
-                              widget.stItems[i].storageCode.toString(),
+                              item.storageCode.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 13,
@@ -179,7 +187,7 @@ class _ItemStockTakeState extends State<ItemStockTake> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            (widget.stItems[i].uom ?? ""),
+                            item.uom ?? "",
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -196,7 +204,7 @@ class _ItemStockTakeState extends State<ItemStockTake> {
                             ),
                           ),
                           Text(
-                            "x " + widget.stItems[i].qty!.toStringAsFixed(0),
+                            "x " + item.qty!.toStringAsFixed(0),
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,

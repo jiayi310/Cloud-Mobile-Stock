@@ -12,6 +12,10 @@ class StockTransfer {
   int? companyID;
   List<StockTransferDetails> stockTransferDetails = [];
 
+  void removeStockTransferDetail(StockTransferDetails detail) {
+    stockTransferDetails?.remove(detail);
+  }
+
   StockTransfer(
       {this.docID,
       this.docNo,

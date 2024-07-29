@@ -178,7 +178,7 @@ class _CustomerHomeScreen extends State<CustomerHomeScreen> {
                                         builder: (context) => CustomerDetails(
                                             customerid:
                                                 customerlist[i].customerID!),
-                                      ));
+                                      )).then((value) => getCustomerData());
                                 }
                               },
                               child: Container(

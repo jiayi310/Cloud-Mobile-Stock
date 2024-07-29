@@ -325,7 +325,8 @@ class _CollectionAddState extends State<CollectionAdd> {
                                 customerid: widget.collection!.customerID!,
                                 customerIds: _customerIds,
                               ),
-                            )).then((returnedData) {
+                            )
+                        ).then((returnedData) {
                           if (returnedData != null) {
                             setState(() {
                               collectionItems = returnedData;

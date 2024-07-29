@@ -488,6 +488,17 @@ class _QuotationAddState extends State<QuotationAdd> {
           if (providerData != null) {
             providerData.clearQuotation();
           }
+
+          widget.quotation.customerID = null;
+          widget.quotation.customerCode = null;
+          widget.quotation.customerName = null;
+          widget.quotation.address1 = null;
+          widget.quotation.address2 = null;
+          widget.quotation.address3 = null;
+          widget.quotation.address4 = null;
+          widget.quotation.salesAgent = null;
+          widget.quotation.phone = null;
+          widget.quotation.email = null;
         }
       } catch (e) {
         // Handle exceptions

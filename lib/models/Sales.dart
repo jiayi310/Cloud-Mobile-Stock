@@ -34,6 +34,9 @@ class Sales {
   int? qTDocID;
   String? qTDocNo;
   bool? isVoid;
+  bool? isPicking;
+  int? pickingDocID;
+  String? pickingDocNo;
   int? lastModifiedUserID;
   DateTime? lastModifiedDateTime;
   int? createdUserID;
@@ -76,6 +79,9 @@ class Sales {
     qTDocID = json["qTDocID"];
     qTDocNo = json["qTDocNo"];
     isVoid = json["isVoid"];
+    isPicking = json["isPicking"];
+    pickingDocID = json["pickingDocID"];
+    pickingDocNo = json["pickingDocNo"];
     lastModifiedUserID = json["lastModifiedUserID"];
     lastModifiedDateTime = json["lastModifiedDateTime"] != null
         ? DateTime.parse(json["lastModifiedDateTime"])

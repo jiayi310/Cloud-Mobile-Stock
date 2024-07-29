@@ -264,21 +264,29 @@ class _SalesFiltersState extends State<SalesFilters> {
 
   List<Stock> applyFilters(RangeValues priceRange, Set<String> groups,
       Set<String> types, Set<String> categories) {
-    List<Stock> filteredProducts = widget.productlist.where((stock) {
-      return ((stock.baseUOMPrice1! >= priceRange.start) &&
-              (stock.baseUOMPrice1! <= priceRange.end) &&
-              (groups != null &&
-                  groups.contains(stock.stockGroupDescription.toString()))) ||
-          ((stock.baseUOMPrice1! >= priceRange.start) &&
-              (stock.baseUOMPrice1! <= priceRange.end) &&
-              (types != null &&
-                  types.contains(stock.stockTypeDescription.toString()))) ||
-          ((stock.baseUOMPrice1! >= priceRange.start) &&
-              (stock.baseUOMPrice1! <= priceRange.end) &&
-              (categories != null &&
-                  categories
-                      .contains(stock.stockCategoryDescription.toString())));
-    }).toList();
+    List<Stock> filteredProducts = [];
+    if (groups.isEmpty && types.isEmpty && categories.isEmpty) {
+      filteredProducts = widget.productlist.where((stock) {
+        return (stock.baseUOMPrice1! >= priceRange.start &&
+            stock.baseUOMPrice1! <= priceRange.end);
+      }).toList();
+    } else {
+      filteredProducts = widget.productlist.where((stock) {
+        return ((stock.baseUOMPrice1! >= priceRange.start) &&
+                (stock.baseUOMPrice1! <= priceRange.end) &&
+                (groups != null &&
+                    groups.contains(stock.stockGroupDescription.toString()))) ||
+            ((stock.baseUOMPrice1! >= priceRange.start) &&
+                (stock.baseUOMPrice1! <= priceRange.end) &&
+                (types != null &&
+                    types.contains(stock.stockTypeDescription.toString()))) ||
+            ((stock.baseUOMPrice1! >= priceRange.start) &&
+                (stock.baseUOMPrice1! <= priceRange.end) &&
+                (categories != null &&
+                    categories
+                        .contains(stock.stockCategoryDescription.toString())));
+      }).toList();
+    }
 
     return filteredProducts;
   }

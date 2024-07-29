@@ -22,6 +22,10 @@ class StockTake {
   int? companyID;
   List<StockTakeDetails>? stockTakeDetails;
 
+  void removeStockTakeDetail(StockTakeDetails detail) {
+    stockTakeDetails?.remove(detail);
+  }
+
   StockTake(
       {this.docID,
       this.docNo,

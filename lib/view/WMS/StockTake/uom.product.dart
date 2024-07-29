@@ -353,20 +353,23 @@ class _StockTakeUOMListState extends State<StockTakeUOMList> {
       return;
     }
 
+    /*
     if (batchSelected == null || batchSelected!.batchNo!.isEmpty) {
       Fluttertoast.showToast(msg: "Please select a batch");
       return;
     }
+
+     */
 
     if (storagecode.isEmpty) {
       Fluttertoast.showToast(msg: "Please select a storage");
       return;
     }
 
-    // if (_quantity == 0) {
-    //   Fluttertoast.showToast(msg: "Quantity cannot be zero");
-    //   return;
-    // }
+    if (_quantity == 0) {
+      Fluttertoast.showToast(msg: "Quantity cannot be 0");
+      return;
+    }
 
     StockTakeDetails stockTakeDetail = new StockTakeDetails();
     stockTakeDetail.stockID = stock.stockID;

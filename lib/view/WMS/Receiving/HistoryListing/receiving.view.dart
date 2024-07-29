@@ -173,7 +173,7 @@ class _ReceivingHomeScreen extends State<ReceivingHomeScreen> {
                                             textConfirm: "Confirm",
                                             textCancel: "Cancel",
                                             onConfirm: () {
-                                              removeCollection(
+                                              removeReceiving(
                                                   receivinglist[i].docID);
 
                                               // Close the dialog
@@ -391,11 +391,14 @@ class _ReceivingHomeScreen extends State<ReceivingHomeScreen> {
     });
   }
 
-  Future<void> removeCollection(int? docID) async {
+  Future<void> removeReceiving(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
+
+    print('Company ID: $companyid, Document ID: $docID');
+
     if (companyid != null) {
       String response = await BaseClient().get(
-          '/Collection/RemoveCollection?docId=' +
+          '/Receiving/RemoveReceiving?docId=' +
               docID.toString() +
               '&companyId=' +
               companyid);

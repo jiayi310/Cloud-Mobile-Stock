@@ -33,26 +33,37 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 1, vsync: this);
+    TabController _tabController = TabController(length: 3, vsync: this);
     containerheight = ((MediaQuery.of(context).size.width - 90) / 2) + 20;
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            var res = await Navigator.push(
+            var scannedData = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SimpleBarcodeScannerPage(),
+              ),
+            );
+
+            if (scannedData != null
+                // setState(() {
+                //   // if (res is String) {
+                //   //   if (res != null)
+                //   //     Navigator.push(
+                //   //         context,
+                //   //         MaterialPageRoute(
+                //   //             builder: (context) => StockDetails(id: res)));
+                //   // }
+                // }
+                ) {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SimpleBarcodeScannerPage(),
-                ));
-            setState(() {
-              // if (res is String) {
-              //   if (res != null)
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => StockDetails(id: res)));
-              // }
-            });
+                  builder: (context) => StockDetails(id: scannedData),
+                ),
+              );
+            }
           },
           child: Icon(Icons.qr_code_scanner),
           backgroundColor: GlobalColors.mainColor,
@@ -74,7 +85,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             children: [
               Container(
                 child: Padding(
-                  padding: const EdgeInsets.all(25.0),hh
+                  padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: [
                       Row(
@@ -198,20 +209,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Tab(
                             text: "Sales Ordering",
                           ),
-                          // Tab(
-                          //   text: "Warehouse Management",
-                          // ),
-                          // Tab(
-                          //   text: "General",
-                          // ),
+                          Tab(
+                            text: "Warehouse Management",
+                          ),
+                          Tab(
+                            text: "General",
+                          ),
                         ]),
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
                         children: [
                           _tabController1(),
-                          // _tabController2(),
-                          // _tabController3()
+                          _tabController2(),
+                          _tabController3()
                         ],
                       ),
                     ),
@@ -303,55 +314,47 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         maxCrossAxisExtent: 300,
         crossAxisSpacing: 11,
         mainAxisSpacing: 11,
-        childAspectRatio: (1 / 1),
-        controller: new ScrollController(keepScrollOffset: false),
+        childAspectRatio: 1, // Ensure the aspect ratio is 1 for a square grid
+        controller: ScrollController(keepScrollOffset: false),
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         children: [
           for (int i = 0; i < warehouse_menu_list.length; i++)
             InkWell(
               onTap: () {
-                // Fluttertoast.showToast(
-                //   msg: "Coming Soon.",
-                //   toastLength: Toast.LENGTH_SHORT,
-                //   gravity: ToastGravity.BOTTOM,
-                //   timeInSecForIosWeb: 2,
-                // );
                 Navigator.push(context,
                     MaterialPageRoute(builder: warehouse_menu_list[i].nav!));
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                padding: EdgeInsets.all(10), // Consistent padding
+                margin: EdgeInsets.all(10), // Consistent margin
                 decoration: BoxDecoration(
                     color: HexColor(warehouse_menu_list[i].color!),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(5.0, 5.0),
-                          blurRadius: 10.0,
-                          spreadRadius: 2.0),
-                      BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0)
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: Offset(0, 2),
+                          blurRadius: 5,
+                          spreadRadius: 1),
                     ]),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       warehouse_menu_list[i].img!,
-                      width: 110,
-                      height: 110,
+                      width: 100, // Increased width for the image
+                      height: 100, // Increased height for the image
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
                     Text(
                       warehouse_menu_list[i].title!,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15), // Consistent text styling
+                      textAlign: TextAlign.center, // Center align the text
                     ),
                   ],
                 ),
@@ -402,8 +405,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   children: [
                     Image.asset(
                       general_list[i].img!,
-                      width: 110,
-                      height: 110,
+                      //width: 110,
+                      //height: 110,
                     ),
                     SizedBox(
                       height: 15,

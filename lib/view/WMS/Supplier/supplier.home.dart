@@ -179,7 +179,7 @@ class _SupplierHomeScreen extends State<SupplierHomeScreen> {
                                         builder: (context) => SupplierDetails(
                                             supplierid:
                                                 Supplierlist[i].supplierID!),
-                                      ));
+                                      )).then((value) => getSupplierData());
                                 }
                               },
                               child: Container(

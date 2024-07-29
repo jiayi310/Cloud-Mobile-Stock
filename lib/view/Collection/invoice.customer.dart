@@ -196,6 +196,9 @@ class _CollectionInvoiceListState extends State<CollectionInvoiceList> {
     if (companyid != null) {
       var body = json.encode(widget.customerIds);
 
+      print('companyid: ${companyid}');
+      print('CustomerID: ${widget.customerid}');
+
       try {
         final response = await BaseClient().post(
           '/Sales/GetSalesListAvailableForCollect?companyId=' +
@@ -205,6 +208,8 @@ class _CollectionInvoiceListState extends State<CollectionInvoiceList> {
               '&collectForm=0',
           body,
         );
+
+        print('Response body: $response');
 
         // Check the status code of the response
         if (response != null) {

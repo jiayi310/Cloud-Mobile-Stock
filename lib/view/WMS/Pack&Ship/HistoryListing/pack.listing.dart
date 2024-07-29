@@ -14,6 +14,7 @@ import '../../../../models/Company.dart';
 import '../../../../models/Packing.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../Sales/OrderHistory/history.listing.dart';
+import '../packing.add.dart';
 import 'pack.view.dart';
 
 class PackingListingScreen extends StatefulWidget {
@@ -71,15 +72,15 @@ class _PackingListingScreen extends State<PackingListingScreen> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PackingAdd(
-                  //       isEdit: true,
-                  //       Packing: Packing,
-                  //     ),
-                  //   ),
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PackingAdd(
+                        isEdit: true,
+                        packing: packing,
+                      ),
+                    ),
+                  );
                 },
               ),
               PopupMenuButton<MenuItem>(
@@ -258,7 +259,7 @@ class _PackingListingScreen extends State<PackingListingScreen> {
                         child: DataTable(
                           horizontalMargin: 10,
                           columnSpacing: 10,
-                          headingRowHeight: 30,
+                          headingRowHeight: 50,
                           headingTextStyle: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
                           headingRowColor: MaterialStateProperty.resolveWith(
@@ -323,6 +324,11 @@ class _PackingListingScreen extends State<PackingListingScreen> {
       if (mounted) {
         setState(() {
           packing = _packing;
+          print('packing: ${packing.packingDetails}');
+          print('packing: ${packing.shippingRefNo}');
+          print('packing: ${packing.shippingMethodID}');
+          print('packing: ${packing.shippingMethodDescription}');
+
           _isLoading = false;
         });
       }
@@ -349,22 +355,54 @@ class _PackingListingScreen extends State<PackingListingScreen> {
 
   List<DataColumn> _createColumns() {
     return [
-      DataColumn(label: Text('Stock Code')),
-      DataColumn(label: Text('Description')),
-      DataColumn(label: Text('UOM')),
       DataColumn(
-        label: Text(
-          'Qty',
-          textAlign: TextAlign.right, // Align text to the right
+        label: Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text('Stock Code'),
+          ),
         ),
-        numeric: true, // Set numeric to true to align content to the right
       ),
       DataColumn(
-          label: Text(
-            'Batch No',
-            textAlign: TextAlign.right,
+        label: Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text('Description'),
           ),
-          numeric: true),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text('UOM'),
+          ),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Qty',
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ),
+        numeric: true,
+      ),
+      DataColumn(
+        label: Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Batch No',
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ),
+        numeric: true,
+      ),
     ];
   }
 

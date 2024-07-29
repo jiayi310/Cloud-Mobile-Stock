@@ -173,7 +173,7 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
                                             textConfirm: "Confirm",
                                             textCancel: "Cancel",
                                             onConfirm: () {
-                                              removeCollection(
+                                              removeTransfer(
                                                   StockTransferList[i].docID);
 
                                               // Close the dialog
@@ -193,7 +193,7 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
                                               ));
                                         },
                                         child: Container(
-                                          height: 110,
+                                          height: 130,
                                           margin: EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 10),
                                           padding: EdgeInsets.all(5),
@@ -304,6 +304,25 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
                                                   ],
                                                 ),
                                                 SizedBox(height: 10),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Flexible(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        'Total Item Transfer: ${StockTransferList.length}',
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontSize: 13,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -368,11 +387,11 @@ class _StockTransferHomeScreen extends State<StockTransferHomeScreen> {
     });
   }
 
-  Future<void> removeCollection(int? docID) async {
+  Future<void> removeTransfer(int? docID) async {
     companyid = (await storage.read(key: "companyid"))!;
     if (companyid != null) {
       String response = await BaseClient().get(
-          '/Collection/RemoveCollection?docId=' +
+          '/StockTransfer/RemoveStockTransfer?docId=' +
               docID.toString() +
               '&companyId=' +
               companyid);
