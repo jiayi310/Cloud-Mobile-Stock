@@ -5,12 +5,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:mobilestock/utils/global.colors.dart';
 import 'package:mobilestock/view/WMS/Picking/HistoryListing/picking.listing.dart';
-import 'package:mobilestock/view/WMS/Picking/picking.item.edit.dart';
 import 'package:mobilestock/view/WMS/Picking/picking.sales.dart';
-import 'package:mobilestock/view/WMS/Picking/picking.invoice.dart';
 import 'package:mobilestock/view/WMS/Picking/picking.item.dart';
 
 import '../../../api/base.client.dart';
@@ -666,7 +663,7 @@ class _PickingAddState extends State<PickingAdd> {
           Map<String, dynamic> responseBody = json.decode(response);
           String docID = responseBody['docID'].toString();
 
-          await updateSalesData();
+          //await updateSalesData();
 
           print('API request successful');
 

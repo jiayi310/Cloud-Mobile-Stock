@@ -16,6 +16,7 @@ import '../../../../models/Picking.dart';
 import '../../../../utils/global.colors.dart';
 import '../../../Sales/OrderHistory/history.listing.dart';
 import '../picking.add.dart';
+import '../picking.pickStock.dart';
 
 class PickingListingScreen extends StatefulWidget {
   PickingListingScreen({Key? key, required this.docid}) : super(key: key);
@@ -75,7 +76,7 @@ class _PickingListingScreen extends State<PickingListingScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PickingAdd(
+                      builder: (context) => PickingPickStock(
                         isEdit: true,
                         picking: picking,
                       ),
@@ -113,6 +114,7 @@ class _PickingListingScreen extends State<PickingListingScreen> {
                   padding: const EdgeInsets.all(20.0),
                   child: SingleChildScrollView(
                       child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         children: [
@@ -254,6 +256,45 @@ class _PickingListingScreen extends State<PickingListingScreen> {
                       SizedBox(
                         height: 10,
                       ),
+                      Text(
+                        "Pick:",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: DataTable(
+                          horizontalMargin: 10,
+                          columnSpacing: 10,
+                          headingRowHeight: 50,
+                          headingTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                          headingRowColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.black),
+                          dataTextStyle:
+                              TextStyle(fontSize: 11, color: Colors.black),
+                          columns: _createColumns2(),
+                          rows: _createRows2(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        "Picked:",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
                       Container(
                         width: double.infinity,
                         child: DataTable(
@@ -368,14 +409,6 @@ class _PickingListingScreen extends State<PickingListingScreen> {
       DataColumn(
         label: Flexible(
           child: Text(
-            'Description',
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
-      DataColumn(
-        label: Flexible(
-          child: Text(
             'UOM',
             overflow: TextOverflow.ellipsis,
           ),
@@ -406,68 +439,137 @@ class _PickingListingScreen extends State<PickingListingScreen> {
 
   List<DataRow> _createRows(BuildContext context) {
     return picking?.pickingDetails
-            ?.map((stItem) => DataRow(cells: [
-                  // DataCell(Text(salesItem['#'].toString())),
-                  DataCell(Row(
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        fit: FlexFit.tight,
-                        child: Text(stItem.stockCode.toString() ?? ''),
-                      )
-                    ],
-                  )),
-                  DataCell(
-                    Row(
-                      children: [
-                        Flexible(
-                          flex: 4,
-                          fit: FlexFit.tight,
-                          child: Text(stItem.description.toString() ?? ''),
+            ?.map((stItem) => DataRow(
+                    color: MaterialStateProperty.resolveWith(
+                        (states) => Colors.grey[200]),
+                    cells: [
+                      // DataCell(Text(salesItem['#'].toString())),
+                      DataCell(Row(
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Text(stItem.stockCode.toString() ?? ''),
+                          )
+                        ],
+                      )),
+                      DataCell(
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Text(stItem.uom.toString() ?? ''),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  DataCell(
-                    Row(
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: Text(stItem.uom.toString() ?? ''),
+                      ),
+                      DataCell(
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                stItem?.qty?.toStringAsFixed(2) ?? '',
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  DataCell(
-                    Row(
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: Text(
-                            stItem?.qty?.toStringAsFixed(2) ?? '',
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                      DataCell(
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                stItem?.storageCode.toString() ?? '',
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  DataCell(
-                    Row(
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          fit: FlexFit.tight,
-                          child: Text(
-                            stItem?.storageCode.toString() ?? '',
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                    ]))
+            ?.toList() ??
+        [];
+  }
+
+  List<DataColumn> _createColumns2() {
+    return [
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'Stock Code',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'UOM',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      DataColumn(
+        label: Flexible(
+          child: Text(
+            'Qty',
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        numeric: true,
+      ),
+    ];
+  }
+
+  List<DataRow> _createRows2() {
+    return picking?.pickingItems
+            ?.map((stItem) => DataRow(
+                    color: MaterialStateProperty.resolveWith(
+                        (states) => Colors.grey[200]),
+                    cells: [
+                      // DataCell(Text(salesItem['#'].toString())),
+                      DataCell(Row(
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Text(stItem.stockCode.toString() ?? ''),
+                          )
+                        ],
+                      )),
+                      DataCell(
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Text(stItem.uom.toString() ?? ''),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ]))
+                      ),
+                      DataCell(
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                stItem?.qty?.toStringAsFixed(2) ?? '',
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]))
             ?.toList() ??
         [];
   }

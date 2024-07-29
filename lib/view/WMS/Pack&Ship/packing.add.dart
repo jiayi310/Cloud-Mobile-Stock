@@ -198,6 +198,8 @@ class _PackingAddState extends State<PackingAdd> {
                         ),
                       );
 
+                      //use api to get picking details from sales,
+
                       if (selectedSalesId != null) {
                         nSelectedSalesId = selectedSalesId;
                         // Fetch the sales details for the selected invoice
@@ -815,6 +817,10 @@ class _PackingAddState extends State<PackingAdd> {
     print('Packing Doc Date: ${widget.packing.docDate}');
     print('Packing Details: ${widget.packing.packingDetails}');
 
+    // Read the company ID and user ID from storage
+    companyid = (await storage.read(key: "companyid"))!;
+    userid = (await storage.read(key: "userid"))!;
+
     if (widget.packing.packingDetails != null) {
       Map<String, dynamic> jsonData = {
         "docID": 0,
@@ -869,14 +875,11 @@ class _PackingAddState extends State<PackingAdd> {
 
       String jsonString = jsonEncode(jsonData);
 
-      print('Request Payload: $jsonString');
-
       try {
         var response = await BaseClient().post(
-          '/Packing/CreatePacking',
-          jsonString,
+          '/Packing/GeneratePackingFromSales?salesId=${nSelectedSalesId}&companyId=${companyid}&userId=${userid}',
+          '',
         );
-        print('API Response: $response');
 
         if (response != null) {
           Map<String, dynamic> responseBody = json.decode(response);
